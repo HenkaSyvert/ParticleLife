@@ -1,7 +1,6 @@
 # ParticleLife
 ```
 todo:
-	- see current seed
 	- save / load config, interesting premade configs
 	- regenerate w different sim params in-game
 	- cooler graphics

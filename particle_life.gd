@@ -19,6 +19,10 @@ var colors = []
 
 func _ready():
 	$UniverseSphere.scale = Vector3.ONE * $Menu/UniverseRadiusSpinBox.value * 2
+	
+	var seed = randi()
+	$Menu/SeedLabel.set_text("Seed: %d" % seed)
+	seed(seed)
 
 	for i in range(num_types):
 		attraction_matrix.append([])
