@@ -1,6 +1,6 @@
 extends Camera3D
 
-@export var mouse_sensitivity = 0.005
+@export var mouse_sensitivity = 0.003
 @export var move_speed = 100
 
 
