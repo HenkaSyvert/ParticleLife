@@ -123,7 +123,12 @@ value = 3.0
 alignment = 2
 prefix = "Number of Particle Types:"
 
+[node name="RunOnGpuCheckBox" type="CheckBox" parent="Menu/Simulation"]
+layout_mode = 2
+text = "Run on GPU"
+
 [node name="Particles" type="VBoxContainer" parent="Menu"]
+visible = false
 layout_mode = 2
 
 [node name="UniverseRadiusSpinBox" type="SpinBox" parent="Menu/Particles"]
