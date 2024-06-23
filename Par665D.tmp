@@ -124,6 +124,7 @@ alignment = 2
 prefix = "Number of Particle Types:"
 
 [node name="Particles" type="VBoxContainer" parent="Menu"]
+visible = false
 layout_mode = 2
 
 [node name="UniverseRadiusSpinBox" type="SpinBox" parent="Menu/Particles"]
