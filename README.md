@@ -1,5 +1,5 @@
 # ParticleLife
-
+```
 todo:
 	- see current seed
 	- add step function / continuous simulation
@@ -11,4 +11,4 @@ todo:
 	- add option to run on GPU
 	- map particles to sound, somehow
 	- export to web assembly
-
+```
