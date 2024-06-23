@@ -1,13 +1,13 @@
 extends MultiMeshInstance3D
 
-@onready var universe_radius = $Menu/UniverseRadiusSpinBox.value
-@onready var num_types  = $Menu/NumTypesSpinBox.value
-@onready var num_particles = $Menu/NumParticlesSpinBox.value
-@onready var attraction_radius = $Menu/AttractionRadiusSpinBox.value
-@onready var repel_radius = $Menu/RepelRadiusSpinBox.value
-@onready var force_strength = $Menu/ForceStrengthSpinBox.value
-@onready var max_speed = $Menu/MaxSpeedSpinBox.value
-@onready var wrap_universe = $Menu/WrapUniverseCheckBox.button_pressed
+@onready var universe_radius = $Menu/Particles/UniverseRadiusSpinBox.value
+@onready var num_types  = $Menu/Simulation/NumTypesSpinBox.value
+@onready var num_particles = $Menu/Simulation/NumParticlesSpinBox.value
+@onready var attraction_radius = $Menu/Particles/AttractionRadiusSpinBox.value
+@onready var repel_radius = $Menu/Particles/RepelRadiusSpinBox.value
+@onready var force_strength = $Menu/Particles/ForceStrengthSpinBox.value
+@onready var max_speed = $Menu/Particles/MaxSpeedSpinBox.value
+@onready var wrap_universe = $Menu/Simulation/WrapUniverseCheckBox.button_pressed
 
 var positions = []
 var velocities = []
@@ -18,10 +18,10 @@ var colors = []
 
 
 func _ready():
-	$UniverseSphere.scale = Vector3.ONE * $Menu/UniverseRadiusSpinBox.value * 2
+	$UniverseSphere.scale = Vector3.ONE * $Menu/Particles/UniverseRadiusSpinBox.value * 2
 	
 	var seed = randi()
-	$Menu/SeedLabel.set_text("Seed: %d" % seed)
+	$Menu/Simulation/SeedLabel.set_text("Seed: %d" % seed)
 	seed(seed)
 
 	for i in range(num_types):
