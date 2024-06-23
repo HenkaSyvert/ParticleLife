@@ -23,7 +23,7 @@ func _ready():
 	var seed = randi()
 	$Menu/Simulation/SeedLineEdit.set_text(str(seed))
 
-	generate_params(seed)
+	generate_params(str(seed))
 	set_multimesh_params()
 
 func _process(delta):
@@ -73,7 +73,7 @@ func _process(delta):
 
 func generate_params(seed):
 	
-	seed(seed)
+	seed(seed.hash())
 	
 	attraction_matrix = []
 	for i in range(num_types):
@@ -135,7 +135,7 @@ func _on_wrap_universe_check_box_toggled(toggled_on):
 func _on_update_button_pressed():
 	num_particles = $Menu/Simulation/NumParticlesSpinBox.value
 	num_types = $Menu/Simulation/NumTypesSpinBox.value
-	var seed = int($Menu/Simulation/SeedLineEdit.text)
+	var seed = $Menu/Simulation/SeedLineEdit.text
 	generate_params(seed)
 	set_multimesh_params()
 
