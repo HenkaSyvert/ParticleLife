@@ -19,16 +19,17 @@ var types = []
 var attraction_matrix = []
 var colors = []
 
-
 var rd = RenderingServer.create_local_rendering_device()
-var pos_in = PackedByteArray()
-var pos_out = PackedByteArray()
-var vels = PackedByteArray()
-var params = PackedByteArray()
-var pos_in_buf
-var pos_out_buf
-var vels_buf
+var shader
+var pipeline
+var uniform_set
+
+var positions_pba = PackedByteArray()
+var params_pba = PackedByteArray()
+var positions_buf
+var velocities_buf
 var params_buf
+var index_toggle = false
 
 
 func _ready():
@@ -53,6 +54,16 @@ func _process(delta):
 	for i in range(num_particles):
 		var t = Transform3D(Basis(), positions[i])
 		multimesh.set_instance_transform(i, t)
+
+
+func _exit_tree():
+	rd.free_rid(pipeline)
+	rd.free_rid(uniform_set)
+	rd.free_rid(positions_buf)
+	rd.free_rid(velocities_buf)
+	rd.free_rid(params_buf)
+	rd.free_rid(shader)
+	rd.free()
 
 
 func generate_params(seed_str):
@@ -98,69 +109,64 @@ func init_shader():
 	if shader_spirv.compile_error_compute != "":
 		print(shader_spirv.compile_error_compute)
 		get_tree().quit()
-	var shader = rd.shader_create_from_spirv(shader_spirv)
-	var pipeline = rd.compute_pipeline_create(shader)
-	
-	var uniform_set = setup_shader_uniforms(shader)
-	
-	var compute_list = rd.compute_list_begin()
-	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
-	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
-	rd.compute_list_dispatch(compute_list, 2, 1, 1)
-	rd.compute_list_end()
-	
+	shader = rd.shader_create_from_spirv(shader_spirv)
+	pipeline = rd.compute_pipeline_create(shader)
+	setup_shader_uniforms()
 
-func setup_shader_uniforms(shader):
+
+func setup_shader_uniforms():
 	
-	var float_size = 4 #vec3 uses 32-bit
-	var buf_size = num_particles * 3 * float_size
-	pos_in.resize(buf_size)
-	pos_out.resize(buf_size)
-	vels.resize(buf_size)
-	params.resize(4 * 8)
+	# vulkan pads vec3 as 16 bytes, so might as well use vec4
+	var float_size = 4
+	var buf_size = num_particles * 4 * float_size
+	positions_pba.resize(buf_size * 2)
 	
-	var stride = float_size * 3
-	for i in range(positions.size()):
-		pos_in.encode_float(i * stride, positions[i].x)
-		pos_in.encode_float(i * stride + 1 * float_size , positions[i].y)
-		pos_in.encode_float(i * stride + 2 * float_size, positions[i].z)
+	var velocities_pba = PackedByteArray()
+	velocities_pba.resize(buf_size)
 
-	params.encode_s32(0, num_particles)
-	params.encode_float(1 * 4, attraction_radius)
-	params.encode_float(2 * 4, repel_radius)
-	params.encode_float(3 * 4, force_strength)
-	params.encode_float(4 * 4, 0.1) # TODO: fix delta somehow
-	params.encode_float(5 * 4, max_speed)
-	params.encode_float(6 * 4, universe_radius)
-	params.encode_s32(7 * 4, int(wrap_universe))
+	var params_buf_size = 48#4 * 9
+	params_pba.resize(params_buf_size)
+	
+	var stride = float_size * 4
+	for i in range(num_particles):
+		positions_pba.encode_float(i * stride, positions[i].x)
+		positions_pba.encode_float(i * stride + 1 * float_size , positions[i].y)
+		positions_pba.encode_float(i * stride + 2 * float_size, positions[i].z)
 
-	pos_in_buf = rd.storage_buffer_create(buf_size, pos_in)
-	pos_out_buf = rd.storage_buffer_create(buf_size, pos_out)
-	vels_buf = rd.storage_buffer_create(buf_size, vels)
-	params_buf = rd.uniform_buffer_create(4 * 8, params)
+	#for i in range(positions_pba.size() / 4):
+	#	print(positions_pba.decode_float(i * 4))
 
-	var pos_in_u = RDUniform.new()
-	var pos_out_u = RDUniform.new()
-	var vels_u = RDUniform.new()
+	params_pba.encode_s32(0, num_particles)
+	params_pba.encode_float(1 * 4, attraction_radius)
+	params_pba.encode_float(2 * 4, repel_radius)
+	params_pba.encode_float(3 * 4, force_strength)
+	params_pba.encode_float(4 * 4, 0.1) # TODO: fix delta somehow
+	params_pba.encode_float(5 * 4, max_speed)
+	params_pba.encode_float(6 * 4, universe_radius)
+	params_pba.encode_s32(7 * 4, int(wrap_universe))
+	params_pba.encode_s32(8 * 4, int(index_toggle))
+
+	positions_buf = rd.storage_buffer_create(buf_size * 2, positions_pba)
+	velocities_buf = rd.storage_buffer_create(buf_size, velocities_pba)
+	params_buf = rd.uniform_buffer_create(params_buf_size, params_pba)
+
+	var positions_u = RDUniform.new()
+	var velocities_u = RDUniform.new()
 	var params_u = RDUniform.new()
 	
-	pos_in_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	pos_out_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	vels_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	positions_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	velocities_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	params_u.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
 	
-	pos_in_u.binding = 0
-	pos_out_u.binding = 1
-	vels_u.binding = 2
-	params_u.binding = 3
+	positions_u.binding = 0
+	velocities_u.binding = 1
+	params_u.binding = 2
 	
-	pos_in_u.add_id(pos_in_buf)
-	pos_out_u.add_id(pos_out_buf)
-	vels_u.add_id(vels_buf)
+	positions_u.add_id(positions_buf)
+	velocities_u.add_id(velocities_buf)
 	params_u.add_id(params_buf)
 	
-	var uniform_set = rd.uniform_set_create([pos_in_u, pos_out_u, vels_u, params_u], shader, 0)
-	return uniform_set
+	uniform_set = rd.uniform_set_create([positions_u, velocities_u, params_u], shader, 0)
 
 
 func particle_life_cpu(delta):
@@ -204,14 +210,33 @@ func particle_life_cpu(delta):
 
 
 func particle_life_gpu():
+	var compute_list = rd.compute_list_begin()
+	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
+	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
+	rd.compute_list_dispatch(compute_list, 512, 1, 1)
+	rd.compute_list_end()
 	rd.submit()
 	rd.sync()
 	
+	var stride = 4 * 4
+	#var pos_in_index = num_particles * int(index_toggle)
+	var pos_out_index = num_particles - num_particles * int(index_toggle)
+	var data = rd.buffer_get_data(positions_buf, pos_out_index * 4 * 4, num_particles * stride)
 	
+	#print("-----")
+	#for i in range(data.size() / 4):
+	#	print(data.decode_float(i * 4))
+
+	for i in range(num_particles):
+		positions[i].x = data.decode_float(i * 4 * 4)
+		positions[i].y = data.decode_float((i * 4 + 1) * 4)
+		positions[i].z = data.decode_float((i * 4 + 2) * 4)
+
 	
-#	var byte_data = rd.buffer_get_data(positions_out)
-#	for i in range(16):
-#		print(byte_data.decode_float(i*4))
+	index_toggle = !index_toggle
+	
+	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(index_toggle)]))
+
 
 
 func _on_universe_radius_spin_box_value_changed(value):
