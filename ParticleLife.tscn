@@ -106,6 +106,7 @@ pan: C"
 [node name="WrapUniverseCheckBox" type="CheckBox" parent="Menu/Simulation"]
 layout_mode = 2
 size_flags_horizontal = 8
+button_pressed = true
 text = "Wrap Universe"
 
 [node name="NumParticlesSpinBox" type="SpinBox" parent="Menu/Simulation"]

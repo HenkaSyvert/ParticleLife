@@ -29,7 +29,7 @@ var params_buf
 var attraction_matrix_buf
 var types_buf
 
-var index_toggle = false
+var buffer_toggle = false
 
 
 func _ready():
@@ -124,7 +124,7 @@ func setup_shader_uniforms():
 	
 	velocities_pba.resize(buf_size)
 
-	var params_buf_size = 48#4 * 9
+	var params_buf_size = 48
 	params_pba.resize(params_buf_size)
 	
 	var attraction_matrix_buf_size = num_types**2 * 4
@@ -147,7 +147,7 @@ func setup_shader_uniforms():
 	params_pba.encode_float(5 * 4, max_speed)
 	params_pba.encode_float(6 * 4, universe_radius)
 	params_pba.encode_s32(7 * 4, int(wrap_universe))
-	params_pba.encode_s32(8 * 4, int(index_toggle))
+	params_pba.encode_s32(8 * 4, int(buffer_toggle))
 	params_pba.encode_s32(9 * 4, num_types)
 
 	for i in range(num_types):
@@ -187,7 +187,8 @@ func setup_shader_uniforms():
 	attraction_matrix_u.add_id(attraction_matrix_buf)
 	types_u.add_id(types_buf)
 	
-	uniform_set = rd.uniform_set_create([positions_u, velocities_u, params_u, attraction_matrix_u, types_u], shader, 0)
+	var uniforms = [positions_u, velocities_u, params_u, attraction_matrix_u, types_u]
+	uniform_set = rd.uniform_set_create(uniforms, shader, 0)
 
 
 func particle_life_cpu(delta):
@@ -206,7 +207,7 @@ func particle_life_cpu(delta):
 			
 			var dir = (positions[j] - positions[i])
 			if dist_squared < repel_radius**2:
-				force += -dir
+				force -= dir
 			else:
 				force += dir * attraction_matrix[types[i]][types[j]]
 		
@@ -238,30 +239,20 @@ func particle_life_gpu():
 	rd.submit()
 	rd.sync()
 	
-	var stride = 4 * 4
-	var pos_out_index = num_particles - num_particles * int(index_toggle)
-	var data = rd.buffer_get_data(positions_buf, pos_out_index * 4 * 4, num_particles * stride)
+	var float_size = 4
+	var num_elements = 4
+	var stride = float_size * num_elements
+	
+	var out_offset = num_particles - num_particles * int(buffer_toggle)
+	var data = rd.buffer_get_data(positions_buf, out_offset * stride, num_particles * stride)
 
 	for i in range(num_particles):
-		positions[i].x = data.decode_float(i * 4 * 4)
-		positions[i].y = data.decode_float((i * 4 + 1) * 4)
-		positions[i].z = data.decode_float((i * 4 + 2) * 4)
+		positions[i].x = data.decode_float(i * num_elements * float_size)
+		positions[i].y = data.decode_float((i * num_elements + 1) * float_size)
+		positions[i].z = data.decode_float((i * num_elements + 2) * float_size)
 
-	index_toggle = not index_toggle
-	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(index_toggle), 0, 0, 0]))
-
-#	data = rd.buffer_get_data(params_buf, 0, 48)
-#	print("-----")
-#	print(data.decode_s32(0))	#num particles
-#	print(data.decode_float(4))	#attraction raiuds
-#	print(data.decode_float(8))	#repel radius
-#	print(data.decode_float(12))#force strength
-#	print(data.decode_float(16))#delta
-#	print(data.decode_float(20))#max speed
-#	print(data.decode_float(24))#universe radius
-#	print(data.decode_s32(28))	#wrap universe
-#	print(data.decode_s32(32)) 	# index toggle
-#	print(data.decode_s32(36))	#num types
+	buffer_toggle = not buffer_toggle
+	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(buffer_toggle), 0, 0, 0]))
 
 
 func _on_universe_radius_spin_box_value_changed(value):
