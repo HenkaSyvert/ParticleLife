@@ -263,30 +263,53 @@ func particle_life_gpu(delta):
 		positions[i].z = data.decode_float((i * num_elements + 2) * float_size)
 
 
-
 func _on_universe_radius_spin_box_value_changed(value):
 	universe_radius = value
 	$UniverseSphere.scale = Vector3.ONE * value * 2
+	var pba = PackedByteArray()
+	pba.resize(4)
+	pba.encode_float(0, value)
+	rd.buffer_update(params_buf, 6 * 4, 4, pba)
 
 
 func _on_attraction_radius_spin_box_value_changed(value):
 	attraction_radius = value
+	var pba = PackedByteArray()
+	pba.resize(4)
+	pba.encode_float(0, value)
+	rd.buffer_update(params_buf, 1 * 4, 4, pba)
 
 
 func _on_repel_radius_spin_box_value_changed(value):
 	repel_radius = value
+	var pba = PackedByteArray()
+	pba.resize(4)
+	pba.encode_float(0, value)
+	rd.buffer_update(params_buf, 2 * 4, 4, pba)
 
 
 func _on_force_strength_spin_box_value_changed(value):
 	force_strength = value
+	var pba = PackedByteArray()
+	pba.resize(4)
+	pba.encode_float(0, value)
+	rd.buffer_update(params_buf, 3 * 4, 4, pba)
 
 
 func _on_max_speed_spin_box_value_changed(value):
 	max_speed = value
+	var pba = PackedByteArray()
+	pba.resize(4)
+	pba.encode_float(0, value)
+	rd.buffer_update(params_buf, 5 * 4, 4, pba)
 
 
 func _on_wrap_universe_check_box_toggled(toggled_on):
 	wrap_universe = toggled_on
+	var pba = PackedByteArray()
+	pba.resize(4)
+	pba.encode_s32(0, int(toggled_on))
+	rd.buffer_update(params_buf, 7 * 4, 4, pba)
 
 
 func _on_update_button_pressed():

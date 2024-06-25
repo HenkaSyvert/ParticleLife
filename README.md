@@ -1,7 +1,6 @@
 # ParticleLife
 ```
 todo:
-	- gpu, fix delta
 	- gpu, figure out optimal work groups
 	- gpu, parallelize i,j loops
 	- gpu, make interleaved version?
