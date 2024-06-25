@@ -105,9 +105,6 @@ func init_shader():
 	
 	var shader_file = load("res://particle_life.glsl")
 	var shader_spirv = shader_file.get_spirv()
-	if shader_spirv.compile_error_compute != "":
-		print(shader_spirv.compile_error_compute)
-		get_tree().quit()
 	shader = rd.shader_create_from_spirv(shader_spirv)
 	pipeline = rd.compute_pipeline_create(shader)
 	setup_shader_uniforms()
@@ -163,7 +160,7 @@ func setup_shader_uniforms():
 
 	positions_buf = rd.storage_buffer_create(buf_size * 2, positions_pba)
 	velocities_buf = rd.storage_buffer_create(buf_size, velocities_pba)
-	params_buf = rd.uniform_buffer_create(params_buf_size, params_pba)
+	params_buf = rd.storage_buffer_create(params_buf_size, params_pba)
 	attraction_matrix_buf = rd.storage_buffer_create(attraction_matrix_buf_size, attraction_matrix_pba)
 	types_buf = rd.storage_buffer_create(types_buf_size, types_pba)
 
@@ -175,7 +172,7 @@ func setup_shader_uniforms():
 	
 	positions_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	velocities_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	params_u.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
+	params_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	attraction_matrix_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	types_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	
@@ -215,16 +212,15 @@ func particle_life_cpu(delta):
 				force += dir * attraction_matrix[types[i]][types[j]]
 		
 		force *= force_strength
-		var acceleration = force
-		velocities[i] += acceleration / delta
+		velocities[i] += force / delta
 		velocities[i] = velocities[i].limit_length(max_speed)
 		var pos = positions[i] + velocities[i]
 		
 		var overlap_squared = positions[i].length_squared() - universe_radius**2
 		if overlap_squared > 0:
 			if wrap_universe:
-				var length = -universe_radius + sqrt(overlap_squared)
-				pos = pos.limit_length(length)
+				var length = universe_radius - sqrt(overlap_squared)
+				pos = -pos.limit_length(length)
 			else:
 				pos = pos.limit_length(universe_radius)
 				velocities[i] = Vector3.ZERO
@@ -255,6 +251,11 @@ func particle_life_gpu():
 	index_toggle = !index_toggle
 	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(index_toggle)]))
 
+	data = rd.buffer_get_data(params_buf, 0, 48)
+	print("-----")
+	print(data.decode_s32(0))
+	print(data.decode_float(4))
+	print(data.decode_float(8))
 
 func _on_universe_radius_spin_box_value_changed(value):
 	universe_radius = value

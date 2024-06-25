@@ -14,8 +14,9 @@ todo:
 	- normalize dir vec 
 	- add infinite attraction radius
 	- inverse square attraction curve
-	- hide variables in funcs (pba?)
 	- re-send positions etc to gpu on restart
 	- interleaved data better for gpu?
+	- when collide with universe edge, just remove velocity that points outside
+	- reflect velocities when passing universe edge?
 	
 ```
