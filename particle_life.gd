@@ -14,7 +14,6 @@ extends MultiMeshInstance3D
 
 var positions = []
 var velocities = []
-var forces = []
 var types = []
 var attraction_matrix = []
 var colors = []
@@ -23,11 +22,6 @@ var rd = RenderingServer.create_local_rendering_device()
 var shader
 var pipeline
 var uniform_set
-
-var positions_pba = PackedByteArray()
-var params_pba = PackedByteArray()
-var attraction_matrix_pba = PackedByteArray()
-var types_pba = PackedByteArray()
 
 var positions_buf
 var velocities_buf
@@ -86,7 +80,6 @@ func generate_params(seed_str):
 
 	positions = []
 	velocities = []
-	forces = []
 	types = []
 	colors = []
 	for i in range(num_particles):
@@ -95,7 +88,6 @@ func generate_params(seed_str):
 		p *= randf_range(0, universe_radius)
 		positions.append(p)
 		velocities.append(Vector3.ZERO)
-		forces.append(Vector3.ZERO)
 		types.append(randi_range(0, num_types - 1))
 	
 	colors = [Color.RED, Color.BLUE, Color.YELLOW]
@@ -123,12 +115,17 @@ func init_shader():
 
 func setup_shader_uniforms():
 	
+	var positions_pba = PackedByteArray()
+	var velocities_pba = PackedByteArray()
+	var params_pba = PackedByteArray()
+	var attraction_matrix_pba = PackedByteArray()
+	var types_pba = PackedByteArray()
+	
 	# vulkan pads vec3 as 16 bytes, so might as well use vec4
 	var float_size = 4
 	var buf_size = num_particles * 4 * float_size
 	positions_pba.resize(buf_size * 2)
 	
-	var velocities_pba = PackedByteArray()
 	velocities_pba.resize(buf_size)
 
 	var params_buf_size = 48#4 * 9
@@ -145,9 +142,6 @@ func setup_shader_uniforms():
 		positions_pba.encode_float(i * stride, positions[i].x)
 		positions_pba.encode_float(i * stride + 1 * float_size , positions[i].y)
 		positions_pba.encode_float(i * stride + 2 * float_size, positions[i].z)
-
-	#for i in range(positions_pba.size() / 4):
-	#	print(positions_pba.decode_float(i * 4))
 
 	params_pba.encode_s32(0, num_particles)
 	params_pba.encode_float(1 * 4, attraction_radius)
@@ -204,7 +198,7 @@ func particle_life_cpu(delta):
 	var new_positions = []
 	for i in range(num_particles):
 		
-		var force_sum = Vector3.ZERO
+		var force = Vector3.ZERO
 		for j in range(num_particles):
 			
 			if i == j:
@@ -216,12 +210,12 @@ func particle_life_cpu(delta):
 			
 			var dir = (positions[j] - positions[i])
 			if dist_squared < repel_radius**2:
-				force_sum += -dir
+				force += -dir
 			else:
-				force_sum += dir * attraction_matrix[types[i]][types[j]]
+				force += dir * attraction_matrix[types[i]][types[j]]
 		
-		force_sum *= force_strength
-		var acceleration = force_sum
+		force *= force_strength
+		var acceleration = force
 		velocities[i] += acceleration / delta
 		velocities[i] = velocities[i].limit_length(max_speed)
 		var pos = positions[i] + velocities[i]
@@ -250,22 +244,15 @@ func particle_life_gpu():
 	rd.sync()
 	
 	var stride = 4 * 4
-	#var pos_in_index = num_particles * int(index_toggle)
 	var pos_out_index = num_particles - num_particles * int(index_toggle)
 	var data = rd.buffer_get_data(positions_buf, pos_out_index * 4 * 4, num_particles * stride)
-	
-	#print("-----")
-	#for i in range(data.size() / 4):
-	#	print(data.decode_float(i * 4))
 
 	for i in range(num_particles):
 		positions[i].x = data.decode_float(i * 4 * 4)
 		positions[i].y = data.decode_float((i * 4 + 1) * 4)
 		positions[i].z = data.decode_float((i * 4 + 2) * 4)
 
-	
 	index_toggle = !index_toggle
-	
 	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(index_toggle)]))
 
 
