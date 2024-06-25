@@ -15,10 +15,11 @@ todo:
 
 	- gui, make particle color picker
 	- gui, attraction matrix
+	- change particle mesh to cooler
+	- cooler graphics
 
 	- make 2d version
 	- lint scripts
-	- cooler graphics
 	- map particles to sound with fibonacci sphere
 	- export to web assembly
 

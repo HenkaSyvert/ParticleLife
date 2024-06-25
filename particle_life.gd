@@ -29,7 +29,7 @@ var params_buf
 var attraction_matrix_buf
 var types_buf
 
-var buffer_toggle = false
+var buffer_toggle = true
 
 
 func _ready():
@@ -46,7 +46,7 @@ func _ready():
 func _process(delta):
 	
 	if run_on_gpu:
-		particle_life_gpu()
+		particle_life_gpu(delta)
 	else:
 		particle_life_cpu(delta)
 
@@ -143,7 +143,7 @@ func setup_shader_uniforms():
 	params_pba.encode_float(1 * 4, attraction_radius)
 	params_pba.encode_float(2 * 4, repel_radius)
 	params_pba.encode_float(3 * 4, force_strength)
-	params_pba.encode_float(4 * 4, 0.1) # TODO: fix delta somehow
+	#params_pba.encode_float(4 * 4, 0.0) # delta
 	params_pba.encode_float(5 * 4, max_speed)
 	params_pba.encode_float(6 * 4, universe_radius)
 	params_pba.encode_s32(7 * 4, int(wrap_universe))
@@ -230,7 +230,18 @@ func particle_life_cpu(delta):
 	positions = new_positions
 
 
-func particle_life_gpu():
+func particle_life_gpu(delta):
+	
+	var pba = PackedByteArray()
+	pba.resize(4)
+	
+	buffer_toggle = not buffer_toggle
+	pba.encode_s32(0, int(buffer_toggle))
+	rd.buffer_update(params_buf, 8 * 4, 4, pba)
+	
+	pba.encode_float(0, delta)
+	rd.buffer_update(params_buf, 4 * 4, 4, pba)
+	
 	var compute_list = rd.compute_list_begin()
 	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
@@ -251,8 +262,6 @@ func particle_life_gpu():
 		positions[i].y = data.decode_float((i * num_elements + 1) * float_size)
 		positions[i].z = data.decode_float((i * num_elements + 2) * float_size)
 
-	buffer_toggle = not buffer_toggle
-	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(buffer_toggle), 0, 0, 0]))
 
 
 func _on_universe_radius_spin_box_value_changed(value):
