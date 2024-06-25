@@ -14,7 +14,7 @@ layout(set = 0, binding = 1, std430) restrict buffer Velocities {
 }
 velocities;
 
-layout(set = 0, binding = 2) uniform Params {
+layout(set = 0, binding = 2) readonly uniform Params {
 	int num_particles;
 	float attraction_radius;
 	float repel_radius;
@@ -25,8 +25,18 @@ layout(set = 0, binding = 2) uniform Params {
 	float universe_radius;
 	bool wrap_universe;
 	int index_toggle;
+	int num_types;
 } params;
 
+layout(set = 0, binding = 3, std430) readonly buffer AttractionMatrix {
+	float data[];
+}
+attraction_matrix;
+
+layout(set = 0, binding = 4, std430) readonly buffer Types {
+	int data[];
+}
+types;
 
 void main() {
 
@@ -51,7 +61,7 @@ void main() {
 		if(dist < params.repel_radius)
 			force_sum += -dir;
 		else
-			force_sum += dir * 1.0f; // todo: attraction matrix
+			force_sum += dir * attraction_matrix.data[types.data[i] * params.num_types + types.data[j]];
 
 	}
 

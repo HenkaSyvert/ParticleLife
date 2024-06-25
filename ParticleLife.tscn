@@ -126,7 +126,6 @@ prefix = "Number of Particle Types:"
 
 [node name="RunOnGpuCheckBox" type="CheckBox" parent="Menu/Simulation"]
 layout_mode = 2
-button_pressed = true
 text = "Run on GPU"
 
 [node name="Particles" type="VBoxContainer" parent="Menu"]
@@ -135,7 +134,7 @@ layout_mode = 2
 
 [node name="UniverseRadiusSpinBox" type="SpinBox" parent="Menu/Particles"]
 layout_mode = 2
-value = 70.0
+value = 30.0
 alignment = 2
 prefix = "Universe Radius:"
 

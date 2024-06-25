@@ -26,22 +26,27 @@ var uniform_set
 
 var positions_pba = PackedByteArray()
 var params_pba = PackedByteArray()
+var attraction_matrix_pba = PackedByteArray()
+var types_pba = PackedByteArray()
+
 var positions_buf
 var velocities_buf
 var params_buf
+var attraction_matrix_buf
+var types_buf
+
 var index_toggle = false
 
 
 func _ready():
 	$UniverseSphere.scale = Vector3.ONE * $Menu/Particles/UniverseRadiusSpinBox.value * 2
 	
-	var seed_str = str(randi())
+	var seed_str = "day" #str(randi())
 	$Menu/Simulation/SeedLineEdit.set_text(seed_str)
 
 	generate_params(seed_str)
 	set_multimesh_params()
 	init_shader()
-	
 
 
 func _process(delta):
@@ -62,6 +67,8 @@ func _exit_tree():
 	rd.free_rid(positions_buf)
 	rd.free_rid(velocities_buf)
 	rd.free_rid(params_buf)
+	rd.free_rid(attraction_matrix_buf)
+	rd.free_rid(types_buf)
 	rd.free_rid(shader)
 	rd.free()
 
@@ -127,6 +134,12 @@ func setup_shader_uniforms():
 	var params_buf_size = 48#4 * 9
 	params_pba.resize(params_buf_size)
 	
+	var attraction_matrix_buf_size = num_types**2 * 4
+	attraction_matrix_pba.resize(attraction_matrix_buf_size)
+	
+	var types_buf_size = num_particles * 4
+	types_pba.resize(types_buf_size)
+	
 	var stride = float_size * 4
 	for i in range(num_particles):
 		positions_pba.encode_float(i * stride, positions[i].x)
@@ -145,28 +158,46 @@ func setup_shader_uniforms():
 	params_pba.encode_float(6 * 4, universe_radius)
 	params_pba.encode_s32(7 * 4, int(wrap_universe))
 	params_pba.encode_s32(8 * 4, int(index_toggle))
+	params_pba.encode_s32(9 * 4, num_types)
+
+	for i in range(num_types):
+		for j in range(num_types):
+			attraction_matrix_pba.encode_float((i * num_types + j) * 4, attraction_matrix[i][j])
+
+	for i in range(num_particles):
+		types_pba.encode_s32(i * 4, types[i])
 
 	positions_buf = rd.storage_buffer_create(buf_size * 2, positions_pba)
 	velocities_buf = rd.storage_buffer_create(buf_size, velocities_pba)
 	params_buf = rd.uniform_buffer_create(params_buf_size, params_pba)
+	attraction_matrix_buf = rd.storage_buffer_create(attraction_matrix_buf_size, attraction_matrix_pba)
+	types_buf = rd.storage_buffer_create(types_buf_size, types_pba)
 
 	var positions_u = RDUniform.new()
 	var velocities_u = RDUniform.new()
 	var params_u = RDUniform.new()
+	var attraction_matrix_u = RDUniform.new()
+	var types_u = RDUniform.new()
 	
 	positions_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	velocities_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	params_u.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
+	attraction_matrix_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	types_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	
 	positions_u.binding = 0
 	velocities_u.binding = 1
 	params_u.binding = 2
+	attraction_matrix_u.binding = 3
+	types_u.binding = 4
 	
 	positions_u.add_id(positions_buf)
 	velocities_u.add_id(velocities_buf)
 	params_u.add_id(params_buf)
+	attraction_matrix_u.add_id(attraction_matrix_buf)
+	types_u.add_id(types_buf)
 	
-	uniform_set = rd.uniform_set_create([positions_u, velocities_u, params_u], shader, 0)
+	uniform_set = rd.uniform_set_create([positions_u, velocities_u, params_u, attraction_matrix_u, types_u], shader, 0)
 
 
 func particle_life_cpu(delta):
@@ -236,7 +267,6 @@ func particle_life_gpu():
 	index_toggle = !index_toggle
 	
 	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(index_toggle)]))
-
 
 
 func _on_universe_radius_spin_box_value_changed(value):
