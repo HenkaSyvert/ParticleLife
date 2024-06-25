@@ -6,10 +6,9 @@ todo:
 	- gpu, make interleaved version?
 	
 	- add infinite attraction radius
-	- normalize dir vec 
-	- inverse square attraction curve
 
 	- gui, make particle color picker
+	- gui, fix dont take wasd input to spinboxes
 	- gui, attraction matrix
 	- change particle mesh to cooler
 	- cooler graphics

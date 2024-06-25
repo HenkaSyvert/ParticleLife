@@ -222,6 +222,7 @@ func particle_life_cpu(delta):
 				continue
 			
 			var dir = (positions[j] - positions[i])
+			dir.limit_length(1.0 / dir.length()**2)
 			if dist_squared < repel_radius**2:
 				force -= dir
 			else:

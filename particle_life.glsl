@@ -64,6 +64,7 @@ void main() {
 		if(dist > params.attraction_radius) continue;
 
 		vec3 dir = q - p;
+		dir = normalize(dir) * 1.0 / dot(dir, dir);
 		if(dist < params.repel_radius)
 			force -= dir;
 		else
