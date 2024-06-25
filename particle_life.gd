@@ -102,7 +102,6 @@ func set_multimesh_params():
 
 
 func init_shader():
-	
 	var shader_file = load("res://particle_life.glsl")
 	var shader_spirv = shader_file.get_spirv()
 	shader = rd.shader_create_from_spirv(shader_spirv)
@@ -118,7 +117,7 @@ func setup_shader_uniforms():
 	var attraction_matrix_pba = PackedByteArray()
 	var types_pba = PackedByteArray()
 	
-	# vulkan pads vec3 as 16 bytes, so might as well use vec4
+	# vulkan pads vec3 as 16 bytes
 	var float_size = 4
 	var buf_size = num_particles * 4 * float_size
 	positions_pba.resize(buf_size * 2)
@@ -248,14 +247,22 @@ func particle_life_gpu():
 		positions[i].y = data.decode_float((i * 4 + 1) * 4)
 		positions[i].z = data.decode_float((i * 4 + 2) * 4)
 
-	index_toggle = !index_toggle
-	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(index_toggle)]))
+	index_toggle = not index_toggle
+	rd.buffer_update(params_buf, 8 * 4, 4, PackedByteArray([int(index_toggle), 0, 0, 0]))
 
-	data = rd.buffer_get_data(params_buf, 0, 48)
-	print("-----")
-	print(data.decode_s32(0))
-	print(data.decode_float(4))
-	print(data.decode_float(8))
+#	data = rd.buffer_get_data(params_buf, 0, 48)
+#	print("-----")
+#	print(data.decode_s32(0))	#num particles
+#	print(data.decode_float(4))	#attraction raiuds
+#	print(data.decode_float(8))	#repel radius
+#	print(data.decode_float(12))#force strength
+#	print(data.decode_float(16))#delta
+#	print(data.decode_float(20))#max speed
+#	print(data.decode_float(24))#universe radius
+#	print(data.decode_s32(28))	#wrap universe
+#	print(data.decode_s32(32)) 	# index toggle
+#	print(data.decode_s32(36))	#num types
+
 
 func _on_universe_radius_spin_box_value_changed(value):
 	universe_radius = value

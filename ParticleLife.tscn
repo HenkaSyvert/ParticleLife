@@ -106,7 +106,6 @@ pan: C"
 [node name="WrapUniverseCheckBox" type="CheckBox" parent="Menu/Simulation"]
 layout_mode = 2
 size_flags_horizontal = 8
-button_pressed = true
 text = "Wrap Universe"
 
 [node name="NumParticlesSpinBox" type="SpinBox" parent="Menu/Simulation"]
@@ -134,7 +133,7 @@ layout_mode = 2
 
 [node name="UniverseRadiusSpinBox" type="SpinBox" parent="Menu/Particles"]
 layout_mode = 2
-value = 30.0
+value = 70.0
 alignment = 2
 prefix = "Universe Radius:"
 

@@ -26,7 +26,7 @@ layout(binding = 2) readonly buffer Params {
 	float max_speed;
 	float universe_radius;
 	bool wrap_universe;
-	int index_toggle;
+	bool index_toggle;
 	int num_types;
 } 
 params;
@@ -48,8 +48,8 @@ void main() {
 
 	uint i = gl_LocalInvocationID.x;
 
-	int pos_in_index = params.num_particles * params.index_toggle;
-	int pos_out_index = params.num_particles - params.num_particles * params.index_toggle;
+	int pos_in_index = params.num_particles * int(params.index_toggle);
+	int pos_out_index = params.num_particles - params.num_particles * int(params.index_toggle);
 	
 	vec3 p = positions.data[pos_in_index + i];
 	vec3 force = vec3(0);
@@ -74,12 +74,13 @@ void main() {
 	force *= params.force_strength;
 	v += force / params.delta;
 	
-	if(v.length() > params.max_speed && v != vec3(0)) // WHY is this check needed??
+	if(length(p) > params.max_speed && v != vec3(0)) // WHY is this check needed??
 		v = normalize(v) * params.max_speed;
 	p += v;
 
-	float overlap = p.length() - params.universe_radius;
+	float overlap = length(p) - params.universe_radius;
 	if(overlap > 0){
+		
 		if (params.wrap_universe)
 			p = -normalize(p) * (params.universe_radius - overlap);
 		else{	
