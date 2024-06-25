@@ -106,7 +106,6 @@ pan: C"
 [node name="WrapUniverseCheckBox" type="CheckBox" parent="Menu/Simulation"]
 layout_mode = 2
 size_flags_horizontal = 8
-button_pressed = true
 text = "Wrap Universe"
 
 [node name="NumParticlesSpinBox" type="SpinBox" parent="Menu/Simulation"]
@@ -125,7 +124,6 @@ prefix = "Number of Particle Types:"
 
 [node name="RunOnGpuCheckBox" type="CheckBox" parent="Menu/Simulation"]
 layout_mode = 2
-button_pressed = true
 text = "Run on GPU"
 
 [node name="Particles" type="VBoxContainer" parent="Menu"]

@@ -216,8 +216,11 @@ func particle_life_cpu(delta):
 			if i == j:
 				continue
 		
-			var dist_squared = min(positions[i].distance_squared_to(positions[j]),
-				positions[i].distance_squared_to(-positions[j].normalized() * universe_radius))
+			var dist_squared = positions[i].distance_squared_to(positions[j])
+			
+			if wrap_universe:
+				dist_squared = min(dist_squared, positions[i].distance_squared_to(-positions[j].normalized() * universe_radius))
+		
 			if dist_squared > attraction_radius**2:
 				continue
 			
@@ -240,7 +243,7 @@ func particle_life_cpu(delta):
 				pos = -pos.limit_length(length)
 			else:
 				pos = pos.limit_length(universe_radius)
-				velocities[i] = Vector3.ZERO
+				velocities[i] = velocities[i] - pos.normalized() * velocities[i].dot(pos.normalized())
 		
 		new_positions.append(pos)
 
