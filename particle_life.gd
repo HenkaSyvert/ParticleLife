@@ -107,10 +107,52 @@ func init_shader():
 	shader = rd.shader_create_from_spirv(shader_spirv)
 	pipeline = rd.compute_pipeline_create(shader)
 	setup_shader_uniforms()
+	set_uniform_values()
 
 
 func setup_shader_uniforms():
+
+	var float_size = 4
+	var buf_size = num_particles * 4 * float_size
+	var params_buf_size = 48
+	var attraction_matrix_buf_size = num_types**2 * 4
+	var types_buf_size = num_particles * 4
+
+	positions_buf = rd.storage_buffer_create(buf_size * 2)
+	velocities_buf = rd.storage_buffer_create(buf_size)
+	params_buf = rd.storage_buffer_create(params_buf_size)
+	attraction_matrix_buf = rd.storage_buffer_create(attraction_matrix_buf_size)
+	types_buf = rd.storage_buffer_create(types_buf_size)
+
+	var positions_u = RDUniform.new()
+	var velocities_u = RDUniform.new()
+	var params_u = RDUniform.new()
+	var attraction_matrix_u = RDUniform.new()
+	var types_u = RDUniform.new()
 	
+	positions_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	velocities_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	params_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	attraction_matrix_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	types_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	
+	positions_u.binding = 0
+	velocities_u.binding = 1
+	params_u.binding = 2
+	attraction_matrix_u.binding = 3
+	types_u.binding = 4
+	
+	positions_u.add_id(positions_buf)
+	velocities_u.add_id(velocities_buf)
+	params_u.add_id(params_buf)
+	attraction_matrix_u.add_id(attraction_matrix_buf)
+	types_u.add_id(types_buf)
+	
+	var uniforms = [positions_u, velocities_u, params_u, attraction_matrix_u, types_u]
+	uniform_set = rd.uniform_set_create(uniforms, shader, 0)
+
+
+func set_uniform_values():
 	var positions_pba = PackedByteArray()
 	var velocities_pba = PackedByteArray()
 	var params_pba = PackedByteArray()
@@ -157,38 +199,11 @@ func setup_shader_uniforms():
 	for i in range(num_particles):
 		types_pba.encode_s32(i * 4, types[i])
 
-	positions_buf = rd.storage_buffer_create(buf_size * 2, positions_pba)
-	velocities_buf = rd.storage_buffer_create(buf_size, velocities_pba)
-	params_buf = rd.storage_buffer_create(params_buf_size, params_pba)
-	attraction_matrix_buf = rd.storage_buffer_create(attraction_matrix_buf_size, attraction_matrix_pba)
-	types_buf = rd.storage_buffer_create(types_buf_size, types_pba)
-
-	var positions_u = RDUniform.new()
-	var velocities_u = RDUniform.new()
-	var params_u = RDUniform.new()
-	var attraction_matrix_u = RDUniform.new()
-	var types_u = RDUniform.new()
-	
-	positions_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	velocities_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	params_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	attraction_matrix_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	types_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	
-	positions_u.binding = 0
-	velocities_u.binding = 1
-	params_u.binding = 2
-	attraction_matrix_u.binding = 3
-	types_u.binding = 4
-	
-	positions_u.add_id(positions_buf)
-	velocities_u.add_id(velocities_buf)
-	params_u.add_id(params_buf)
-	attraction_matrix_u.add_id(attraction_matrix_buf)
-	types_u.add_id(types_buf)
-	
-	var uniforms = [positions_u, velocities_u, params_u, attraction_matrix_u, types_u]
-	uniform_set = rd.uniform_set_create(uniforms, shader, 0)
+	rd.buffer_update(positions_buf, 0, buf_size * 2, positions_pba)
+	rd.buffer_update(velocities_buf, 0, buf_size, velocities_pba)
+	rd.buffer_update(params_buf, 0, params_buf_size, params_pba)
+	rd.buffer_update(attraction_matrix_buf, 0, attraction_matrix_buf_size, attraction_matrix_pba)
+	rd.buffer_update(types_buf, 0, types_buf_size, types_pba)
 
 
 func particle_life_cpu(delta):
@@ -317,5 +332,7 @@ func _on_update_button_pressed():
 	num_types = $Menu/Simulation/NumTypesSpinBox.value
 	run_on_gpu = $Menu/Simulation/RunOnGpuCheckBox.button_pressed
 	generate_params($Menu/Simulation/SeedLineEdit.text)
+	buffer_toggle = true
+	set_uniform_values()
 	set_multimesh_params()
 

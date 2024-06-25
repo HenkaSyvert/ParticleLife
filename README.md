@@ -4,8 +4,6 @@ todo:
 	- gpu, figure out optimal work groups
 	- gpu, parallelize i,j loops
 	- gpu, make interleaved version?
-	- gpu, fix restart on update button
-	- gpu, make params changable in real time
 	
 	- wrap particle interaction radius across universe edge
 	- add infinite attraction radius
