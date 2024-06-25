@@ -5,7 +5,6 @@ todo:
 	- gpu, parallelize i,j loops
 	- gpu, make interleaved version?
 	
-	- wrap particle interaction radius across universe edge
 	- add infinite attraction radius
 	- normalize dir vec 
 	- inverse square attraction curve

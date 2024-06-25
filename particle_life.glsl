@@ -59,7 +59,8 @@ void main() {
 		if(i == j) continue;
 
 		vec3 q = positions.data[in_offset + j];
-		float dist = distance(p, q);
+		float dist = min(distance(p, q),
+						 distance(p, -normalize(q) * params.universe_radius));
 		if(dist > params.attraction_radius) continue;
 
 		vec3 dir = q - p;

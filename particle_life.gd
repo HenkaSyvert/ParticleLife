@@ -216,7 +216,8 @@ func particle_life_cpu(delta):
 			if i == j:
 				continue
 		
-			var dist_squared = positions[i].distance_squared_to(positions[j])
+			var dist_squared = min(positions[i].distance_squared_to(positions[j]),
+				positions[i].distance_squared_to(-positions[j].normalized() * universe_radius))
 			if dist_squared > attraction_radius**2:
 				continue
 			
