@@ -1,15 +1,15 @@
 extends MultiMeshInstance3D
 
-@onready var num_types: int = $Menu/Simulation/NumTypesSpinBox.value
-@onready var num_particles: int = $Menu/Simulation/NumParticlesSpinBox.value
-@onready var wrap_universe: bool = $Menu/Simulation/WrapUniverseCheckBox.button_pressed
-@onready var run_on_gpu: bool = $Menu/Simulation/RunOnGpuCheckBox.button_pressed
+@onready var num_types: int = %NumTypesSpinBox.value
+@onready var num_particles: int = %NumParticlesSpinBox.value
+@onready var wrap_universe: bool = %WrapUniverseCheckBox.button_pressed
+@onready var run_on_gpu: bool = %RunOnGpuCheckBox.button_pressed
 
-@onready var universe_radius: float = $Menu/Particles/UniverseRadiusSpinBox.value
-@onready var attraction_radius: float = $Menu/Particles/AttractionRadiusSpinBox.value
-@onready var repel_radius: float = $Menu/Particles/RepelRadiusSpinBox.value
-@onready var force_strength: float = $Menu/Particles/ForceStrengthSpinBox.value
-@onready var max_speed: float = $Menu/Particles/MaxSpeedSpinBox.value
+@onready var universe_radius: float = %UniverseRadiusSpinBox.value
+@onready var attraction_radius: float = %AttractionRadiusSpinBox.value
+@onready var repel_radius: float = %RepelRadiusSpinBox.value
+@onready var force_strength: float = %ForceStrengthSpinBox.value
+@onready var max_speed: float = %MaxSpeedSpinBox.value
 
 
 var positions = []
@@ -33,10 +33,12 @@ var buffer_toggle = true
 
 
 func _ready():
-	$UniverseSphere.scale = Vector3.ONE * $Menu/Particles/UniverseRadiusSpinBox.value * 2
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	
-	var seed_str = "day" #str(randi())
-	$Menu/Simulation/SeedLineEdit.set_text(seed_str)
+	$UniverseSphere.scale = Vector3.ONE * %UniverseRadiusSpinBox.value * 2
+	
+	var seed_str = "johan är inte gay" #str(randi())
+	%SeedLineEdit.set_text(seed_str)
 
 	generate_params(seed_str)
 	set_multimesh_params()
@@ -44,6 +46,9 @@ func _ready():
 
 
 func _process(delta):
+	
+	if Input.is_action_pressed("ui_cancel"):
+		get_tree().quit()
 	
 	if run_on_gpu:
 		particle_life_gpu(delta)
@@ -333,10 +338,10 @@ func _on_wrap_universe_check_box_toggled(toggled_on):
 
 
 func _on_update_button_pressed():
-	num_particles = $Menu/Simulation/NumParticlesSpinBox.value
-	num_types = $Menu/Simulation/NumTypesSpinBox.value
-	run_on_gpu = $Menu/Simulation/RunOnGpuCheckBox.button_pressed
-	generate_params($Menu/Simulation/SeedLineEdit.text)
+	num_particles = %NumParticlesSpinBox.value
+	num_types = %NumTypesSpinBox.value
+	run_on_gpu = %RunOnGpuCheckBox.button_pressed
+	generate_params(%SeedLineEdit.text)
 	buffer_toggle = true
 	set_uniform_values()
 	set_multimesh_params()

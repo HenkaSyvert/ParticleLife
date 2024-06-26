@@ -68,89 +68,115 @@ script = ExtResource("2_hrovq")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_m44sp")
 
-[node name="Menu" type="TabContainer" parent="."]
+[node name="MenuWindow" type="Window" parent="."]
+mode = 1
+title = "Menu"
+position = Vector2i(20, 40)
+size = Vector2i(400, 600)
+transparent = true
+extend_to_title = true
+keep_title_visible = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuWindow"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -893.0
-offset_bottom = 114.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Simulation" type="VBoxContainer" parent="Menu"]
+[node name="Tabs" type="TabContainer" parent="MenuWindow/MarginContainer"]
 layout_mode = 2
 
-[node name="SeedLabel" type="Label" parent="Menu/Simulation"]
-layout_mode = 2
-text = "Seed:"
-
-[node name="SeedLineEdit" type="LineEdit" parent="Menu/Simulation"]
+[node name="Simulation" type="VBoxContainer" parent="MenuWindow/MarginContainer/Tabs"]
 layout_mode = 2
 
-[node name="UpdateButton" type="Button" parent="Menu/Simulation"]
+[node name="ControlsLabel" type="Label" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
 layout_mode = 2
-text = "Update"
+text = "
+ESC: quit
+Camera: 
+WASD
+up / down: Shift / Space
+mouse pan: C"
 
-[node name="FpsLabel" type="Label" parent="Menu/Simulation"]
+[node name="FpsLabel" type="Label" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
 layout_mode = 2
 text = "FPS: "
 script = ExtResource("3_m6ham")
 
-[node name="ControlsLabel" type="Label" parent="Menu/Simulation"]
+[node name="SeedLabel" type="Label" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
 layout_mode = 2
-text = "Camera: 
-WASD
-up / down: Shift / Space
-pan: C"
+text = "Seed:"
 
-[node name="WrapUniverseCheckBox" type="CheckBox" parent="Menu/Simulation"]
+[node name="SeedLineEdit" type="LineEdit" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
+
+[node name="UpdateButton" type="Button" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Update"
+
+[node name="WrapUniverseCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
 text = "Wrap Universe"
 
-[node name="NumParticlesSpinBox" type="SpinBox" parent="Menu/Simulation"]
+[node name="NumParticlesSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
 layout_mode = 2
 max_value = 10000.0
-value = 512.0
+value = 400.0
 alignment = 2
 prefix = "Number of Particles:"
 
-[node name="NumTypesSpinBox" type="SpinBox" parent="Menu/Simulation"]
+[node name="NumTypesSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
 layout_mode = 2
 max_value = 16.0
 value = 3.0
 alignment = 2
 prefix = "Number of Particle Types:"
 
-[node name="RunOnGpuCheckBox" type="CheckBox" parent="Menu/Simulation"]
+[node name="RunOnGpuCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Run on GPU"
 
-[node name="Particles" type="VBoxContainer" parent="Menu"]
+[node name="Particles" type="VBoxContainer" parent="MenuWindow/MarginContainer/Tabs"]
 visible = false
 layout_mode = 2
 
-[node name="UniverseRadiusSpinBox" type="SpinBox" parent="Menu/Particles"]
+[node name="Label" type="Label" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+layout_mode = 2
+text = "
+fields are scrollable"
+
+[node name="UniverseRadiusSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
 layout_mode = 2
 value = 70.0
 alignment = 2
 prefix = "Universe Radius:"
 
-[node name="AttractionRadiusSpinBox" type="SpinBox" parent="Menu/Particles"]
+[node name="AttractionRadiusSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
 layout_mode = 2
 step = 0.001
 value = 10.0
 alignment = 2
 prefix = "Attraction Radius:"
 
-[node name="RepelRadiusSpinBox" type="SpinBox" parent="Menu/Particles"]
+[node name="RepelRadiusSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
 layout_mode = 2
 step = 0.015
 value = 1.005
 alignment = 2
 prefix = "Repel Radius:"
 
-[node name="ForceStrengthSpinBox" type="SpinBox" parent="Menu/Particles"]
+[node name="ForceStrengthSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
 layout_mode = 2
 max_value = 10.0
 step = 0.001
@@ -158,17 +184,18 @@ value = 0.01
 alignment = 2
 prefix = "Force Strength:"
 
-[node name="MaxSpeedSpinBox" type="SpinBox" parent="Menu/Particles"]
+[node name="MaxSpeedSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
 layout_mode = 2
 step = 0.1
 value = 2.0
 alignment = 2
 prefix = "Max Speed:"
 
-[connection signal="pressed" from="Menu/Simulation/UpdateButton" to="." method="_on_update_button_pressed"]
-[connection signal="toggled" from="Menu/Simulation/WrapUniverseCheckBox" to="." method="_on_wrap_universe_check_box_toggled"]
-[connection signal="value_changed" from="Menu/Particles/UniverseRadiusSpinBox" to="." method="_on_universe_radius_spin_box_value_changed"]
-[connection signal="value_changed" from="Menu/Particles/AttractionRadiusSpinBox" to="." method="_on_attraction_radius_spin_box_value_changed"]
-[connection signal="value_changed" from="Menu/Particles/RepelRadiusSpinBox" to="." method="_on_repel_radius_spin_box_value_changed"]
-[connection signal="value_changed" from="Menu/Particles/ForceStrengthSpinBox" to="." method="_on_force_strength_spin_box_value_changed"]
-[connection signal="value_changed" from="Menu/Particles/MaxSpeedSpinBox" to="." method="_on_max_speed_spin_box_value_changed"]
+[connection signal="pressed" from="MenuWindow/MarginContainer/Tabs/Simulation/UpdateButton" to="." method="_on_update_button_pressed"]
+[connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Simulation/WrapUniverseCheckBox" to="." method="_on_wrap_universe_check_box_toggled"]
+[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/UniverseRadiusSpinBox" to="." method="_on_universe_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/AttractionRadiusSpinBox" to="." method="_on_attraction_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/RepelRadiusSpinBox" to="." method="_on_repel_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/ForceStrengthSpinBox" to="." method="_on_force_strength_spin_box_value_changed"]
+[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/MaxSpeedSpinBox" to="." method="_on_max_speed_spin_box_value_changed"]
