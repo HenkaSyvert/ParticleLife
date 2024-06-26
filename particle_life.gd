@@ -46,10 +46,11 @@ func _ready():
 
 
 func _process(delta):
+	%FpsLabel.set_text("FPS: %d" % Engine.get_frames_per_second())	
 	
 	if Input.is_action_pressed("ui_cancel"):
 		get_tree().quit()
-	
+
 	if run_on_gpu:
 		particle_life_gpu(delta)
 	else:
