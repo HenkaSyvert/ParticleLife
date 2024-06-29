@@ -31,19 +31,27 @@ var types_buf
 
 var buffer_toggle = true
 
+@onready var sound_enabled = %SoundEnabledCheckBox.button_pressed
+var fib_points
+var notes = "ABCDEFG"
+var timers = []
+
 
 func _ready():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	
 	$UniverseSphere.scale = Vector3.ONE * %UniverseRadiusSpinBox.value * 2
 	
-	var seed_str = "johan är inte gay" #str(randi())
+	var seed_str = "du luktar fisk" #str(randi())
 	%SeedLineEdit.set_text(seed_str)
 
 	generate_params(seed_str)
 	set_multimesh_params()
 	init_shader()
-
+	
+	fib_points = fibonacci_sphere(7)
+	for i in range(7):
+		timers.append(0)
 
 func _process(delta):
 	%FpsLabel.set_text("FPS: %d" % Engine.get_frames_per_second())	
@@ -60,6 +68,9 @@ func _process(delta):
 		var t = Transform3D(Basis(), positions[i])
 		multimesh.set_instance_transform(i, t)
 
+	if sound_enabled:
+		map_sound(delta)
+
 
 func _exit_tree():
 	rd.free_rid(pipeline)
@@ -72,6 +83,20 @@ func _exit_tree():
 	rd.free_rid(shader)
 	rd.free()
 
+
+func map_sound(delta):
+
+	for i in range(fib_points.size()):
+		
+		timers[i] -= delta
+		
+		for j in range(num_particles):
+			var d = fib_points[i].normalized().dot(positions[j].normalized())
+			if d > 0.9:
+				
+				if timers[i] < 0:
+					$SamplerInstrument.play_note(notes[i])
+					timers[i] = randf_range(0.8, 1.2)
 
 func generate_params(seed_str):
 	
@@ -121,8 +146,8 @@ func setup_shader_uniforms():
 	var float_size = 4
 	var buf_size = num_particles * 4 * float_size
 	var params_buf_size = 48
-	var attraction_matrix_buf_size = num_types**2 * 4
-	var types_buf_size = num_particles * 4
+	var attraction_matrix_buf_size = num_types**2 * float_size
+	var types_buf_size = num_particles * float_size
 
 	positions_buf = rd.storage_buffer_create(buf_size * 2)
 	velocities_buf = rd.storage_buffer_create(buf_size)
@@ -167,7 +192,8 @@ func set_uniform_values():
 	
 	# vulkan pads vec3 as 16 bytes
 	var float_size = 4
-	var buf_size = num_particles * 4 * float_size
+	var num_elements = 4
+	var buf_size = num_particles * num_elements * float_size
 	positions_pba.resize(buf_size * 2)
 	
 	velocities_pba.resize(buf_size)
@@ -175,13 +201,13 @@ func set_uniform_values():
 	var params_buf_size = 48
 	params_pba.resize(params_buf_size)
 	
-	var attraction_matrix_buf_size = num_types**2 * 4
+	var attraction_matrix_buf_size = num_types**2 * float_size
 	attraction_matrix_pba.resize(attraction_matrix_buf_size)
 	
-	var types_buf_size = num_particles * 4
+	var types_buf_size = num_particles * float_size
 	types_pba.resize(types_buf_size)
 	
-	var stride = float_size * 4
+	var stride = float_size * num_elements
 	for i in range(num_particles):
 		positions_pba.encode_float(i * stride, positions[i].x)
 		positions_pba.encode_float(i * stride + 1 * float_size , positions[i].y)
@@ -289,6 +315,19 @@ func particle_life_gpu(delta):
 		positions[i].z = data.decode_float((i * num_elements + 2) * float_size)
 
 
+func fibonacci_sphere(n):
+	var points = []
+	var phi = PI * (sqrt(5) - 1)
+	for i in range(n):
+		var y = 1  - (i / float(n - 1)) * 2
+		var r = sqrt(1 - y**2)
+		var theta = phi * i
+		var x = r * cos(theta)
+		var z = r * sin(theta)
+		points.append(Vector3(x, y, z))
+	return points
+
+
 func _on_universe_radius_spin_box_value_changed(value):
 	universe_radius = value
 	$UniverseSphere.scale = Vector3.ONE * value * 2
@@ -347,3 +386,6 @@ func _on_update_button_pressed():
 	set_uniform_values()
 	set_multimesh_params()
 
+
+func _on_sound_enabled_check_box_toggled(toggled_on):
+	sound_enabled = toggled_on

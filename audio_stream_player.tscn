@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://dcwuy61aoaqfj"]
-
-[ext_resource type="Script" path="res://SoundMap.gd" id="1_h1pyx"]
-
-[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_wah5o"]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer"]
-stream = SubResource("AudioStreamGenerator_wah5o")
-script = ExtResource("1_h1pyx")
