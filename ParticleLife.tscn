@@ -1,11 +1,15 @@
-[gd_scene load_steps=21 format=3 uid="uid://bb5yu55jng3ek"]
+[gd_scene load_steps=32 format=3 uid="uid://bb5yu55jng3ek"]
 
 [ext_resource type="Script" path="res://particle_life.gd" id="1_1flt5"]
 [ext_resource type="Script" path="res://camera_movement.gd" id="2_hrovq"]
 [ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="3_cwoe8"]
 [ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="4_fojeo"]
-[ext_resource type="AudioStream" uid="uid://cw7k5pse7ceox" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D4_mf1.wav" id="5_f376l"]
-[ext_resource type="AudioStream" uid="uid://dpgxeswqhss6d" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F4_mf1.wav" id="6_la30n"]
+[ext_resource type="AudioStream" uid="uid://br2jd1j18u3s3" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A2_mf1.wav" id="5_73skb"]
+[ext_resource type="AudioStream" uid="uid://c6bsjc4wqptt5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A6_mf1.wav" id="6_ne2sv"]
+[ext_resource type="AudioStream" uid="uid://b8phiocn4sgmo" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B3_mf1.wav" id="7_q1mea"]
+[ext_resource type="AudioStream" uid="uid://c0ho1vajtnv71" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B5_mf1.wav" id="8_0plqi"]
+[ext_resource type="AudioStream" uid="uid://c5b58a8jvxaog" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B6_mf1.wav" id="9_fxaak"]
+[ext_resource type="AudioStream" uid="uid://c888edrfyiwaj" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/C3_mf3.wav" id="10_kfpa6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_es8bu"]
 vertex_color_use_as_albedo = true
@@ -51,18 +55,57 @@ refraction_texture = SubResource("NoiseTexture2D_0akae")
 [sub_resource type="SphereMesh" id="SphereMesh_drbe8"]
 material = SubResource("StandardMaterial3D_eqshp")
 
-[sub_resource type="Resource" id="Resource_h37f6"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lyq8f"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_u0b18"]
+material = SubResource("StandardMaterial3D_lyq8f")
+radius = 0.05
+
+[sub_resource type="MultiMesh" id="MultiMesh_6ql17"]
+transform_format = 1
+mesh = SubResource("CapsuleMesh_u0b18")
+
+[sub_resource type="Resource" id="Resource_6oo6l"]
 script = ExtResource("4_fojeo")
-stream = ExtResource("5_f376l")
-tone = "D"
-octave = 4
+stream = ExtResource("5_73skb")
+tone = "A"
+octave = 2
 velocity = 5
 
-[sub_resource type="Resource" id="Resource_tv6ru"]
+[sub_resource type="Resource" id="Resource_16wbn"]
 script = ExtResource("4_fojeo")
-stream = ExtResource("6_la30n")
-tone = "F"
-octave = 4
+stream = ExtResource("6_ne2sv")
+tone = "A"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_1n0sy"]
+script = ExtResource("4_fojeo")
+stream = ExtResource("7_q1mea")
+tone = "B"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_1gkbf"]
+script = ExtResource("4_fojeo")
+stream = ExtResource("8_0plqi")
+tone = "B"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_p6ep0"]
+script = ExtResource("4_fojeo")
+stream = ExtResource("9_fxaak")
+tone = "B"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_bftpw"]
+script = ExtResource("4_fojeo")
+stream = ExtResource("10_kfpa6")
+tone = "C"
+octave = 3
 velocity = 5
 
 [sub_resource type="Environment" id="Environment_m44sp"]
@@ -76,15 +119,21 @@ transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
 mesh = SubResource("SphereMesh_drbe8")
 skeleton = NodePath("../..")
 
+[node name="NoteStrings" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_6ql17")
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
 script = ExtResource("2_hrovq")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 
-[node name="SamplerInstrument" type="AudioStreamPlayer" parent="."]
+[node name="HarpSampler" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+volume_db = -20.0
 script = ExtResource("3_cwoe8")
-samples = Array[ExtResource("4_fojeo")]([SubResource("Resource_h37f6"), SubResource("Resource_tv6ru")])
+max_notes = 21
+samples = Array[ExtResource("4_fojeo")]([SubResource("Resource_6oo6l"), SubResource("Resource_16wbn"), SubResource("Resource_1n0sy"), SubResource("Resource_1gkbf"), SubResource("Resource_p6ep0"), SubResource("Resource_bftpw")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_m44sp")
@@ -147,7 +196,7 @@ text = "Wrap Universe"
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 10000.0
-value = 100.0
+value = 150.0
 alignment = 2
 prefix = "Number of Particles:"
 
@@ -163,11 +212,6 @@ prefix = "Number of Particle Types:"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Run on GPU"
-
-[node name="SoundEnabledCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Sound Enabled"
 
 [node name="Particles" type="VBoxContainer" parent="MenuWindow/MarginContainer/Tabs"]
 visible = false
@@ -218,11 +262,36 @@ value = 2.0
 alignment = 2
 prefix = "Max Speed:"
 
+[node name="Sound" type="VBoxContainer" parent="MenuWindow/MarginContainer/Tabs"]
+visible = false
+layout_mode = 2
+
+[node name="SoundEnabledCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Sound Enabled"
+
+[node name="NoteCooldownSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 10.0
+value = 4.0
+prefix = "Note Cooldown: "
+suffix = "Seconds"
+
+[node name="ShowNoteStringsCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show Note Strings"
+
 [connection signal="pressed" from="MenuWindow/MarginContainer/Tabs/Simulation/UpdateButton" to="." method="_on_update_button_pressed"]
 [connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Simulation/WrapUniverseCheckBox" to="." method="_on_wrap_universe_check_box_toggled"]
-[connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Simulation/SoundEnabledCheckBox" to="." method="_on_sound_enabled_check_box_toggled"]
 [connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/UniverseRadiusSpinBox" to="." method="_on_universe_radius_spin_box_value_changed"]
 [connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/AttractionRadiusSpinBox" to="." method="_on_attraction_radius_spin_box_value_changed"]
 [connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/RepelRadiusSpinBox" to="." method="_on_repel_radius_spin_box_value_changed"]
 [connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/ForceStrengthSpinBox" to="." method="_on_force_strength_spin_box_value_changed"]
 [connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/MaxSpeedSpinBox" to="." method="_on_max_speed_spin_box_value_changed"]
+[connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Sound/SoundEnabledCheckBox" to="." method="_on_sound_enabled_check_box_toggled"]
+[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Sound/NoteCooldownSpinBox" to="." method="_on_note_cooldown_spin_box_value_changed"]
+[connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Sound/ShowNoteStringsCheckBox" to="." method="_on_show_note_strings_check_box_toggled"]

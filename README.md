@@ -16,7 +16,12 @@ todo:
 
 	- make 2d version
 	- lint scripts
-	- map particles to sound with fibonacci sphere
+	
+	- make particle velocity affect envelope or something
+	- interactive string width
+	- change melodic scales
+	- other note mapping to fib dirs
+	- fix string scale to universe radius
 
 	
 ```

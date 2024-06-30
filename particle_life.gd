@@ -32,26 +32,40 @@ var types_buf
 var buffer_toggle = true
 
 @onready var sound_enabled = %SoundEnabledCheckBox.button_pressed
-var fib_points
+var note_strings
 var notes = "ABCDEFG"
-var timers = []
-
+var note_timers = []
+var num_octaves = 3
+var num_notes = notes.length() * num_octaves
+@onready var note_cooldown = %NoteCooldownSpinBox.value
+var starting_octave = 3
+var string_width = 0.2 # todo make use of
 
 func _ready():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	
 	$UniverseSphere.scale = Vector3.ONE * %UniverseRadiusSpinBox.value * 2
 	
-	var seed_str = "du luktar fisk" #str(randi())
+	var seed_str = "det luktar fisk" #str(randi())
 	%SeedLineEdit.set_text(seed_str)
 
 	generate_params(seed_str)
 	set_multimesh_params()
 	init_shader()
 	
-	fib_points = fibonacci_sphere(7)
-	for i in range(7):
-		timers.append(0)
+	$NoteStrings.multimesh.use_colors = true
+	$NoteStrings.multimesh.instance_count = num_notes
+	$NoteStrings.multimesh.mesh.height = universe_radius
+	$NoteStrings.visible = %ShowNoteStringsCheckBox.button_pressed
+	note_strings = fibonacci_sphere(num_notes)
+	for i in range(num_notes):
+		note_timers.append(note_cooldown / 2+ randf_range(-1, 1))
+		
+		var t = Transform3D(Basis(), note_strings[i] * universe_radius / 2)
+		t = t.looking_at(Vector3.ZERO)
+		t = t.rotated_local(Vector3.RIGHT, PI / 2)
+		$NoteStrings.multimesh.set_instance_transform(i, t)
+	
 
 func _process(delta):
 	%FpsLabel.set_text("FPS: %d" % Engine.get_frames_per_second())	
@@ -86,17 +100,27 @@ func _exit_tree():
 
 func map_sound(delta):
 
-	for i in range(fib_points.size()):
+	for i in range(note_strings.size()):
 		
-		timers[i] -= delta
+		note_timers[i] -= delta
 		
 		for j in range(num_particles):
-			var d = fib_points[i].normalized().dot(positions[j].normalized())
+			
+			if velocities[j].length() < 0.1:
+				continue
+			
+			var d = note_strings[i].normalized().dot(positions[j].normalized())
 			if d > 0.9:
 				
-				if timers[i] < 0:
-					$SamplerInstrument.play_note(notes[i])
-					timers[i] = randf_range(0.8, 1.2)
+				if note_timers[i] < 0:
+					%HarpSampler.play_note(notes[i % notes.length()], starting_octave + i % num_octaves)
+					note_timers[i] = note_cooldown# randf_range(3, 4)
+	
+		if note_timers[i] > 0:
+			$NoteStrings.multimesh.set_instance_color(i, Color.GREEN)
+		else:
+			$NoteStrings.multimesh.set_instance_color(i, Color.RED)
+
 
 func generate_params(seed_str):
 	
@@ -331,6 +355,7 @@ func fibonacci_sphere(n):
 func _on_universe_radius_spin_box_value_changed(value):
 	universe_radius = value
 	$UniverseSphere.scale = Vector3.ONE * value * 2
+	$NoteStrings.multimesh.mesh.height = value
 	var pba = PackedByteArray()
 	pba.resize(4)
 	pba.encode_float(0, value)
@@ -389,3 +414,11 @@ func _on_update_button_pressed():
 
 func _on_sound_enabled_check_box_toggled(toggled_on):
 	sound_enabled = toggled_on
+
+
+func _on_note_cooldown_spin_box_value_changed(value):
+	note_cooldown = value
+
+
+func _on_show_note_strings_check_box_toggled(toggled_on):
+	$NoteStrings.visible = toggled_on
