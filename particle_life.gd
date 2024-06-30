@@ -33,13 +33,22 @@ var buffer_toggle = true
 
 @onready var sound_enabled = %SoundEnabledCheckBox.button_pressed
 var note_strings
-var notes = "ABCDEFG"
 var note_timers = []
 var num_octaves = 3
-var num_notes = notes.length() * num_octaves
+var num_notes = 15
 @onready var note_cooldown = %NoteCooldownSpinBox.value
-var starting_octave = 3
+var starting_octave: int = 3
 var string_width = 0.2 # todo make use of
+
+var penta_scale = ["C", "D", "E", "G", "A"]
+var jap_penta_scale = ["A", "B", "C", "E", "F"]
+var hicaz_scale = ["A", "A#", "C#", "D", "E", "F", "G"]
+var major_scale = ["A", "B", "C", "D", "E", "F", "G"]
+var melodic_minor_scale = ["A", "B", "C", "D", "E", "F#", "G#"]
+
+var music_scales = [penta_scale, jap_penta_scale, hicaz_scale, major_scale, melodic_minor_scale]
+@onready var selected_scale = %MusicScaleOptionButton.selected
+
 
 func _ready():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
@@ -111,11 +120,11 @@ func map_sound(delta):
 			
 			var d = note_strings[i].normalized().dot(positions[j].normalized())
 			if d > 0.9:
-				
+				var notes = music_scales[selected_scale]
 				if note_timers[i] < 0:
-					%HarpSampler.play_note(notes[i % notes.length()], starting_octave + i % num_octaves)
+					%HarpSampler.play_note(notes[i % notes.size()], starting_octave + i / notes.size())
 					note_timers[i] = note_cooldown# randf_range(3, 4)
-	
+					
 		if note_timers[i] > 0:
 			$NoteStrings.multimesh.set_instance_color(i, Color.GREEN)
 		else:
@@ -422,3 +431,7 @@ func _on_note_cooldown_spin_box_value_changed(value):
 
 func _on_show_note_strings_check_box_toggled(toggled_on):
 	$NoteStrings.visible = toggled_on
+
+
+func _on_music_scale_option_button_item_selected(index):
+	selected_scale = index

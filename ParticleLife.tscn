@@ -141,7 +141,7 @@ environment = SubResource("Environment_m44sp")
 [node name="MenuWindow" type="Window" parent="."]
 mode = 1
 title = "Menu"
-position = Vector2i(20, 40)
+position = Vector2i(20, 36)
 size = Vector2i(400, 600)
 transparent = true
 extend_to_title = true
@@ -202,6 +202,7 @@ prefix = "Number of Particles:"
 
 [node name="NumTypesSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 max_value = 16.0
 value = 3.0
@@ -210,6 +211,7 @@ prefix = "Number of Particle Types:"
 
 [node name="RunOnGpuCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Run on GPU"
 
@@ -285,6 +287,26 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Show Note Strings"
 
+[node name="Label" type="Label" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+layout_mode = 2
+text = "Music Scale:"
+
+[node name="MusicScaleOptionButton" type="OptionButton" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 5
+selected = 0
+popup/item_0/text = "Pentatonic"
+popup/item_0/id = 0
+popup/item_1/text = "Japanese Pentatonic"
+popup/item_1/id = 1
+popup/item_2/text = "Hicaz"
+popup/item_2/id = 2
+popup/item_3/text = "Major"
+popup/item_3/id = 3
+popup/item_4/text = "Melodic Minor"
+popup/item_4/id = 4
+
 [connection signal="pressed" from="MenuWindow/MarginContainer/Tabs/Simulation/UpdateButton" to="." method="_on_update_button_pressed"]
 [connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Simulation/WrapUniverseCheckBox" to="." method="_on_wrap_universe_check_box_toggled"]
 [connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/UniverseRadiusSpinBox" to="." method="_on_universe_radius_spin_box_value_changed"]
@@ -295,3 +317,4 @@ text = "Show Note Strings"
 [connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Sound/SoundEnabledCheckBox" to="." method="_on_sound_enabled_check_box_toggled"]
 [connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Sound/NoteCooldownSpinBox" to="." method="_on_note_cooldown_spin_box_value_changed"]
 [connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Sound/ShowNoteStringsCheckBox" to="." method="_on_show_note_strings_check_box_toggled"]
+[connection signal="item_selected" from="MenuWindow/MarginContainer/Tabs/Sound/MusicScaleOptionButton" to="." method="_on_music_scale_option_button_item_selected"]
