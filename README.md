@@ -25,5 +25,6 @@ todo:
 	- other note mapping to fib dirs
 	- fix string scale to universe radius
 	- differenr particles have own sounds?
+	- add rest of harp samples?..
 	
 ```

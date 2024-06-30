@@ -45,8 +45,13 @@ var jap_penta_scale = ["A", "B", "C", "E", "F"]
 var hicaz_scale = ["A", "A#", "C#", "D", "E", "F", "G"]
 var major_scale = ["A", "B", "C", "D", "E", "F", "G"]
 var melodic_minor_scale = ["A", "B", "C", "D", "E", "F#", "G#"]
+var whole_tone_scale = ["C", "D", "E", "F#", "G#", "A#"]
+var diminished_scale = ["C", "C#", "D#", "E", "F#", "G", "A", "#A"]
+var blues_scale = ["A", "C", "D", "D#", "E", "G"]
+var doric_hicaz = ["D", "E", "F", "G#", "A", "B", "C"]
 
-var music_scales = [penta_scale, jap_penta_scale, hicaz_scale, major_scale, melodic_minor_scale]
+var music_scales = [penta_scale, jap_penta_scale, hicaz_scale, major_scale, melodic_minor_scale,
+	whole_tone_scale, diminished_scale, blues_scale, doric_hicaz]
 @onready var selected_scale = %MusicScaleOptionButton.selected
 
 
