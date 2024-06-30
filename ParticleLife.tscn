@@ -1,7 +1,8 @@
-[gd_scene load_steps=32 format=3 uid="uid://bb5yu55jng3ek"]
+[gd_scene load_steps=33 format=3 uid="uid://bb5yu55jng3ek"]
 
 [ext_resource type="Script" path="res://particle_life.gd" id="1_1flt5"]
 [ext_resource type="Script" path="res://camera_movement.gd" id="2_hrovq"]
+[ext_resource type="Script" path="res://sound.gd" id="2_v3sst"]
 [ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="3_cwoe8"]
 [ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="4_fojeo"]
 [ext_resource type="AudioStream" uid="uid://br2jd1j18u3s3" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A2_mf1.wav" id="5_73skb"]
@@ -110,35 +111,40 @@ velocity = 5
 
 [sub_resource type="Environment" id="Environment_m44sp"]
 
-[node name="ParticleLife" type="MultiMeshInstance3D"]
+[node name="Game" type="Node"]
+
+[node name="ParticleLife" type="MultiMeshInstance3D" parent="."]
+unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_rnxrb")
 script = ExtResource("1_1flt5")
 
-[node name="UniverseSphere" type="MeshInstance3D" parent="."]
+[node name="UniverseSphere" type="MeshInstance3D" parent="ParticleLife"]
+unique_name_in_owner = true
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
 mesh = SubResource("SphereMesh_drbe8")
 skeleton = NodePath("../..")
 
-[node name="NoteStrings" type="MultiMeshInstance3D" parent="."]
+[node name="NoteStrings" type="MultiMeshInstance3D" parent="ParticleLife"]
 multimesh = SubResource("MultiMesh_6ql17")
+script = ExtResource("2_v3sst")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="ParticleLife"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
 script = ExtResource("2_hrovq")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ParticleLife"]
 
-[node name="HarpSampler" type="AudioStreamPlayer" parent="."]
+[node name="HarpSampler" type="AudioStreamPlayer" parent="ParticleLife"]
 unique_name_in_owner = true
 volume_db = -20.0
 script = ExtResource("3_cwoe8")
 max_notes = 21
 samples = Array[ExtResource("4_fojeo")]([SubResource("Resource_6oo6l"), SubResource("Resource_16wbn"), SubResource("Resource_1n0sy"), SubResource("Resource_1gkbf"), SubResource("Resource_p6ep0"), SubResource("Resource_bftpw")])
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="ParticleLife"]
 environment = SubResource("Environment_m44sp")
 
-[node name="MenuWindow" type="Window" parent="."]
+[node name="MenuWindow" type="Window" parent="ParticleLife"]
 mode = 1
 title = "Menu"
 position = Vector2i(20, 36)
@@ -147,20 +153,20 @@ transparent = true
 extend_to_title = true
 keep_title_visible = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MenuWindow"]
+[node name="MarginContainer" type="MarginContainer" parent="ParticleLife/MenuWindow"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Tabs" type="TabContainer" parent="MenuWindow/MarginContainer"]
+[node name="Tabs" type="TabContainer" parent="ParticleLife/MenuWindow/MarginContainer"]
 layout_mode = 2
 
-[node name="Simulation" type="VBoxContainer" parent="MenuWindow/MarginContainer/Tabs"]
+[node name="Simulation" type="VBoxContainer" parent="ParticleLife/MenuWindow/MarginContainer/Tabs"]
 layout_mode = 2
 
-[node name="ControlsLabel" type="Label" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="ControlsLabel" type="Label" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 layout_mode = 2
 text = "
 ESC: quit
@@ -169,30 +175,30 @@ WASD
 up / down: Shift / Space
 mouse pan: C"
 
-[node name="FpsLabel" type="Label" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="FpsLabel" type="Label" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "FPS: "
 
-[node name="SeedLabel" type="Label" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="SeedLabel" type="Label" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 layout_mode = 2
 text = "Seed:"
 
-[node name="SeedLineEdit" type="LineEdit" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="SeedLineEdit" type="LineEdit" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="UpdateButton" type="Button" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="UpdateButton" type="Button" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Update"
 
-[node name="WrapUniverseCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="WrapUniverseCheckBox" type="CheckBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Wrap Universe"
 
-[node name="NumParticlesSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="NumParticlesSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 10000.0
@@ -200,7 +206,7 @@ value = 150.0
 alignment = 2
 prefix = "Number of Particles:"
 
-[node name="NumTypesSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="NumTypesSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -209,29 +215,29 @@ value = 3.0
 alignment = 2
 prefix = "Number of Particle Types:"
 
-[node name="RunOnGpuCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Simulation"]
+[node name="RunOnGpuCheckBox" type="CheckBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Run on GPU"
 
-[node name="Particles" type="VBoxContainer" parent="MenuWindow/MarginContainer/Tabs"]
+[node name="Particles" type="VBoxContainer" parent="ParticleLife/MenuWindow/MarginContainer/Tabs"]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+[node name="Label" type="Label" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles"]
 layout_mode = 2
 text = "
 fields are scrollable"
 
-[node name="UniverseRadiusSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+[node name="UniverseRadiusSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles"]
 unique_name_in_owner = true
 layout_mode = 2
 value = 70.0
 alignment = 2
 prefix = "Universe Radius:"
 
-[node name="AttractionRadiusSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+[node name="AttractionRadiusSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles"]
 unique_name_in_owner = true
 layout_mode = 2
 step = 0.001
@@ -239,7 +245,7 @@ value = 10.0
 alignment = 2
 prefix = "Attraction Radius:"
 
-[node name="RepelRadiusSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+[node name="RepelRadiusSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles"]
 unique_name_in_owner = true
 layout_mode = 2
 step = 0.015
@@ -247,7 +253,7 @@ value = 1.005
 alignment = 2
 prefix = "Repel Radius:"
 
-[node name="ForceStrengthSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+[node name="ForceStrengthSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 10.0
@@ -256,7 +262,7 @@ value = 0.01
 alignment = 2
 prefix = "Force Strength:"
 
-[node name="MaxSpeedSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Particles"]
+[node name="MaxSpeedSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles"]
 unique_name_in_owner = true
 layout_mode = 2
 step = 0.1
@@ -264,17 +270,17 @@ value = 2.0
 alignment = 2
 prefix = "Max Speed:"
 
-[node name="Sound" type="VBoxContainer" parent="MenuWindow/MarginContainer/Tabs"]
+[node name="Sound" type="VBoxContainer" parent="ParticleLife/MenuWindow/MarginContainer/Tabs"]
 visible = false
 layout_mode = 2
 
-[node name="SoundEnabledCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+[node name="SoundEnabledCheckBox" type="CheckBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Sound Enabled"
 
-[node name="NoteCooldownSpinBox" type="SpinBox" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+[node name="NoteCooldownSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 10.0
@@ -282,16 +288,16 @@ value = 4.0
 prefix = "Note Cooldown: "
 suffix = "Seconds"
 
-[node name="ShowNoteStringsCheckBox" type="CheckBox" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+[node name="ShowNoteStringsCheckBox" type="CheckBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Show Note Strings"
 
-[node name="Label" type="Label" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+[node name="Label" type="Label" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound"]
 layout_mode = 2
 text = "Music Scale:"
 
-[node name="MusicScaleOptionButton" type="OptionButton" parent="MenuWindow/MarginContainer/Tabs/Sound"]
+[node name="MusicScaleOptionButton" type="OptionButton" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound"]
 unique_name_in_owner = true
 layout_mode = 2
 item_count = 9
@@ -315,14 +321,13 @@ popup/item_7/id = 7
 popup/item_8/text = "Doric Hicaz"
 popup/item_8/id = 8
 
-[connection signal="pressed" from="MenuWindow/MarginContainer/Tabs/Simulation/UpdateButton" to="." method="_on_update_button_pressed"]
-[connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Simulation/WrapUniverseCheckBox" to="." method="_on_wrap_universe_check_box_toggled"]
-[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/UniverseRadiusSpinBox" to="." method="_on_universe_radius_spin_box_value_changed"]
-[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/AttractionRadiusSpinBox" to="." method="_on_attraction_radius_spin_box_value_changed"]
-[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/RepelRadiusSpinBox" to="." method="_on_repel_radius_spin_box_value_changed"]
-[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/ForceStrengthSpinBox" to="." method="_on_force_strength_spin_box_value_changed"]
-[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Particles/MaxSpeedSpinBox" to="." method="_on_max_speed_spin_box_value_changed"]
-[connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Sound/SoundEnabledCheckBox" to="." method="_on_sound_enabled_check_box_toggled"]
-[connection signal="value_changed" from="MenuWindow/MarginContainer/Tabs/Sound/NoteCooldownSpinBox" to="." method="_on_note_cooldown_spin_box_value_changed"]
-[connection signal="toggled" from="MenuWindow/MarginContainer/Tabs/Sound/ShowNoteStringsCheckBox" to="." method="_on_show_note_strings_check_box_toggled"]
-[connection signal="item_selected" from="MenuWindow/MarginContainer/Tabs/Sound/MusicScaleOptionButton" to="." method="_on_music_scale_option_button_item_selected"]
+[connection signal="pressed" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation/UpdateButton" to="ParticleLife" method="_on_update_button_pressed"]
+[connection signal="toggled" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation/WrapUniverseCheckBox" to="ParticleLife" method="_on_wrap_universe_check_box_toggled"]
+[connection signal="value_changed" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles/UniverseRadiusSpinBox" to="ParticleLife" method="_on_universe_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles/AttractionRadiusSpinBox" to="ParticleLife" method="_on_attraction_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles/RepelRadiusSpinBox" to="ParticleLife" method="_on_repel_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles/ForceStrengthSpinBox" to="ParticleLife" method="_on_force_strength_spin_box_value_changed"]
+[connection signal="value_changed" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Particles/MaxSpeedSpinBox" to="ParticleLife" method="_on_max_speed_spin_box_value_changed"]
+[connection signal="toggled" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound/SoundEnabledCheckBox" to="ParticleLife/NoteStrings" method="_on_sound_enabled_check_box_toggled"]
+[connection signal="value_changed" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound/NoteCooldownSpinBox" to="ParticleLife/NoteStrings" method="_on_note_cooldown_spin_box_value_changed"]
+[connection signal="toggled" from="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound/ShowNoteStringsCheckBox" to="ParticleLife/NoteStrings" method="_on_show_note_strings_check_box_toggled"]

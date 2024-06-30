@@ -31,32 +31,9 @@ var types_buf
 
 var buffer_toggle = true
 
-@onready var sound_enabled = %SoundEnabledCheckBox.button_pressed
-var note_strings
-var note_timers = []
-var num_octaves = 3
-var num_notes = 15
-@onready var note_cooldown = %NoteCooldownSpinBox.value
-var starting_octave: int = 3
-var string_width = 0.2 # todo make use of
-
-var penta_scale = ["C", "D", "E", "G", "A"]
-var jap_penta_scale = ["A", "B", "C", "E", "F"]
-var hicaz_scale = ["A", "A#", "C#", "D", "E", "F", "G"]
-var major_scale = ["A", "B", "C", "D", "E", "F", "G"]
-var melodic_minor_scale = ["A", "B", "C", "D", "E", "F#", "G#"]
-var whole_tone_scale = ["C", "D", "E", "F#", "G#", "A#"]
-var diminished_scale = ["C", "C#", "D#", "E", "F#", "G", "A", "#A"]
-var blues_scale = ["A", "C", "D", "D#", "E", "G"]
-var doric_hicaz = ["D", "E", "F", "G#", "A", "B", "C"]
-
-var music_scales = [penta_scale, jap_penta_scale, hicaz_scale, major_scale, melodic_minor_scale,
-	whole_tone_scale, diminished_scale, blues_scale, doric_hicaz]
-@onready var selected_scale = %MusicScaleOptionButton.selected
-
 
 func _ready():
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+	#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	
 	$UniverseSphere.scale = Vector3.ONE * %UniverseRadiusSpinBox.value * 2
 	
@@ -66,19 +43,6 @@ func _ready():
 	generate_params(seed_str)
 	set_multimesh_params()
 	init_shader()
-	
-	$NoteStrings.multimesh.use_colors = true
-	$NoteStrings.multimesh.instance_count = num_notes
-	$NoteStrings.multimesh.mesh.height = universe_radius
-	$NoteStrings.visible = %ShowNoteStringsCheckBox.button_pressed
-	note_strings = fibonacci_sphere(num_notes)
-	for i in range(num_notes):
-		note_timers.append(note_cooldown / 2+ randf_range(-1, 1))
-		
-		var t = Transform3D(Basis(), note_strings[i] * universe_radius / 2)
-		t = t.looking_at(Vector3.ZERO)
-		t = t.rotated_local(Vector3.RIGHT, PI / 2)
-		$NoteStrings.multimesh.set_instance_transform(i, t)
 	
 
 func _process(delta):
@@ -96,9 +60,6 @@ func _process(delta):
 		var t = Transform3D(Basis(), positions[i])
 		multimesh.set_instance_transform(i, t)
 
-	if sound_enabled:
-		map_sound(delta)
-
 
 func _exit_tree():
 	rd.free_rid(pipeline)
@@ -110,30 +71,6 @@ func _exit_tree():
 	rd.free_rid(types_buf)
 	rd.free_rid(shader)
 	rd.free()
-
-
-func map_sound(delta):
-
-	for i in range(note_strings.size()):
-		
-		note_timers[i] -= delta
-		
-		for j in range(num_particles):
-			
-			if velocities[j].length() < 0.1:
-				continue
-			
-			var d = note_strings[i].normalized().dot(positions[j].normalized())
-			if d > 0.9:
-				var notes = music_scales[selected_scale]
-				if note_timers[i] < 0:
-					%HarpSampler.play_note(notes[i % notes.size()], starting_octave + i / notes.size())
-					note_timers[i] = note_cooldown# randf_range(3, 4)
-					
-		if note_timers[i] > 0:
-			$NoteStrings.multimesh.set_instance_color(i, Color.GREEN)
-		else:
-			$NoteStrings.multimesh.set_instance_color(i, Color.RED)
 
 
 func generate_params(seed_str):
@@ -353,19 +290,6 @@ func particle_life_gpu(delta):
 		positions[i].z = data.decode_float((i * num_elements + 2) * float_size)
 
 
-func fibonacci_sphere(n):
-	var points = []
-	var phi = PI * (sqrt(5) - 1)
-	for i in range(n):
-		var y = 1  - (i / float(n - 1)) * 2
-		var r = sqrt(1 - y**2)
-		var theta = phi * i
-		var x = r * cos(theta)
-		var z = r * sin(theta)
-		points.append(Vector3(x, y, z))
-	return points
-
-
 func _on_universe_radius_spin_box_value_changed(value):
 	universe_radius = value
 	$UniverseSphere.scale = Vector3.ONE * value * 2
@@ -425,18 +349,3 @@ func _on_update_button_pressed():
 	set_uniform_values()
 	set_multimesh_params()
 
-
-func _on_sound_enabled_check_box_toggled(toggled_on):
-	sound_enabled = toggled_on
-
-
-func _on_note_cooldown_spin_box_value_changed(value):
-	note_cooldown = value
-
-
-func _on_show_note_strings_check_box_toggled(toggled_on):
-	$NoteStrings.visible = toggled_on
-
-
-func _on_music_scale_option_button_item_selected(index):
-	selected_scale = index

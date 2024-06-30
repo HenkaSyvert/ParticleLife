@@ -26,5 +26,6 @@ todo:
 	- fix string scale to universe radius
 	- differenr particles have own sounds?
 	- add rest of harp samples?..
+	- make notes from 4ths and 5th and set intervals instead of just all tones in scale
 	
 ```
