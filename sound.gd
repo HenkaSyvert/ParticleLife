@@ -8,7 +8,6 @@ var num_octaves = 3
 var num_notes = 15
 @onready var note_cooldown = %NoteCooldownSpinBox.value
 var starting_octave: int = 3
-var string_width = 0.2 # todo make use of
 
 var penta_scale = ["C", "D", "E", "G", "A"]
 var jap_penta_scale = ["A", "B", "C", "E", "F"]
@@ -29,24 +28,31 @@ func _ready():
 	multimesh.use_colors = true
 	multimesh.instance_count = num_notes
 	multimesh.mesh.height = %ParticleLife.universe_radius
-	#visible = %ShowNoteStringsCheckBox.button_pressed
+	multimesh.mesh.radius = %StringWidthSpinBox.value / 2
+	visible = %ShowNoteStringsCheckBox.button_pressed
+	
 	note_strings = fibonacci_sphere(num_notes)
 	for i in range(num_notes):
 		note_timers.append(note_cooldown / 2 + randf_range(-1, 1))
-
-
-func _process(delta):
-	if sound_enabled:
-		map_sound(delta)
-	
-	multimesh.mesh.height = %ParticleLife.universe_radius
-	for i in range(num_notes):
-		var t = Transform3D(Basis(), note_strings[i] * %ParticleLife.universe_radius / 2)
 		
-		if t.origin.normalized().is_zero_approx():
+		var t = Transform3D(Basis(), note_strings[i] * %ParticleLife.universe_radius / 2)
+	
+		if not t.origin.normalized().cross(Vector3.UP).is_zero_approx():
 			t = t.looking_at(Vector3.ZERO)
 			t = t.rotated_local(Vector3.RIGHT, PI / 2)
 		
+		multimesh.set_instance_transform(i, t)
+
+
+func _process(delta):
+
+	map_sound(delta)
+
+	for i in range(multimesh.instance_count):
+		var t = multimesh.get_instance_transform(i)
+		t.origin = Vector3.ZERO
+		t = t.translated(note_strings[i] * %ParticleLife.universe_radius / 2)
+		multimesh.mesh.height = %ParticleLife.universe_radius
 		multimesh.set_instance_transform(i, t)
 
 
@@ -78,9 +84,10 @@ func map_sound(delta):
 			if d > 0.9:
 				var notes = music_scales[selected_scale]
 				if note_timers[i] < 0:
-					%HarpSampler.play_note(notes[i % notes.size()], starting_octave + i / notes.size())
-					note_timers[i] = note_cooldown# randf_range(3, 4)
-					
+					note_timers[i] = note_cooldown
+					if sound_enabled:
+						%HarpSampler.play_note(notes[i % notes.size()], starting_octave + i / notes.size())
+
 		if note_timers[i] > 0:
 			multimesh.set_instance_color(i, Color.GREEN)
 		else:
@@ -102,5 +109,9 @@ func _on_sound_enabled_check_box_toggled(toggled_on):
 
 func _on_show_note_strings_check_box_toggled(toggled_on):
 	visible = toggled_on
+
+
+func _on_string_width_spin_box_value_changed(value):
+	multimesh.mesh.radius = value / 2
 
 
