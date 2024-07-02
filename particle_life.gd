@@ -21,7 +21,7 @@ var colors = []
 func _ready():
 	#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	
-	$UniverseSphere.scale = Vector3.ONE * %UniverseRadiusSpinBox.value * 2
+	%UniverseSphere.scale = Vector3.ONE * %UniverseRadiusSpinBox.value * 2
 	
 	var seed_str = "det luktar fisk" #str(randi())
 	%SeedLineEdit.set_text(seed_str)
@@ -145,8 +145,7 @@ func particle_life_cpu(delta):
 
 func _on_universe_radius_spin_box_value_changed(value):
 	universe_radius = value
-	$UniverseSphere.scale = Vector3.ONE * value * 2
-	$NoteStrings.multimesh.mesh.height = value
+	%UniverseSphere.scale = Vector3.ONE * value * 2
 	GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, value)
 
 
