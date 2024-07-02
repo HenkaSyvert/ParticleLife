@@ -101,6 +101,6 @@ func _on_sound_enabled_check_box_toggled(toggled_on):
 
 
 func _on_show_note_strings_check_box_toggled(toggled_on):
-	#visible = toggled_on
-	pass
+	visible = toggled_on
+
 

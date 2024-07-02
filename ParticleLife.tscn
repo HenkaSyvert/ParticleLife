@@ -217,8 +217,8 @@ prefix = "Number of Particle Types:"
 
 [node name="RunOnGpuCheckBox" type="CheckBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Simulation"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
+button_pressed = true
 text = "Run on GPU"
 
 [node name="Particles" type="VBoxContainer" parent="ParticleLife/MenuWindow/MarginContainer/Tabs"]
@@ -277,7 +277,6 @@ layout_mode = 2
 [node name="SoundEnabledCheckBox" type="CheckBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound"]
 unique_name_in_owner = true
 layout_mode = 2
-button_pressed = true
 text = "Sound Enabled"
 
 [node name="NoteCooldownSpinBox" type="SpinBox" parent="ParticleLife/MenuWindow/MarginContainer/Tabs/Sound"]
