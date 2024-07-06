@@ -54,6 +54,7 @@ static func _static_init() -> void:
 	_pipeline = _rd.compute_pipeline_create(_shader)
 	_positions_bufs.resize(2)
 
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		_rd.free_rid(_pipeline)

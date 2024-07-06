@@ -7,6 +7,7 @@ todo:
 	- make 2d version
 	- lint scripts
 	- make sound work with gpu
+	- add cube universe shape
 	
 	gpu:
 		- figure out optimal work groups

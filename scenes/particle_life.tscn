@@ -1,16 +1,16 @@
 [gd_scene load_steps=33 format=3 uid="uid://bb5yu55jng3ek"]
 
-[ext_resource type="Script" path="res://particle_life.gd" id="1_1flt5"]
-[ext_resource type="Script" path="res://camera_movement.gd" id="2_hrovq"]
-[ext_resource type="Script" path="res://sound.gd" id="2_v3sst"]
-[ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="3_cwoe8"]
-[ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="4_fojeo"]
-[ext_resource type="AudioStream" uid="uid://br2jd1j18u3s3" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A2_mf1.wav" id="5_73skb"]
-[ext_resource type="AudioStream" uid="uid://c6bsjc4wqptt5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A6_mf1.wav" id="6_ne2sv"]
-[ext_resource type="AudioStream" uid="uid://b8phiocn4sgmo" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B3_mf1.wav" id="7_q1mea"]
-[ext_resource type="AudioStream" uid="uid://c0ho1vajtnv71" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B5_mf1.wav" id="8_0plqi"]
-[ext_resource type="AudioStream" uid="uid://c5b58a8jvxaog" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B6_mf1.wav" id="9_fxaak"]
-[ext_resource type="AudioStream" uid="uid://c888edrfyiwaj" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/C3_mf3.wav" id="10_kfpa6"]
+[ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="1_1o4o4"]
+[ext_resource type="Script" path="res://scripts/particle_life.gd" id="1_tq84v"]
+[ext_resource type="Script" path="res://scripts/sound.gd" id="2_qaoom"]
+[ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="2_qj4jq"]
+[ext_resource type="Script" path="res://scripts/camera_movement.gd" id="3_drljc"]
+[ext_resource type="AudioStream" uid="uid://br2jd1j18u3s3" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A2_mf1.wav" id="3_trfgc"]
+[ext_resource type="AudioStream" uid="uid://c6bsjc4wqptt5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A6_mf1.wav" id="4_ojnt6"]
+[ext_resource type="AudioStream" uid="uid://b8phiocn4sgmo" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B3_mf1.wav" id="5_cmxlv"]
+[ext_resource type="AudioStream" uid="uid://c0ho1vajtnv71" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B5_mf1.wav" id="6_sam0k"]
+[ext_resource type="AudioStream" uid="uid://c5b58a8jvxaog" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B6_mf1.wav" id="7_7xwv0"]
+[ext_resource type="AudioStream" uid="uid://c888edrfyiwaj" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/C3_mf3.wav" id="8_0v8b5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_es8bu"]
 vertex_color_use_as_albedo = true
@@ -69,43 +69,43 @@ transform_format = 1
 mesh = SubResource("CapsuleMesh_u0b18")
 
 [sub_resource type="Resource" id="Resource_6oo6l"]
-script = ExtResource("4_fojeo")
-stream = ExtResource("5_73skb")
+script = ExtResource("2_qj4jq")
+stream = ExtResource("3_trfgc")
 tone = "A"
 octave = 2
 velocity = 5
 
 [sub_resource type="Resource" id="Resource_16wbn"]
-script = ExtResource("4_fojeo")
-stream = ExtResource("6_ne2sv")
+script = ExtResource("2_qj4jq")
+stream = ExtResource("4_ojnt6")
 tone = "A"
 octave = 6
 velocity = 5
 
 [sub_resource type="Resource" id="Resource_1n0sy"]
-script = ExtResource("4_fojeo")
-stream = ExtResource("7_q1mea")
+script = ExtResource("2_qj4jq")
+stream = ExtResource("5_cmxlv")
 tone = "B"
 octave = 3
 velocity = 5
 
 [sub_resource type="Resource" id="Resource_1gkbf"]
-script = ExtResource("4_fojeo")
-stream = ExtResource("8_0plqi")
+script = ExtResource("2_qj4jq")
+stream = ExtResource("6_sam0k")
 tone = "B"
 octave = 5
 velocity = 5
 
 [sub_resource type="Resource" id="Resource_p6ep0"]
-script = ExtResource("4_fojeo")
-stream = ExtResource("9_fxaak")
+script = ExtResource("2_qj4jq")
+stream = ExtResource("7_7xwv0")
 tone = "B"
 octave = 6
 velocity = 5
 
 [sub_resource type="Resource" id="Resource_bftpw"]
-script = ExtResource("4_fojeo")
-stream = ExtResource("10_kfpa6")
+script = ExtResource("2_qj4jq")
+stream = ExtResource("8_0v8b5")
 tone = "C"
 octave = 3
 velocity = 5
@@ -117,7 +117,7 @@ velocity = 5
 [node name="ParticleLife" type="MultiMeshInstance3D" parent="."]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_rnxrb")
-script = ExtResource("1_1flt5")
+script = ExtResource("1_tq84v")
 
 [node name="UniverseSphere" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
@@ -127,20 +127,20 @@ mesh = SubResource("SphereMesh_drbe8")
 [node name="NoteStrings" type="MultiMeshInstance3D" parent="."]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_6ql17")
-script = ExtResource("2_v3sst")
+script = ExtResource("2_qaoom")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
-script = ExtResource("2_hrovq")
+script = ExtResource("3_drljc")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 
 [node name="HarpSampler" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 volume_db = -20.0
-script = ExtResource("3_cwoe8")
+script = ExtResource("1_1o4o4")
 max_notes = 21
-samples = Array[ExtResource("4_fojeo")]([SubResource("Resource_6oo6l"), SubResource("Resource_16wbn"), SubResource("Resource_1n0sy"), SubResource("Resource_1gkbf"), SubResource("Resource_p6ep0"), SubResource("Resource_bftpw")])
+samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_6oo6l"), SubResource("Resource_16wbn"), SubResource("Resource_1n0sy"), SubResource("Resource_1gkbf"), SubResource("Resource_p6ep0"), SubResource("Resource_bftpw")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_m44sp")
