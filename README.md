@@ -11,6 +11,7 @@ todo:
 	- add pause
 	- add typed scripting macro
 	- 4d version
+	- fix errors from all enforced typing options
 	
 	gpu:
 		- figure out optimal work groups

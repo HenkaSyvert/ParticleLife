@@ -27,7 +27,7 @@ const WORKGROUP_SIZE: Vector3i = Vector3i(512, 1, 1)
 static var _num_particles: int
 static var _num_types: int
 
-static var _rd := RenderingServer.create_local_rendering_device()
+static var _rd: RenderingDevice = RenderingServer.create_local_rendering_device()
 static var _shader: RID
 static var _pipeline: RID
 static var _uniform_set: RID
@@ -48,11 +48,11 @@ static var _buffer_toggle: int
 
 
 static func _static_init() -> void:
-	var _shader_file = load("res://particle_life.glsl")
-	var _shader_spirv = _shader_file.get_spirv()
+	var _shader_file: RDShaderFile = load("res://particle_life.glsl")
+	var _shader_spirv: RDShaderSPIRV = _shader_file.get_spirv()
 	_shader = _rd.shader_create_from_spirv(_shader_spirv)
 	_pipeline = _rd.compute_pipeline_create(_shader)
-	_positions_bufs.resize(2)
+	assert(_positions_bufs.resize(2) == OK)
 
 
 func _notification(what: int) -> void:
@@ -95,12 +95,12 @@ static func setup_shader_uniforms(num_particles:int, num_types: int) -> void:
 	_attraction_matrix_buf = _rd.storage_buffer_create(_attraction_matrix_buf_size)
 	_types_buf = _rd.storage_buffer_create(_types_buf_size)
 
-	var positions0_u = RDUniform.new()
-	var positions1_u = RDUniform.new()
-	var velocities_u = RDUniform.new()
-	var params_u = RDUniform.new()
-	var attraction_matrix_u = RDUniform.new()
-	var types_u = RDUniform.new()
+	var positions0_u: RDUniform = RDUniform.new()
+	var positions1_u: RDUniform = RDUniform.new()
+	var velocities_u: RDUniform = RDUniform.new()
+	var params_u: RDUniform = RDUniform.new()
+	var attraction_matrix_u: RDUniform = RDUniform.new()
+	var types_u: RDUniform = RDUniform.new()
 	
 	positions0_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	positions1_u.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
@@ -123,7 +123,7 @@ static func setup_shader_uniforms(num_particles:int, num_types: int) -> void:
 	attraction_matrix_u.add_id(_attraction_matrix_buf)
 	types_u.add_id(_types_buf)
 	
-	var uniforms = [
+	var uniforms: Array[RDUniform] = [
 		positions0_u,
 		positions1_u,
 		velocities_u,
@@ -139,13 +139,13 @@ static func setup_shader_uniforms(num_particles:int, num_types: int) -> void:
 	GPU.set_uniform(Uniform.DELTA, 0.0)
 
 
-static func particle_life_gpu(delta: float) -> Array:
+static func particle_life_gpu(delta: float) -> Array[Vector3]:
 
 	_buffer_toggle = (_buffer_toggle + 1) % 2
 	GPU.set_uniform(Uniform.BUFFER_TOGGLE, _buffer_toggle)
 	GPU.set_uniform(Uniform.DELTA, delta)
 
-	var compute_list = _rd.compute_list_begin()
+	var compute_list: int = _rd.compute_list_begin()
 	_rd.compute_list_bind_compute_pipeline(compute_list, _pipeline)
 	_rd.compute_list_bind_uniform_set(compute_list, _uniform_set, 0)
 	_rd.compute_list_dispatch(compute_list, WORKGROUP_SIZE.x, WORKGROUP_SIZE.y, WORKGROUP_SIZE.z)
@@ -153,27 +153,27 @@ static func particle_life_gpu(delta: float) -> Array:
 	_rd.submit()
 	_rd.sync()
 	
-	var data = _rd.buffer_get_data(_positions_bufs[_buffer_toggle], 0, _positions_buf_size)
+	var data: PackedByteArray = _rd.buffer_get_data(_positions_bufs[_buffer_toggle], 0, _positions_buf_size)
 
-	var positions = []
-	for i in range(_num_particles):
-		var v = Vector3()
-		for j in range(3):
-			var offset = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
+	var positions: Array[Vector3] = []
+	for i: int in range(_num_particles):
+		var v: Vector3 = Vector3()
+		for j: int in range(3):
+			var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
 			v[j] = data.decode_float(offset)
 		positions.append(v)
 	
 	return positions
 
 
-static func set_uniform(uniform: Uniform, data) -> void:
+static func set_uniform(uniform: Uniform, data: Variant) -> void:
 	
 	if not _uniform_set.is_valid():
 		return
 	
-	var pba = PackedByteArray()
+	var pba: PackedByteArray = PackedByteArray()
 	
-	var buffer_uniforms = [
+	var buffer_uniforms: Array[Uniform] = [
 		Uniform.ATTRACTION_MATRIX,
 		Uniform.POSITIONS,
 		Uniform.TYPES,
@@ -182,54 +182,54 @@ static func set_uniform(uniform: Uniform, data) -> void:
 	
 	if uniform in buffer_uniforms:
 		
-		var buffer
-		var size
+		var buffer: RID
+		var size: int
 		
 		if uniform == Uniform.ATTRACTION_MATRIX:
 			buffer = _attraction_matrix_buf
 			size = _attraction_matrix_buf_size
-			pba.resize(size)
-			for i in range(_num_types):
-				for j in range(_num_types):
-					var offset = (i * _num_types + j) * SIZEOF_DATATYPE
+			assert(pba.resize(size) == OK)
+			for i: int in range(_num_types):
+				for j: int in range(_num_types):
+					var offset: int = (i * _num_types + j) * SIZEOF_DATATYPE
 					pba.encode_float(offset, data[i][j])
 		
 		elif uniform == Uniform.POSITIONS:
 			buffer = _positions_bufs[0]
 			size = _positions_buf_size
-			pba.resize(size)
-			for i in range(_num_particles):
-				for j in range(3):
-					var offset = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
+			assert(pba.resize(size) == OK)
+			for i: int in range(_num_particles):
+				for j: int in range(3):
+					var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
 					pba.encode_float(offset, data[i][j])
 		
 		elif uniform == Uniform.TYPES:
 			buffer = _types_buf
 			size = _types_buf_size
-			pba.resize(size)
-			for i in range(_num_particles):
+			assert(pba.resize(size) == OK)
+			for i: int in range(_num_particles):
 				pba.encode_s32(i * SIZEOF_DATATYPE, data[i])
 		
 		else:
 			buffer = _velocities_buf
 			size = _velocities_buf_size
-			pba.resize(size)
-			for i in range(_num_particles):
-				for j in range(3):
-					var offset = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
+			assert(pba.resize(size) == OK)
+			for i: int in range(_num_particles):
+				for j: int in range(3):
+					var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
 					pba.encode_float(offset, data[i][j])
 
-		_rd.buffer_update(buffer, 0, size, pba)
+		assert(_rd.buffer_update(buffer, 0, size, pba) == OK)
 		return
 	
-	var s32_uniforms = [
+	var s32_uniforms: Array[Uniform] = [
 		Uniform.NUM_PARTICLES,
 		Uniform.WRAP_UNIVERSE,
 		Uniform.BUFFER_TOGGLE,
 		Uniform.NUM_TYPES
 	]
 	
-	pba.resize(SIZEOF_DATATYPE)
+	assert(pba.resize(SIZEOF_DATATYPE) == OK)
 	if uniform in s32_uniforms:
 		if uniform == Uniform.WRAP_UNIVERSE:
 			data = int(data)
@@ -237,5 +237,5 @@ static func set_uniform(uniform: Uniform, data) -> void:
 	else:
 		pba.encode_float(0, data)
 	
-	_rd.buffer_update(_params_buf, uniform * SIZEOF_DATATYPE, SIZEOF_DATATYPE, pba)
+	assert(_rd.buffer_update(_params_buf, uniform * SIZEOF_DATATYPE, SIZEOF_DATATYPE, pba) == OK)
 
