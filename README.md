@@ -8,6 +8,8 @@ todo:
 	- lint scripts
 	- make sound work with gpu
 	- add cube universe shape
+	- add pause
+	- add typed scripting macro
 	
 	gpu:
 		- figure out optimal work groups

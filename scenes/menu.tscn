@@ -1,0 +1,200 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjlrbt0unonkr"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_q1rge"]
+
+[node name="Menu" type="Window"]
+mode = 1
+title = "Menu"
+position = Vector2i(20, 36)
+size = Vector2i(400, 600)
+transparent = true
+extend_to_title = true
+keep_title_visible = true
+script = ExtResource("1_q1rge")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tabs" type="TabContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Simulation" type="VBoxContainer" parent="MarginContainer/Tabs"]
+layout_mode = 2
+
+[node name="ControlsLabel" type="Label" parent="MarginContainer/Tabs/Simulation"]
+layout_mode = 2
+text = "
+ESC: quit
+Camera: 
+WASD
+up / down: Shift / Space
+mouse pan: C"
+
+[node name="FpsLabel" type="Label" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "FPS: "
+
+[node name="SeedLabel" type="Label" parent="MarginContainer/Tabs/Simulation"]
+layout_mode = 2
+text = "Seed:"
+
+[node name="SeedLineEdit" type="LineEdit" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "det luktar fisk"
+
+[node name="RestartButton" type="Button" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Update"
+
+[node name="WrapUniverseCheckBox" type="CheckBox" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Wrap Universe"
+
+[node name="NumParticlesSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 10000.0
+value = 150.0
+alignment = 2
+prefix = "Number of Particles:"
+
+[node name="NumTypesSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 16.0
+value = 3.0
+alignment = 2
+prefix = "Number of Particle Types:"
+
+[node name="RunOnGpuCheckBox" type="CheckBox" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Run on GPU"
+
+[node name="Particles" type="VBoxContainer" parent="MarginContainer/Tabs"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/Tabs/Particles"]
+layout_mode = 2
+text = "
+fields are scrollable"
+
+[node name="UniverseRadiusSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 70.0
+alignment = 2
+prefix = "Universe Radius:"
+
+[node name="AttractionRadiusSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.001
+value = 10.0
+alignment = 2
+prefix = "Attraction Radius:"
+
+[node name="RepelRadiusSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.015
+value = 1.005
+alignment = 2
+prefix = "Repel Radius:"
+
+[node name="ForceStrengthSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 10.0
+step = 0.001
+value = 0.01
+alignment = 2
+prefix = "Force Strength:"
+
+[node name="MaxSpeedSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Particles"]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.1
+value = 2.0
+alignment = 2
+prefix = "Max Speed:"
+
+[node name="Sound" type="VBoxContainer" parent="MarginContainer/Tabs"]
+visible = false
+layout_mode = 2
+
+[node name="EnableSoundCheckBox" type="CheckBox" parent="MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sound Enabled"
+
+[node name="NoteCooldownSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 10.0
+value = 4.0
+prefix = "Note Cooldown: "
+suffix = "Seconds"
+
+[node name="ShowNoteStringsCheckBox" type="CheckBox" parent="MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show Note Strings"
+
+[node name="Label" type="Label" parent="MarginContainer/Tabs/Sound"]
+layout_mode = 2
+text = "Music Scale:"
+
+[node name="MusicScaleOptionButton" type="OptionButton" parent="MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 9
+selected = 0
+popup/item_0/text = "Pentatonic"
+popup/item_0/id = 0
+popup/item_1/text = "Japanese Pentatonic"
+popup/item_1/id = 1
+popup/item_2/text = "Hicaz"
+popup/item_2/id = 2
+popup/item_3/text = "Major"
+popup/item_3/id = 3
+popup/item_4/text = "Melodic Minor"
+popup/item_4/id = 4
+popup/item_5/text = "Whole Tone"
+popup/item_5/id = 5
+popup/item_6/text = "Diminished"
+popup/item_6/id = 6
+popup/item_7/text = "Blues"
+popup/item_7/id = 7
+popup/item_8/text = "Doric Hicaz"
+popup/item_8/id = 8
+
+[node name="NoteStringWidthSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.05
+value = 0.5
+prefix = "String Width"
+
+[connection signal="pressed" from="MarginContainer/Tabs/Simulation/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="toggled" from="MarginContainer/Tabs/Simulation/WrapUniverseCheckBox" to="." method="_on_wrap_universe_check_box_toggled"]
+[connection signal="toggled" from="MarginContainer/Tabs/Simulation/RunOnGpuCheckBox" to="." method="_on_run_on_gpu_check_box_toggled"]
+[connection signal="value_changed" from="MarginContainer/Tabs/Particles/UniverseRadiusSpinBox" to="." method="_on_universe_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="MarginContainer/Tabs/Particles/AttractionRadiusSpinBox" to="." method="_on_attraction_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="MarginContainer/Tabs/Particles/RepelRadiusSpinBox" to="." method="_on_repel_radius_spin_box_value_changed"]
+[connection signal="value_changed" from="MarginContainer/Tabs/Particles/ForceStrengthSpinBox" to="." method="_on_force_strength_spin_box_value_changed"]
+[connection signal="value_changed" from="MarginContainer/Tabs/Particles/MaxSpeedSpinBox" to="." method="_on_max_speed_spin_box_value_changed"]
+[connection signal="toggled" from="MarginContainer/Tabs/Sound/EnableSoundCheckBox" to="." method="_on_enable_sound_check_box_toggled"]
+[connection signal="value_changed" from="MarginContainer/Tabs/Sound/NoteCooldownSpinBox" to="." method="_on_note_cooldown_spin_box_value_changed"]
+[connection signal="toggled" from="MarginContainer/Tabs/Sound/ShowNoteStringsCheckBox" to="." method="_on_show_note_strings_check_box_toggled"]
+[connection signal="item_selected" from="MarginContainer/Tabs/Sound/MusicScaleOptionButton" to="." method="_on_music_scale_option_button_item_selected"]
+[connection signal="value_changed" from="MarginContainer/Tabs/Sound/NoteStringWidthSpinBox" to="." method="_on_note_string_width_spin_box_value_changed"]

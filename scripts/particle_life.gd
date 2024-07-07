@@ -1,15 +1,16 @@
+class_name ParticleLife
 extends MultiMeshInstance3D
 
-@onready var num_types: int = %NumTypesSpinBox.value
-@onready var num_particles: int = %NumParticlesSpinBox.value
-@onready var wrap_universe: bool = %WrapUniverseCheckBox.button_pressed
-@onready var run_on_gpu: bool = %RunOnGpuCheckBox.button_pressed
+@export var num_types: int = 3
+@export var num_particles: int = 150
+@export var wrap_universe: bool = false
+@export var run_on_gpu: bool = false
 
-@onready var universe_radius: float = %UniverseRadiusSpinBox.value
-@onready var attraction_radius: float = %AttractionRadiusSpinBox.value
-@onready var repel_radius: float = %RepelRadiusSpinBox.value
-@onready var force_strength: float = %ForceStrengthSpinBox.value
-@onready var max_speed: float = %MaxSpeedSpinBox.value
+@export var universe_radius: float = 70
+@export var attraction_radius: float = 10
+@export var repel_radius: float = 1
+@export var force_strength: float = 0.001
+@export var max_speed: float = 2
 
 var positions = []
 var velocities = []
@@ -21,19 +22,12 @@ var colors = []
 func _ready():
 	#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	
-	%UniverseSphere.scale = Vector3.ONE * %UniverseRadiusSpinBox.value * 2
-	
-	var seed_str = "det luktar fisk" #str(randi())
-	%SeedLineEdit.set_text(seed_str)
+	%UniverseSphere.scale = Vector3.ONE * universe_radius * 2
 
-	start_simulation()
+	start_simulation("det luktar fisk")
 
 
 func _process(delta):
-	%FpsLabel.set_text("FPS: %d" % Engine.get_frames_per_second())	
-	
-	if Input.is_action_pressed("ui_cancel"):
-		get_tree().quit()
 
 	if run_on_gpu:
 		positions = GPU.particle_life_gpu(delta)
@@ -45,9 +39,9 @@ func _process(delta):
 		multimesh.set_instance_transform(i, t)
 
 
-func start_simulation():
+func start_simulation(seed_str):
 	
-	generate_params(%SeedLineEdit.text)
+	generate_params(seed_str)
 	set_multimesh_params()
 	
 	if run_on_gpu:
@@ -143,40 +137,42 @@ func particle_life_cpu(delta):
 	positions = new_positions
 
 
-func _on_universe_radius_spin_box_value_changed(value):
+func _on_menu_attraction_radius_changed(value):
+	attraction_radius = value
+	GPU.set_uniform(GPU.Uniform.ATTRACTION_RADIUS, value)
+
+
+func _on_menu_force_strength_changed(value):
+	force_strength = value
+	GPU.set_uniform(GPU.Uniform.FORCE_STRENGTH, value)
+
+
+func _on_menu_max_speed_changed(value):
+	max_speed = value
+	GPU.set_uniform(GPU.Uniform.MAX_SPEED, value)
+
+
+func _on_menu_pressed_restart(seed_str, particles_count, types_count):
+	num_particles = particles_count
+	num_types = types_count
+	start_simulation(seed_str)
+
+
+func _on_menu_repel_radius_changed(value):
+	repel_radius = value
+	GPU.set_uniform(GPU.Uniform.REPEL_RADIUS, value)
+
+
+func _on_menu_run_on_gpu_changed(value):
+	run_on_gpu = value
+
+
+func _on_menu_universe_radius_changed(value):
 	universe_radius = value
 	%UniverseSphere.scale = Vector3.ONE * value * 2
 	GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, value)
 
 
-func _on_attraction_radius_spin_box_value_changed(value):
-	attraction_radius = value
-	GPU.set_uniform(GPU.Uniform.ATTRACTION_RADIUS, value)
-
-
-func _on_repel_radius_spin_box_value_changed(value):
-	repel_radius = value
-	GPU.set_uniform(GPU.Uniform.REPEL_RADIUS, value)
-
-
-func _on_force_strength_spin_box_value_changed(value):
-	force_strength = value
-	GPU.set_uniform(GPU.Uniform.FORCE_STRENGTH, value)
-
-
-func _on_max_speed_spin_box_value_changed(value):
-	max_speed = value
-	GPU.set_uniform(GPU.Uniform.MAX_SPEED, value)
-
-
-func _on_wrap_universe_check_box_toggled(toggled_on):
-	wrap_universe = toggled_on
-	GPU.set_uniform(GPU.Uniform.WRAP_UNIVERSE, toggled_on)
-
-
-func _on_update_button_pressed():
-	num_particles = %NumParticlesSpinBox.value
-	num_types = %NumTypesSpinBox.value
-	run_on_gpu = %RunOnGpuCheckBox.button_pressed
-	start_simulation()
-
+func _on_menu_wrap_universe_changed(value):
+	wrap_universe = value
+	GPU.set_uniform(GPU.Uniform.WRAP_UNIVERSE, value)
