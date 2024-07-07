@@ -1,6 +1,5 @@
 extends MultiMeshInstance3D
 
-
 @export var particle_life: ParticleLife
 
 
@@ -16,5 +15,3 @@ func _on_particle_life_simulation_started() -> void:
 	multimesh.instance_count = particle_life.num_particles
 	for i: int in range(particle_life.num_particles):
 		multimesh.set_instance_color(i, particle_life.colors[particle_life.types[i]])
-
-

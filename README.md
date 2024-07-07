@@ -5,11 +5,9 @@ todo:
 	- make can change numer of particle types
 	- use more efficient data types, eg packed float 32 array 
 	- make 2d version
-	- lint scripts
 	- make sound work with gpu
 	- add cube universe shape
 	- add pause
-	- add typed scripting macro
 	- 4d version
 	- fix errors from all enforced typing options
 	

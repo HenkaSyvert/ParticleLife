@@ -26,13 +26,13 @@ func _ready() -> void:
 	(%NumParticlesSpinBox as SpinBox).value = particle_life.num_particles
 	(%NumTypesSpinBox as SpinBox).value = particle_life.num_types
 	(%RunOnGpuCheckBox as CheckBox).button_pressed = particle_life.run_on_gpu
-	
+
 	(%UniverseRadiusSpinBox as SpinBox).value = particle_life.universe_radius
 	(%AttractionRadiusSpinBox as SpinBox).value = particle_life.attraction_radius
 	(%RepelRadiusSpinBox as SpinBox).value = particle_life.repel_radius
 	(%ForceStrengthSpinBox as SpinBox).value = particle_life.force_strength
 	(%MaxSpeedSpinBox as SpinBox).value = particle_life.max_speed
-	
+
 	(%EnableSoundCheckBox as CheckBox).button_pressed = sound.enable_sound
 	(%NoteCooldownSpinBox as SpinBox).value = sound.note_cooldown
 	(%ShowNoteStringsCheckBox as CheckBox).button_pressed = sound.show_note_strings
@@ -43,7 +43,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_pressed("ui_cancel"):
 		get_tree().quit()
-	
+
 	(%FpsLabel as Label).set_text("FPS: %d" % Engine.get_frames_per_second())
 
 
@@ -101,6 +101,3 @@ func _on_music_scale_option_button_item_selected(index: int) -> void:
 
 func _on_note_string_width_spin_box_value_changed(value: float) -> void:
 	note_string_width_changed.emit(value)
-
-
-
