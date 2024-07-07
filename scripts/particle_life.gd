@@ -1,5 +1,7 @@
 class_name ParticleLife
-extends MultiMeshInstance3D
+extends Node
+
+signal simulation_started
 
 @export var num_types: int = 3
 @export var num_particles: int = 150
@@ -11,6 +13,7 @@ extends MultiMeshInstance3D
 @export var repel_radius: float = 1
 @export var force_strength: float = 0.001
 @export var max_speed: float = 2
+@export var seed_str: String = "det luktar fisk"
 
 var positions = []
 var velocities = []
@@ -24,7 +27,7 @@ func _ready():
 	
 	%UniverseSphere.scale = Vector3.ONE * universe_radius * 2
 
-	start_simulation("det luktar fisk")
+	start_simulation()
 
 
 func _process(delta):
@@ -34,15 +37,10 @@ func _process(delta):
 	else:
 		particle_life_cpu(delta)
 
-	for i in range(num_particles):
-		var t = Transform3D(Basis(), positions[i])
-		multimesh.set_instance_transform(i, t)
 
-
-func start_simulation(seed_str):
+func start_simulation():
 	
-	generate_params(seed_str)
-	set_multimesh_params()
+	generate_params()
 	
 	if run_on_gpu:
 		GPU.setup_shader_uniforms(num_particles, num_types)
@@ -57,9 +55,9 @@ func start_simulation(seed_str):
 		GPU.set_uniform(GPU.Uniform.POSITIONS, positions)
 		GPU.set_uniform(GPU.Uniform.TYPES, types)
 		GPU.set_uniform(GPU.Uniform.ATTRACTION_MATRIX, attraction_matrix)
+	simulation_started.emit()
 
-
-func generate_params(seed_str):
+func generate_params():
 	
 	seed(seed_str.hash())
 	
@@ -83,14 +81,6 @@ func generate_params(seed_str):
 		types.append(randi_range(0, num_types - 1))
 	
 	colors = [Color.RED, Color.BLUE, Color.YELLOW]
-
-
-func set_multimesh_params():
-	multimesh.instance_count = 0
-	multimesh.use_colors = true
-	multimesh.instance_count = num_particles
-	for i in range(num_particles):
-		multimesh.set_instance_color(i, colors[types[i]])
 
 
 func particle_life_cpu(delta):
@@ -152,10 +142,11 @@ func _on_menu_max_speed_changed(value):
 	GPU.set_uniform(GPU.Uniform.MAX_SPEED, value)
 
 
-func _on_menu_pressed_restart(seed_str, particles_count, types_count):
+func _on_menu_pressed_restart(seed_string, particles_count, types_count):
 	num_particles = particles_count
 	num_types = types_count
-	start_simulation(seed_str)
+	seed_str = seed_string
+	start_simulation()
 
 
 func _on_menu_repel_radius_changed(value):

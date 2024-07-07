@@ -2,6 +2,7 @@ class_name Sound
 extends MultiMeshInstance3D
 
 
+@export var particle_life: ParticleLife
 @export var enable_sound = false
 var note_strings
 var note_timers = []
@@ -30,7 +31,7 @@ var music_scales = [penta_scale, jap_penta_scale, hicaz_scale, major_scale, melo
 func _ready():
 	multimesh.use_colors = true
 	multimesh.instance_count = num_notes
-	multimesh.mesh.height = %ParticleLife.universe_radius
+	multimesh.mesh.height = particle_life.universe_radius
 	multimesh.mesh.radius = string_width / 2
 	
 	visible = show_note_strings
@@ -39,7 +40,7 @@ func _ready():
 	for i in range(num_notes):
 		note_timers.append(note_cooldown / 2 + randf_range(-1, 1))
 		
-		var t = Transform3D(Basis(), note_strings[i] * %ParticleLife.universe_radius / 2)
+		var t = Transform3D(Basis(), note_strings[i] * particle_life.universe_radius / 2)
 	
 		if not t.origin.normalized().cross(Vector3.UP).is_zero_approx():
 			t = t.looking_at(Vector3.ZERO)
@@ -55,8 +56,8 @@ func _process(delta):
 	for i in range(multimesh.instance_count):
 		var t = multimesh.get_instance_transform(i)
 		t.origin = Vector3.ZERO
-		t = t.translated(note_strings[i] * %ParticleLife.universe_radius / 2)
-		multimesh.mesh.height = %ParticleLife.universe_radius
+		t = t.translated(note_strings[i] * particle_life.universe_radius / 2)
+		multimesh.mesh.height = particle_life.universe_radius
 		multimesh.set_instance_transform(i, t)
 
 
@@ -79,12 +80,12 @@ func map_sound(delta):
 		
 		note_timers[i] -= delta
 		
-		for j in range(%ParticleLife.num_particles):
+		for j in range(particle_life.num_particles):
 			
-			if %ParticleLife.velocities[j].length() < 0.1:
+			if particle_life.velocities[j].length() < 0.1:
 				continue
 			
-			var d = note_strings[i].normalized().dot(%ParticleLife.positions[j].normalized())
+			var d = note_strings[i].normalized().dot(particle_life.positions[j].normalized())
 			if d > 0.9:
 				var notes = music_scales[selected_scale]
 				if note_timers[i] < 0:

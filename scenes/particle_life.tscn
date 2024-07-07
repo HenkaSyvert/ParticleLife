@@ -1,7 +1,8 @@
-[gd_scene load_steps=34 format=3 uid="uid://bb5yu55jng3ek"]
+[gd_scene load_steps=35 format=3 uid="uid://bb5yu55jng3ek"]
 
 [ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="1_1o4o4"]
 [ext_resource type="Script" path="res://scripts/particle_life.gd" id="1_tq84v"]
+[ext_resource type="Script" path="res://scripts/particles_3d.gd" id="2_ao65r"]
 [ext_resource type="Script" path="res://scripts/sound.gd" id="2_qaoom"]
 [ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="2_qj4jq"]
 [ext_resource type="Script" path="res://scripts/camera_movement.gd" id="3_drljc"]
@@ -113,22 +114,25 @@ velocity = 5
 
 [sub_resource type="Environment" id="Environment_m44sp"]
 
-[node name="Game" type="Node"]
+[node name="ParticleLife" type="Node"]
+script = ExtResource("1_tq84v")
 
-[node name="ParticleLife" type="MultiMeshInstance3D" parent="."]
+[node name="Particles3D" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life")]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_rnxrb")
-script = ExtResource("1_tq84v")
+script = ExtResource("2_ao65r")
+particle_life = NodePath("..")
 
 [node name="UniverseSphere" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
 mesh = SubResource("SphereMesh_drbe8")
 
-[node name="NoteStrings" type="MultiMeshInstance3D" parent="."]
+[node name="NoteStrings" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life")]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_6ql17")
 script = ExtResource("2_qaoom")
+particle_life = NodePath("..")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
@@ -147,19 +151,24 @@ samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_6oo6l"), SubResou
 environment = SubResource("Environment_m44sp")
 
 [node name="Menu" parent="." node_paths=PackedStringArray("particle_life", "sound") instance=ExtResource("12_yjsci")]
-particle_life = NodePath("../ParticleLife")
+particle_life = NodePath("..")
 sound = NodePath("../NoteStrings")
 
-[connection signal="attraction_radius_changed" from="Menu" to="ParticleLife" method="_on_menu_attraction_radius_changed"]
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
+
+[connection signal="simulation_started" from="." to="Particles3D" method="_on_particle_life_simulation_started"]
+[connection signal="attraction_radius_changed" from="Menu" to="." method="_on_menu_attraction_radius_changed"]
 [connection signal="enable_sound_changed" from="Menu" to="NoteStrings" method="_on_menu_enable_sound_changed"]
-[connection signal="force_strength_changed" from="Menu" to="ParticleLife" method="_on_menu_force_strength_changed"]
-[connection signal="max_speed_changed" from="Menu" to="ParticleLife" method="_on_menu_max_speed_changed"]
+[connection signal="force_strength_changed" from="Menu" to="." method="_on_menu_force_strength_changed"]
+[connection signal="max_speed_changed" from="Menu" to="." method="_on_menu_max_speed_changed"]
 [connection signal="music_scale_changed" from="Menu" to="NoteStrings" method="_on_menu_music_scale_changed"]
 [connection signal="note_cooldown_changed" from="Menu" to="NoteStrings" method="_on_menu_note_cooldown_changed"]
 [connection signal="note_string_width_changed" from="Menu" to="NoteStrings" method="_on_menu_note_string_width_changed"]
-[connection signal="pressed_restart" from="Menu" to="ParticleLife" method="_on_menu_pressed_restart"]
-[connection signal="repel_radius_changed" from="Menu" to="ParticleLife" method="_on_menu_repel_radius_changed"]
-[connection signal="run_on_gpu_changed" from="Menu" to="ParticleLife" method="_on_menu_run_on_gpu_changed"]
+[connection signal="pressed_restart" from="Menu" to="." method="_on_menu_pressed_restart"]
+[connection signal="repel_radius_changed" from="Menu" to="." method="_on_menu_repel_radius_changed"]
+[connection signal="run_on_gpu_changed" from="Menu" to="." method="_on_menu_run_on_gpu_changed"]
 [connection signal="show_note_strings_changed" from="Menu" to="NoteStrings" method="_on_menu_show_note_strings_changed"]
-[connection signal="universe_radius_changed" from="Menu" to="ParticleLife" method="_on_menu_universe_radius_changed"]
-[connection signal="wrap_universe_changed" from="Menu" to="ParticleLife" method="_on_menu_wrap_universe_changed"]
+[connection signal="universe_radius_changed" from="Menu" to="." method="_on_menu_universe_radius_changed"]
+[connection signal="wrap_universe_changed" from="Menu" to="." method="_on_menu_wrap_universe_changed"]

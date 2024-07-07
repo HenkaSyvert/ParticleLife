@@ -1,6 +1,6 @@
 extends Window
 
-signal pressed_restart(seed_str: String, particles_count: int, types_count: int)
+signal pressed_restart(seed_string: String, particles_count: int, types_count: int)
 signal wrap_universe_changed(value: bool)
 signal run_on_gpu_changed(value: bool)
 
@@ -21,6 +21,7 @@ signal note_string_width_changed(value: float)
 
 
 func _ready():
+	%SeedLineEdit.set_text(particle_life.seed_str)
 	%WrapUniverseCheckBox.button_pressed = particle_life.wrap_universe
 	%NumParticlesSpinBox.value = particle_life.num_particles
 	%NumTypesSpinBox.value = particle_life.num_types

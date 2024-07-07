@@ -10,6 +10,7 @@ todo:
 	- add cube universe shape
 	- add pause
 	- add typed scripting macro
+	- 4d version
 	
 	gpu:
 		- figure out optimal work groups
