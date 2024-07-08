@@ -15,10 +15,10 @@ signal simulation_started
 @export var max_speed: float = 2
 @export var seed_str: String = "mehiko"
 
-var positions: Array[Vector3] = []
-var velocities: Array[Vector3] = []
-var types: Array[int] = []
-var attraction_matrix: Array[Array] = []
+var positions: PackedVector3Array = PackedVector3Array()
+var velocities: PackedVector3Array = PackedVector3Array()
+var types: PackedInt32Array = PackedInt32Array()
+var attraction_matrix: PackedFloat32Array = PackedFloat32Array()
 var colors: Array[Color] = []
 
 
@@ -60,23 +60,22 @@ func generate_params() -> void:
 	seed(seed_str.hash())
 
 	attraction_matrix = []
-	for i: int in range(num_types):
-		attraction_matrix.append([])
-		for j: int in range(num_types):
-			var val: float = randf_range(-1, 1)
-			attraction_matrix[i].append(val)
+	assert(attraction_matrix.resize(num_types ** 2) == OK)
+	for i: int in range(num_types ** 2):
+		attraction_matrix[i] = randf_range(-1, 1)
 
-	positions = []
-	velocities = []
-	types = []
+	assert(positions.resize(num_particles) == OK)
+	assert(velocities.resize(num_particles) == OK)
+	assert(types.resize(num_particles) == OK)
 	colors = []
+
 	for i: int in range(num_particles):
 		var p: Vector3 = Vector3(randf_range(-1, 1), randf_range(-1, 1), randf_range(-1, 1))
 		p = p.normalized()
 		p *= randf_range(0, universe_radius)
-		positions.append(p)
-		velocities.append(Vector3.ZERO)
-		types.append(randi_range(0, num_types - 1))
+		positions[i] = p
+		velocities[i] = Vector3()
+		types[i] = randi_range(0, num_types - 1)
 
 	colors = [Color.RED, Color.BLUE, Color.YELLOW]
 
@@ -105,7 +104,7 @@ func particle_life_cpu(delta: float) -> void:
 			if dist_squared < repel_radius ** 2:
 				force -= dir
 			else:
-				force += dir * attraction_matrix[types[i]][types[j]]
+				force += dir * attraction_matrix[types[i] * num_types + types[j]]
 
 		force *= force_strength
 		velocities[i] += force / delta

@@ -3,13 +3,13 @@
 todo:
 	
 	- make can change numer of particle types
-	- use more efficient data types, eg packed float 32 array 
 	- make 2d version
+	- 4d version
 	- make sound work with gpu
 	- add cube universe shape
 	- add pause
-	- 4d version
 	- fix errors from all enforced typing options
+	- c++ optimization?
 	
 	gpu:
 		- figure out optimal work groups
@@ -21,13 +21,13 @@ todo:
 		- make particle color picker
 		- fix dont take wasd input to spinboxes
 		- attraction matrix
-		- add theme, transparency
+		- add theme, transparency, to see check boxes better
 		- make better menu sliders, with own scene
 		
 	sound:
 		- make particle velocity affect envelope
 		- other note mapping to fib dirs
-		- differenr particles have own sounds
+		- different particles have own sounds
 		- make notes from 4ths and 5th and set intervals instead of just all tones in scale
 		- visualize with keyboard
 		- polyrythm

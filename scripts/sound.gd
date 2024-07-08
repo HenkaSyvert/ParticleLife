@@ -18,7 +18,7 @@ var hicaz_scale: Array[String] = ["A", "A#", "C#", "D", "E", "F", "G"]
 var major_scale: Array[String] = ["A", "B", "C", "D", "E", "F", "G"]
 var melodic_minor_scale: Array[String] = ["A", "B", "C", "D", "E", "F#", "G#"]
 var whole_tone_scale: Array[String] = ["C", "D", "E", "F#", "G#", "A#"]
-var diminished_scale: Array[String] = ["C", "C#", "D#", "E", "F#", "G", "A", "#A"]
+var diminished_scale: Array[String] = ["C", "C#", "D#", "E", "F#", "G", "A", "A#"]
 var blues_scale: Array[String] = ["A", "C", "D", "D#", "E", "G"]
 var doric_hicaz_scale: Array[String] = ["D", "E", "F", "G#", "A", "B", "C"]
 
