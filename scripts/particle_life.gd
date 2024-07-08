@@ -7,6 +7,7 @@ signal simulation_started
 @export var num_particles: int = 100
 @export var wrap_universe: bool = false
 @export var run_on_gpu: bool = true
+@export var is_paused: bool = false
 
 @export var universe_radius: float = 40
 @export var attraction_radius: float = 10
@@ -33,6 +34,11 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not is_paused:
+		step_simulation(delta)
+
+
+func step_simulation(delta: float) -> void:
 	if run_on_gpu:
 		GPU.particle_life_gpu(delta, positions, velocities)
 	else:
@@ -167,10 +173,19 @@ func _on_menu_run_on_gpu_changed(value: bool) -> void:
 
 func _on_menu_universe_radius_changed(value: float) -> void:
 	universe_radius = value
-	universe_sphere.scale = Vector3.ONE * value * 2
+	(%UniverseSphere as MeshInstance3D).scale = Vector3.ONE * value * 2
 	GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, value)
 
 
 func _on_menu_wrap_universe_changed(value: float) -> void:
 	wrap_universe = value
 	GPU.set_uniform(GPU.Uniform.WRAP_UNIVERSE, value)
+
+
+func _on_menu_pause_changed(value: bool) -> void:
+	is_paused = value
+
+
+func _on_menu_pressed_step() -> void:
+	if is_paused:
+		step_simulation(1.0 / Engine.physics_ticks_per_second)

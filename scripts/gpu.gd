@@ -132,7 +132,7 @@ static func setup_shader_uniforms(num_particles: int, num_types: int) -> void:
 	GPU.set_uniform(Uniform.NUM_PARTICLES, num_particles)
 	GPU.set_uniform(Uniform.NUM_TYPES, num_types)
 	GPU.set_uniform(Uniform.BUFFER_TOGGLE, _buffer_toggle)
-	GPU.set_uniform(Uniform.DELTA, 0.0)
+	GPU.set_uniform(Uniform.DELTA, 1.0/Engine.physics_ticks_per_second)
 
 
 static func particle_life_gpu(

@@ -3,6 +3,8 @@ extends Window
 signal pressed_restart(seed_string: String, particles_count: int, types_count: int)
 signal wrap_universe_changed(value: bool)
 signal run_on_gpu_changed(value: bool)
+signal pause_changed(value: bool)
+signal pressed_step
 
 signal universe_radius_changed(value: float)
 signal attraction_radius_changed(value: float)
@@ -31,6 +33,7 @@ func _ready() -> void:
 	(%RunOnGpuCheckBox as CheckBox).button_pressed = particle_life.run_on_gpu
 	Engine.physics_ticks_per_second = 30
 	(%PhysicsFPSSpinBox as SpinBox).value = Engine.physics_ticks_per_second
+	(%PauseCheckBox as CheckBox).button_pressed = particle_life.is_paused
 
 	(%UniverseRadiusSpinBox as SpinBox).value = particle_life.universe_radius
 	(%AttractionRadiusSpinBox as SpinBox).value = particle_life.attraction_radius
@@ -115,3 +118,11 @@ func _on_instrument_option_button_item_selected(index: int) -> void:
 
 func _on_physics_fps_spin_box_value_changed(value: float) -> void:
 	Engine.physics_ticks_per_second = int(value)
+
+
+func _on_pause_check_box_toggled(toggled_on: bool) -> void:
+	pause_changed.emit(toggled_on)
+
+
+func _on_step_button_pressed() -> void:
+	pressed_step.emit()

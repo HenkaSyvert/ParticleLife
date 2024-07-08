@@ -6,10 +6,11 @@ todo:
 	- make 2d version
 	- 4d version
 	- add cube universe shape
-	- add pause
 	- fix errors from all enforced typing options
 	- c++ optimization?
 	- do double buffer in cpu
+	- figure out why gpu and cpu dont behave the same
+	- remove unnessary delta param
 	
 	gpu:
 		- figure out optimal work groups
