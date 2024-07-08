@@ -53,6 +53,8 @@ types;
 void main() {
 
 	uint i = gl_LocalInvocationID.x;
+	if (i >= params.num_particles)
+		return;
 
 	vec3 pos_i = params.buffer_toggle ? positions1.data[i] : positions0.data[i];
 	vec3 force = vec3(0);

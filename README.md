@@ -15,7 +15,6 @@ todo:
 		- figure out optimal work groups
 		- parallelize i,j loops
 		- research interleaved version
-		- fix num particles not hard coded in shader
 		
 	gui:
 		- make particle color picker

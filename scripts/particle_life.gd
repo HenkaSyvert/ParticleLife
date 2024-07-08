@@ -4,11 +4,11 @@ extends Node
 signal simulation_started
 
 @export var num_types: int = 3
-@export var num_particles: int = 512
+@export var num_particles: int = 100
 @export var wrap_universe: bool = false
 @export var run_on_gpu: bool = true
 
-@export var universe_radius: float = 70
+@export var universe_radius: float = 40
 @export var attraction_radius: float = 10
 @export var repel_radius: float = 1
 @export var force_strength: float = 0.5
@@ -32,7 +32,7 @@ func _ready() -> void:
 	start_simulation()
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if run_on_gpu:
 		GPU.particle_life_gpu(delta, positions, velocities)
 	else:

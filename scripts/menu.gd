@@ -29,6 +29,8 @@ func _ready() -> void:
 	(%NumParticlesSpinBox as SpinBox).value = particle_life.num_particles
 	(%NumTypesSpinBox as SpinBox).value = particle_life.num_types
 	(%RunOnGpuCheckBox as CheckBox).button_pressed = particle_life.run_on_gpu
+	Engine.physics_ticks_per_second = 30
+	(%PhysicsFPSSpinBox as SpinBox).value = Engine.physics_ticks_per_second
 
 	(%UniverseRadiusSpinBox as SpinBox).value = particle_life.universe_radius
 	(%AttractionRadiusSpinBox as SpinBox).value = particle_life.attraction_radius
@@ -109,3 +111,7 @@ func _on_note_string_width_spin_box_value_changed(value: float) -> void:
 
 func _on_instrument_option_button_item_selected(index: int) -> void:
 	instrument_changed.emit(index)
+
+
+func _on_physics_fps_spin_box_value_changed(value: float) -> void:
+	Engine.physics_ticks_per_second = int(value)
