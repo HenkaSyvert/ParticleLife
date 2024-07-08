@@ -5,17 +5,17 @@ todo:
 	- make can change numer of particle types
 	- make 2d version
 	- 4d version
-	- make sound work with gpu
 	- add cube universe shape
 	- add pause
 	- fix errors from all enforced typing options
 	- c++ optimization?
+	- do double buffer in cpu
 	
 	gpu:
 		- figure out optimal work groups
 		- parallelize i,j loops
 		- research interleaved version
-		- smooth transition between gpu and cpu simulation
+		- fix num particles not hard coded in shader
 		
 	gui:
 		- make particle color picker

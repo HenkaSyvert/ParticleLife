@@ -20,6 +20,8 @@ signal instrument_changed(value: int)
 @export var particle_life: ParticleLife
 @export var sound: Sound
 
+@onready var fps_label: Label = %FpsLabel
+
 
 func _ready() -> void:
 	(%SeedLineEdit as LineEdit).set_text(particle_life.seed_str)
@@ -46,7 +48,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_pressed("ui_cancel"):
 		get_tree().quit()
 
-	(%FpsLabel as Label).set_text("FPS: %d" % Engine.get_frames_per_second())
+	fps_label.set_text("FPS: %d" % Engine.get_frames_per_second())
 
 
 func _on_restart_button_pressed() -> void:

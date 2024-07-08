@@ -135,7 +135,9 @@ static func setup_shader_uniforms(num_particles: int, num_types: int) -> void:
 	GPU.set_uniform(Uniform.DELTA, 0.0)
 
 
-static func particle_life_gpu(delta: float) -> Array[Vector3]:
+static func particle_life_gpu(
+	delta: float, positions: PackedVector3Array, velocities: PackedVector3Array
+) -> void:
 	_buffer_toggle = (_buffer_toggle + 1) % 2
 	GPU.set_uniform(Uniform.BUFFER_TOGGLE, _buffer_toggle)
 	GPU.set_uniform(Uniform.DELTA, delta)
@@ -148,19 +150,22 @@ static func particle_life_gpu(delta: float) -> Array[Vector3]:
 	_rd.submit()
 	_rd.sync()
 
-	var data: PackedByteArray = _rd.buffer_get_data(
+	var pos_data: PackedByteArray = _rd.buffer_get_data(
 		_positions_bufs[_buffer_toggle], 0, _positions_buf_size
 	)
+	var vel_data: PackedByteArray = _rd.buffer_get_data(_velocities_buf, 0, _velocities_buf_size)
 
-	var positions: Array[Vector3] = []
 	for i: int in range(_num_particles):
-		var v: Vector3 = Vector3()
-		for j: int in range(3):
-			var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
-			v[j] = data.decode_float(offset)
-		positions.append(v)
-
-	return positions
+		positions[i] = Vector3(
+			pos_data.decode_float((i * NUM_VEC_ELEMENTS) * SIZEOF_DATATYPE),
+			pos_data.decode_float((i * NUM_VEC_ELEMENTS + 1) * SIZEOF_DATATYPE),
+			pos_data.decode_float((i * NUM_VEC_ELEMENTS + 2) * SIZEOF_DATATYPE)
+		)
+		velocities[i] = Vector3(
+			vel_data.decode_float((i * NUM_VEC_ELEMENTS) * SIZEOF_DATATYPE),
+			vel_data.decode_float((i * NUM_VEC_ELEMENTS + 1) * SIZEOF_DATATYPE),
+			vel_data.decode_float((i * NUM_VEC_ELEMENTS + 2) * SIZEOF_DATATYPE),
+		)
 
 
 static func set_uniform(uniform: Uniform, data: Variant) -> void:
@@ -181,10 +186,8 @@ static func set_uniform(uniform: Uniform, data: Variant) -> void:
 			buffer = _attraction_matrix_buf
 			size = _attraction_matrix_buf_size
 			assert(pba.resize(size) == OK)
-			for i: int in range(_num_types):
-				for j: int in range(_num_types):
-					var offset: int = (i * _num_types + j) * SIZEOF_DATATYPE
-					pba.encode_float(offset, data[i][j])
+			for i: int in range(_num_types ** 2):
+				pba.encode_float(i * SIZEOF_DATATYPE, data[i])
 
 		elif uniform == Uniform.POSITIONS:
 			buffer = _positions_bufs[0]
