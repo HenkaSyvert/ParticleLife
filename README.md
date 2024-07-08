@@ -28,9 +28,7 @@ todo:
 		- make particle velocity affect envelope
 		- other note mapping to fib dirs
 		- differenr particles have own sounds
-		- add rest of instruments, and samples
 		- make notes from 4ths and 5th and set intervals instead of just all tones in scale
-		- add more intruments
 		- visualize with keyboard
 		- polyrythm
 

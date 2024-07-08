@@ -8,7 +8,7 @@ var note_timers: Array[float] = []
 var num_octaves: int = 3
 var num_notes: int = 15
 @export var note_cooldown: float = 3
-var starting_octave: int = 3
+var starting_octaves: Array[int] = [3, 5, 3]
 @export var string_width: float = 0.05
 @export var show_note_strings: bool = false
 
@@ -34,6 +34,8 @@ var music_scales: Array[Array] = [
 	doric_hicaz_scale
 ]
 @export var selected_scale: int = 0
+@export var samplers: Array[SamplerInstrument]
+@export var selected_sampler: int = 0
 
 
 func _ready() -> void:
@@ -98,8 +100,9 @@ func map_sound(delta: float) -> void:
 					note_timers[i] = note_cooldown
 					if enable_sound:
 						@warning_ignore("integer_division")
-						(%HarpSampler as SamplerInstrument).play_note(
-							notes[i % notes.size()], starting_octave + i / notes.size()
+						samplers[selected_sampler].play_note(
+							notes[i % notes.size()],
+							starting_octaves[selected_sampler] + i / notes.size()
 						)
 
 		if note_timers[i] > 0:
@@ -110,7 +113,7 @@ func map_sound(delta: float) -> void:
 
 func _on_menu_enable_sound_changed(value: float) -> void:
 	enable_sound = value
-	(%HarpSampler as SamplerInstrument).release()
+	samplers[selected_sampler].release()
 
 
 func _on_menu_music_scale_changed(value: int) -> void:
@@ -129,3 +132,7 @@ func _on_menu_note_string_width_changed(value: float) -> void:
 func _on_menu_show_note_strings_changed(value: float) -> void:
 	visible = value
 	show_note_strings = value
+
+
+func _on_menu_instrument_changed(value: int) -> void:
+	selected_sampler = value

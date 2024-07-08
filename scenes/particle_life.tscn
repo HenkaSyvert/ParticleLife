@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bb5yu55jng3ek"]
+[gd_scene load_steps=91 format=3 uid="uid://bb5yu55jng3ek"]
 
 [ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="1_1o4o4"]
 [ext_resource type="Script" path="res://scripts/particle_life.gd" id="1_tq84v"]
@@ -6,13 +6,41 @@
 [ext_resource type="Script" path="res://scripts/sound.gd" id="2_qaoom"]
 [ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="2_qj4jq"]
 [ext_resource type="Script" path="res://scripts/camera_movement.gd" id="3_drljc"]
-[ext_resource type="AudioStream" uid="uid://br2jd1j18u3s3" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A2_mf1.wav" id="3_trfgc"]
-[ext_resource type="AudioStream" uid="uid://c6bsjc4wqptt5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A6_mf1.wav" id="4_ojnt6"]
-[ext_resource type="AudioStream" uid="uid://b8phiocn4sgmo" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B3_mf1.wav" id="5_cmxlv"]
-[ext_resource type="AudioStream" uid="uid://c0ho1vajtnv71" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B5_mf1.wav" id="6_sam0k"]
-[ext_resource type="AudioStream" uid="uid://c5b58a8jvxaog" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B6_mf1.wav" id="7_7xwv0"]
-[ext_resource type="AudioStream" uid="uid://c888edrfyiwaj" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/C3_mf3.wav" id="8_0v8b5"]
+[ext_resource type="AudioStream" uid="uid://xlvyebdqvar2" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A2_mf1.wav" id="3_trfgc"]
+[ext_resource type="AudioStream" uid="uid://bpw57mi88o12v" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B3_mf1.wav" id="5_cmxlv"]
+[ext_resource type="AudioStream" uid="uid://8x31uiv8ulvq" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B6_mf1.wav" id="7_7xwv0"]
+[ext_resource type="AudioStream" uid="uid://c2fpi0783x13a" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B1_mf1.wav" id="8_5fn18"]
+[ext_resource type="AudioStream" uid="uid://ct3h42gb43e5f" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/C5_f1.wav" id="11_tdjry"]
+[ext_resource type="AudioStream" uid="uid://buku0u55xmn3k" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D2_f1.wav" id="12_jjyub"]
 [ext_resource type="PackedScene" uid="uid://cjlrbt0unonkr" path="res://scenes/menu.tscn" id="12_yjsci"]
+[ext_resource type="AudioStream" uid="uid://dwp4w5wgtbt26" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D4_mf1.wav" id="13_5d2do"]
+[ext_resource type="AudioStream" uid="uid://v3p1tp0tkpd5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D6_mf1.wav" id="14_or2sn"]
+[ext_resource type="AudioStream" uid="uid://n4pd7wnl0edf" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D7_f1.wav" id="15_7kqn3"]
+[ext_resource type="AudioStream" uid="uid://dwuqe4qjt0nc5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/E1_f1.wav" id="16_t3a5w"]
+[ext_resource type="AudioStream" uid="uid://dwsbc4no6ivp8" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/E3_mf1.wav" id="17_q65h2"]
+[ext_resource type="AudioStream" uid="uid://by00himaqn7kc" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/E5_mf1.wav" id="18_umxjd"]
+[ext_resource type="AudioStream" uid="uid://cpeo5g8qh40wq" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F2_f1.wav" id="19_48m3q"]
+[ext_resource type="AudioStream" uid="uid://b58b51u7jqc6x" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F4_mf1.wav" id="20_67lnn"]
+[ext_resource type="AudioStream" uid="uid://r6l1pslenjh1" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F6_mf1.wav" id="21_avsrj"]
+[ext_resource type="AudioStream" uid="uid://ddlxso46dsgrg" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F7_f1.wav" id="22_vst0r"]
+[ext_resource type="AudioStream" uid="uid://cxdnkphh4dvno" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/G1_f1.wav" id="23_xwlt3"]
+[ext_resource type="AudioStream" uid="uid://dfpwtwspt2rm3" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/G3_mf1.wav" id="24_u3pcg"]
+[ext_resource type="AudioStream" uid="uid://ceuw4jlpfsp8a" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/G5_mf1.wav" id="25_loxmp"]
+[ext_resource type="AudioStream" uid="uid://cynukpdtl30y0" path="res://sounds/Glass-SFZ-20191227/samples/A#4-B4_01.wav" id="27_qr6tm"]
+[ext_resource type="AudioStream" uid="uid://vefranwgms4r" path="res://sounds/Glass-SFZ-20191227/samples/C5_01.wav" id="28_6x3ud"]
+[ext_resource type="AudioStream" uid="uid://dpumaiggsjkts" path="res://sounds/Glass-SFZ-20191227/samples/C#6_01.wav" id="29_04gnr"]
+[ext_resource type="AudioStream" uid="uid://en6ohg377l1l" path="res://sounds/Glass-SFZ-20191227/samples/E5_01.wav" id="30_me1p6"]
+[ext_resource type="AudioStream" uid="uid://dlwpjdjwcxwgk" path="res://sounds/Glass-SFZ-20191227/samples/F6_01.wav" id="31_qgeu5"]
+[ext_resource type="AudioStream" uid="uid://bxadx6xaqx5ih" path="res://sounds/Glass-SFZ-20191227/samples/G#5_01.wav" id="32_hfgp8"]
+[ext_resource type="AudioStream" uid="uid://d384oq8ey5qu3" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C3_ff.wav" id="33_ocfxp"]
+[ext_resource type="AudioStream" uid="uid://d0h47skwjlpdf" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C4_ff.wav" id="34_71uh8"]
+[ext_resource type="AudioStream" uid="uid://cbktp06ca2o78" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C5_ff.wav" id="35_g0q5j"]
+[ext_resource type="AudioStream" uid="uid://b6dlfy5nirhfn" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C6_ff.wav" id="36_pfy3f"]
+[ext_resource type="AudioStream" uid="uid://b3shkhra6yfgm" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C7_ff.wav" id="37_thsq0"]
+[ext_resource type="AudioStream" uid="uid://dk2wa05uli7ol" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G3_ff.wav" id="38_eu11m"]
+[ext_resource type="AudioStream" uid="uid://dyx1a33tbv6an" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G4_ff.wav" id="39_5lo0l"]
+[ext_resource type="AudioStream" uid="uid://bw5t6xnetwuje" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G5_ff.wav" id="40_lindn"]
+[ext_resource type="AudioStream" uid="uid://dantrjwrlv7jx" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G6_ff.wav" id="41_lmsvn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_es8bu"]
 vertex_color_use_as_albedo = true
@@ -70,49 +98,245 @@ height = 7.452
 transform_format = 1
 mesh = SubResource("CapsuleMesh_u0b18")
 
-[sub_resource type="Resource" id="Resource_6oo6l"]
+[sub_resource type="Resource" id="Resource_u31wq"]
 script = ExtResource("2_qj4jq")
 stream = ExtResource("3_trfgc")
 tone = "A"
 octave = 2
 velocity = 5
 
-[sub_resource type="Resource" id="Resource_16wbn"]
+[sub_resource type="Resource" id="Resource_fbw0g"]
 script = ExtResource("2_qj4jq")
-stream = ExtResource("4_ojnt6")
-tone = "A"
-octave = 6
+stream = ExtResource("8_5fn18")
+tone = "B"
+octave = 1
 velocity = 5
 
-[sub_resource type="Resource" id="Resource_1n0sy"]
+[sub_resource type="Resource" id="Resource_bjwkn"]
 script = ExtResource("2_qj4jq")
 stream = ExtResource("5_cmxlv")
 tone = "B"
 octave = 3
 velocity = 5
 
-[sub_resource type="Resource" id="Resource_1gkbf"]
-script = ExtResource("2_qj4jq")
-stream = ExtResource("6_sam0k")
-tone = "B"
-octave = 5
-velocity = 5
-
-[sub_resource type="Resource" id="Resource_p6ep0"]
+[sub_resource type="Resource" id="Resource_5t8ka"]
 script = ExtResource("2_qj4jq")
 stream = ExtResource("7_7xwv0")
 tone = "B"
 octave = 6
 velocity = 5
 
-[sub_resource type="Resource" id="Resource_bftpw"]
+[sub_resource type="Resource" id="Resource_u54xo"]
 script = ExtResource("2_qj4jq")
-stream = ExtResource("8_0v8b5")
+stream = ExtResource("11_tdjry")
+tone = "C"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_upxau"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("12_jjyub")
+tone = "D"
+octave = 2
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_urcf2"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("13_5d2do")
+tone = "D"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_i1p03"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("14_or2sn")
+tone = "D"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_htvdp"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("15_7kqn3")
+tone = "D"
+octave = 7
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_mlo1f"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("16_t3a5w")
+tone = "E"
+octave = 1
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_u2ajk"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("17_q65h2")
+tone = "E"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_6j6gw"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("18_umxjd")
+tone = "E"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_73jew"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("19_48m3q")
+tone = "F"
+octave = 2
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_fmpf5"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("20_67lnn")
+tone = "F"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_ltr1o"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("21_avsrj")
+tone = "F"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_tew52"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("22_vst0r")
+tone = "F"
+octave = 7
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_4vufs"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("23_xwlt3")
+tone = "G"
+octave = 1
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_gd2x7"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("24_u3pcg")
+tone = "G"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_sb1xo"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("25_loxmp")
+tone = "G"
+octave = 5
+velocity = 5
+
+[sub_resource type="Environment" id="Environment_m44sp"]
+
+[sub_resource type="Resource" id="Resource_je76h"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("27_qr6tm")
+tone = "A#"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_2y3ji"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("28_6x3ud")
+tone = "C"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_84yif"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("29_04gnr")
+tone = "C#"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_l1d1h"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("30_me1p6")
+tone = "E"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_2bieg"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("31_qgeu5")
+tone = "F"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_tl1qy"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("32_hfgp8")
+tone = "G#"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_83mwu"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("33_ocfxp")
 tone = "C"
 octave = 3
 velocity = 5
 
-[sub_resource type="Environment" id="Environment_m44sp"]
+[sub_resource type="Resource" id="Resource_052dl"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("34_71uh8")
+tone = "C"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_8ciwq"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("35_g0q5j")
+tone = "C"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_ypvs5"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("36_pfy3f")
+tone = "C"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_dwq2o"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("37_thsq0")
+tone = "C"
+octave = 7
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_ehxy7"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("38_eu11m")
+tone = "G"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_cdysb"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("39_5lo0l")
+tone = "G"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_os3nw"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("40_lindn")
+tone = "G"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_0ktdp"]
+script = ExtResource("2_qj4jq")
+stream = ExtResource("41_lmsvn")
+tone = "G"
+octave = 6
+velocity = 5
 
 [node name="ParticleLife" type="Node"]
 script = ExtResource("1_tq84v")
@@ -128,11 +352,12 @@ unique_name_in_owner = true
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
 mesh = SubResource("SphereMesh_drbe8")
 
-[node name="NoteStrings" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life")]
+[node name="NoteStrings" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life", "samplers")]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_6ql17")
 script = ExtResource("2_qaoom")
 particle_life = NodePath("..")
+samplers = [NodePath("../HarpSampler"), NodePath("../GlassSampler"), NodePath("../XylophoneSampler")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
@@ -144,8 +369,8 @@ script = ExtResource("3_drljc")
 unique_name_in_owner = true
 volume_db = -20.0
 script = ExtResource("1_1o4o4")
-max_notes = 21
-samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_6oo6l"), SubResource("Resource_16wbn"), SubResource("Resource_1n0sy"), SubResource("Resource_1gkbf"), SubResource("Resource_p6ep0"), SubResource("Resource_bftpw")])
+max_notes = 20
+samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_u31wq"), SubResource("Resource_fbw0g"), SubResource("Resource_bjwkn"), SubResource("Resource_5t8ka"), SubResource("Resource_u54xo"), SubResource("Resource_upxau"), SubResource("Resource_urcf2"), SubResource("Resource_i1p03"), SubResource("Resource_htvdp"), SubResource("Resource_mlo1f"), SubResource("Resource_u2ajk"), SubResource("Resource_6j6gw"), SubResource("Resource_73jew"), SubResource("Resource_fmpf5"), SubResource("Resource_ltr1o"), SubResource("Resource_tew52"), SubResource("Resource_4vufs"), SubResource("Resource_gd2x7"), SubResource("Resource_sb1xo")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_m44sp")
@@ -158,10 +383,21 @@ sound = NodePath("../NoteStrings")
 
 [node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
 
+[node name="GlassSampler" type="AudioStreamPlayer" parent="."]
+script = ExtResource("1_1o4o4")
+max_notes = 20
+samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_je76h"), SubResource("Resource_2y3ji"), SubResource("Resource_84yif"), SubResource("Resource_l1d1h"), SubResource("Resource_2bieg"), SubResource("Resource_tl1qy")])
+
+[node name="XylophoneSampler" type="AudioStreamPlayer" parent="."]
+script = ExtResource("1_1o4o4")
+max_notes = 20
+samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_83mwu"), SubResource("Resource_052dl"), SubResource("Resource_8ciwq"), SubResource("Resource_ypvs5"), SubResource("Resource_dwq2o"), SubResource("Resource_ehxy7"), SubResource("Resource_cdysb"), SubResource("Resource_os3nw"), SubResource("Resource_0ktdp")])
+
 [connection signal="simulation_started" from="." to="Particles3D" method="_on_particle_life_simulation_started"]
 [connection signal="attraction_radius_changed" from="Menu" to="." method="_on_menu_attraction_radius_changed"]
 [connection signal="enable_sound_changed" from="Menu" to="NoteStrings" method="_on_menu_enable_sound_changed"]
 [connection signal="force_strength_changed" from="Menu" to="." method="_on_menu_force_strength_changed"]
+[connection signal="instrument_changed" from="Menu" to="NoteStrings" method="_on_menu_instrument_changed"]
 [connection signal="max_speed_changed" from="Menu" to="." method="_on_menu_max_speed_changed"]
 [connection signal="music_scale_changed" from="Menu" to="NoteStrings" method="_on_menu_music_scale_changed"]
 [connection signal="note_cooldown_changed" from="Menu" to="NoteStrings" method="_on_menu_note_cooldown_changed"]

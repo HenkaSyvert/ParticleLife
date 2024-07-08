@@ -185,6 +185,21 @@ step = 0.05
 value = 0.5
 prefix = "String Width"
 
+[node name="Label2" type="Label" parent="MarginContainer/Tabs/Sound"]
+layout_mode = 2
+text = "Instrument:"
+
+[node name="InstrumentOptionButton" type="OptionButton" parent="MarginContainer/Tabs/Sound"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "Harp"
+popup/item_0/id = 0
+popup/item_1/text = "Glass"
+popup/item_1/id = 1
+popup/item_2/text = "Xylophone"
+popup/item_2/id = 2
+
 [connection signal="pressed" from="MarginContainer/Tabs/Simulation/RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="toggled" from="MarginContainer/Tabs/Simulation/WrapUniverseCheckBox" to="." method="_on_wrap_universe_check_box_toggled"]
 [connection signal="toggled" from="MarginContainer/Tabs/Simulation/RunOnGpuCheckBox" to="." method="_on_run_on_gpu_check_box_toggled"]
@@ -198,3 +213,4 @@ prefix = "String Width"
 [connection signal="toggled" from="MarginContainer/Tabs/Sound/ShowNoteStringsCheckBox" to="." method="_on_show_note_strings_check_box_toggled"]
 [connection signal="item_selected" from="MarginContainer/Tabs/Sound/MusicScaleOptionButton" to="." method="_on_music_scale_option_button_item_selected"]
 [connection signal="value_changed" from="MarginContainer/Tabs/Sound/NoteStringWidthSpinBox" to="." method="_on_note_string_width_spin_box_value_changed"]
+[connection signal="item_selected" from="MarginContainer/Tabs/Sound/InstrumentOptionButton" to="." method="_on_instrument_option_button_item_selected"]

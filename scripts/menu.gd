@@ -15,6 +15,7 @@ signal note_cooldown_changed(value: float)
 signal show_note_strings_changed(value: bool)
 signal music_scale_changed(value: int)
 signal note_string_width_changed(value: float)
+signal instrument_changed(value: int)
 
 @export var particle_life: ParticleLife
 @export var sound: Sound
@@ -38,6 +39,7 @@ func _ready() -> void:
 	(%ShowNoteStringsCheckBox as CheckBox).button_pressed = sound.show_note_strings
 	(%MusicScaleOptionButton as OptionButton).selected = sound.selected_scale
 	(%NoteStringWidthSpinBox as SpinBox).value = sound.string_width
+	(%InstrumentOptionButton as OptionButton).selected = sound.selected_sampler
 
 
 func _process(_delta: float) -> void:
@@ -101,3 +103,7 @@ func _on_music_scale_option_button_item_selected(index: int) -> void:
 
 func _on_note_string_width_spin_box_value_changed(value: float) -> void:
 	note_string_width_changed.emit(value)
+
+
+func _on_instrument_option_button_item_selected(index: int) -> void:
+	instrument_changed.emit(index)
