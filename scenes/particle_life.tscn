@@ -384,11 +384,13 @@ sound = NodePath("../NoteStrings")
 [node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
 
 [node name="GlassSampler" type="AudioStreamPlayer" parent="."]
+volume_db = -20.0
 script = ExtResource("1_1o4o4")
 max_notes = 20
 samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_je76h"), SubResource("Resource_2y3ji"), SubResource("Resource_84yif"), SubResource("Resource_l1d1h"), SubResource("Resource_2bieg"), SubResource("Resource_tl1qy")])
 
 [node name="XylophoneSampler" type="AudioStreamPlayer" parent="."]
+volume_db = -20.0
 script = ExtResource("1_1o4o4")
 max_notes = 20
 samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_83mwu"), SubResource("Resource_052dl"), SubResource("Resource_8ciwq"), SubResource("Resource_ypvs5"), SubResource("Resource_dwq2o"), SubResource("Resource_ehxy7"), SubResource("Resource_cdysb"), SubResource("Resource_os3nw"), SubResource("Resource_0ktdp")])
@@ -403,10 +405,12 @@ samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_83mwu"), SubResou
 [connection signal="note_cooldown_changed" from="Menu" to="NoteStrings" method="_on_menu_note_cooldown_changed"]
 [connection signal="note_string_width_changed" from="Menu" to="NoteStrings" method="_on_menu_note_string_width_changed"]
 [connection signal="pause_changed" from="Menu" to="." method="_on_menu_pause_changed"]
+[connection signal="physics_fps_changed" from="Menu" to="." method="_on_menu_physics_fps_changed"]
 [connection signal="pressed_restart" from="Menu" to="." method="_on_menu_pressed_restart"]
 [connection signal="pressed_step" from="Menu" to="." method="_on_menu_pressed_step"]
 [connection signal="repel_radius_changed" from="Menu" to="." method="_on_menu_repel_radius_changed"]
 [connection signal="run_on_gpu_changed" from="Menu" to="." method="_on_menu_run_on_gpu_changed"]
 [connection signal="show_note_strings_changed" from="Menu" to="NoteStrings" method="_on_menu_show_note_strings_changed"]
 [connection signal="universe_radius_changed" from="Menu" to="." method="_on_menu_universe_radius_changed"]
+[connection signal="universe_radius_changed" from="Menu" to="Particles3D" method="_on_menu_universe_radius_changed"]
 [connection signal="wrap_universe_changed" from="Menu" to="." method="_on_menu_wrap_universe_changed"]

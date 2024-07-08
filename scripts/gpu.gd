@@ -48,9 +48,9 @@ static var _buffer_toggle: int
 
 
 static func _static_init() -> void:
-	var _shader_file: RDShaderFile = load("res://particle_life.glsl")
-	var _shader_spirv: RDShaderSPIRV = _shader_file.get_spirv()
-	_shader = _rd.shader_create_from_spirv(_shader_spirv)
+	var shader_file: RDShaderFile = load("res://particle_life.glsl")
+	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
+	_shader = _rd.shader_create_from_spirv(shader_spirv)
 	_pipeline = _rd.compute_pipeline_create(_shader)
 	assert(_positions_bufs.resize(2) == OK)
 
@@ -58,12 +58,12 @@ static func _static_init() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		_rd.free_rid(_pipeline)
-		GPU._free_uniforms()
+		GPU.free_uniforms()
 		_rd.free_rid(_shader)
 		_rd.free()
 
 
-static func _free_uniforms() -> void:
+static func free_uniforms() -> void:
 	if _uniform_set.is_valid():
 		_rd.free_rid(_uniform_set)
 		_rd.free_rid(_positions_bufs[0])
@@ -78,8 +78,7 @@ static func setup_shader_uniforms(num_particles: int, num_types: int) -> void:
 	_num_particles = num_particles
 	_num_types = num_types
 
-	_free_uniforms()
-	_buffer_toggle = 1
+	free_uniforms()
 
 	_positions_buf_size = _num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
 	_velocities_buf_size = _num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
@@ -131,16 +130,23 @@ static func setup_shader_uniforms(num_particles: int, num_types: int) -> void:
 
 	GPU.set_uniform(Uniform.NUM_PARTICLES, num_particles)
 	GPU.set_uniform(Uniform.NUM_TYPES, num_types)
+	GPU.set_uniform(Uniform.DELTA, 1.0 / Engine.physics_ticks_per_second)
+
+
+static func set_particles_state(
+	positions: PackedVector3Array, velocities: PackedVector3Array
+) -> void:
+	_buffer_toggle = 1
 	GPU.set_uniform(Uniform.BUFFER_TOGGLE, _buffer_toggle)
-	GPU.set_uniform(Uniform.DELTA, 1.0/Engine.physics_ticks_per_second)
+	GPU.set_uniform(Uniform.POSITIONS, positions)
+	GPU.set_uniform(Uniform.VELOCITIES, velocities)
 
 
 static func particle_life_gpu(
-	delta: float, positions: PackedVector3Array, velocities: PackedVector3Array
+	positions: PackedVector3Array, velocities: PackedVector3Array
 ) -> void:
 	_buffer_toggle = (_buffer_toggle + 1) % 2
 	GPU.set_uniform(Uniform.BUFFER_TOGGLE, _buffer_toggle)
-	GPU.set_uniform(Uniform.DELTA, delta)
 
 	var compute_list: int = _rd.compute_list_begin()
 	_rd.compute_list_bind_compute_pipeline(compute_list, _pipeline)

@@ -16,8 +16,6 @@ signal simulation_started
 @export var max_speed: float = 2
 @export var seed_str: String = "mehiko"
 
-@onready var universe_sphere: MeshInstance3D = %UniverseSphere
-
 var positions: PackedVector3Array = PackedVector3Array()
 var velocities: PackedVector3Array = PackedVector3Array()
 var types: PackedInt32Array = PackedInt32Array()
@@ -27,9 +25,6 @@ var colors: Array[Color] = []
 
 func _ready() -> void:
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-
-	universe_sphere.scale = Vector3.ONE * universe_radius * 2
-
 	start_simulation()
 
 
@@ -40,7 +35,7 @@ func _physics_process(delta: float) -> void:
 
 func step_simulation(delta: float) -> void:
 	if run_on_gpu:
-		GPU.particle_life_gpu(delta, positions, velocities)
+		GPU.particle_life_gpu(positions, velocities)
 	else:
 		particle_life_cpu(delta)
 
@@ -57,9 +52,9 @@ func start_simulation() -> void:
 	GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, universe_radius)
 	GPU.set_uniform(GPU.Uniform.WRAP_UNIVERSE, wrap_universe)
 
-	GPU.set_uniform(GPU.Uniform.POSITIONS, positions)
 	GPU.set_uniform(GPU.Uniform.TYPES, types)
 	GPU.set_uniform(GPU.Uniform.ATTRACTION_MATRIX, attraction_matrix)
+	GPU.set_particles_state(positions, velocities)
 
 	simulation_started.emit()
 
@@ -108,7 +103,9 @@ func particle_life_cpu(delta: float) -> void:
 				continue
 
 			var dir: Vector3 = positions[j] - positions[i]
-			dir = dir.limit_length(1.0 / dir.length() ** 2)
+
+			dir = dir.limit_length(1.0 / (dir.length() ** 2))
+
 			if dist_squared < repel_radius ** 2:
 				force -= dir
 			else:
@@ -116,7 +113,9 @@ func particle_life_cpu(delta: float) -> void:
 
 		force *= force_strength
 		velocities[i] += force / delta
+
 		velocities[i] = velocities[i].limit_length(max_speed)
+
 		var pos: Vector3 = positions[i] + velocities[i]
 
 		var overlap_squared: float = positions[i].length_squared() - universe_radius ** 2
@@ -164,16 +163,12 @@ func _on_menu_repel_radius_changed(value: float) -> void:
 
 func _on_menu_run_on_gpu_changed(value: bool) -> void:
 	if not run_on_gpu:
-		GPU._buffer_toggle = 1
-		GPU.set_uniform(GPU.Uniform.BUFFER_TOGGLE, 0)
-		GPU.set_uniform(GPU.Uniform.POSITIONS, positions)
-		GPU.set_uniform(GPU.Uniform.VELOCITIES, velocities)
+		GPU.set_particles_state(positions, velocities)
 	run_on_gpu = value
 
 
 func _on_menu_universe_radius_changed(value: float) -> void:
 	universe_radius = value
-	(%UniverseSphere as MeshInstance3D).scale = Vector3.ONE * value * 2
 	GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, value)
 
 
@@ -189,3 +184,7 @@ func _on_menu_pause_changed(value: bool) -> void:
 func _on_menu_pressed_step() -> void:
 	if is_paused:
 		step_simulation(1.0 / Engine.physics_ticks_per_second)
+
+
+func _on_menu_physics_fps_changed() -> void:
+	GPU.set_uniform(GPU.Uniform.DELTA, 1.0 / Engine.physics_ticks_per_second)

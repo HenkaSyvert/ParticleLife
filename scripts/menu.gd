@@ -5,6 +5,7 @@ signal wrap_universe_changed(value: bool)
 signal run_on_gpu_changed(value: bool)
 signal pause_changed(value: bool)
 signal pressed_step
+signal physics_fps_changed
 
 signal universe_radius_changed(value: float)
 signal attraction_radius_changed(value: float)
@@ -118,6 +119,7 @@ func _on_instrument_option_button_item_selected(index: int) -> void:
 
 func _on_physics_fps_spin_box_value_changed(value: float) -> void:
 	Engine.physics_ticks_per_second = int(value)
+	physics_fps_changed.emit()
 
 
 func _on_pause_check_box_toggled(toggled_on: bool) -> void:

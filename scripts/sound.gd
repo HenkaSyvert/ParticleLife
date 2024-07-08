@@ -3,14 +3,18 @@ extends MultiMeshInstance3D
 
 @export var particle_life: ParticleLife
 @export var enable_sound: bool = false
+@export var note_cooldown: float = 3
+@export var string_width: float = 0.05
+@export var show_note_strings: bool = false
+@export var selected_scale: int = 0
+@export var samplers: Array[SamplerInstrument]
+@export var selected_sampler: int = 0
+
 var note_strings: Array[Vector3]
 var note_timers: Array[float] = []
 var num_octaves: int = 3
 var num_notes: int = 15
-@export var note_cooldown: float = 3
 var starting_octaves: Array[int] = [3, 5, 3]
-@export var string_width: float = 0.05
-@export var show_note_strings: bool = false
 
 var penta_scale: Array[String] = ["C", "D", "E", "G", "A"]
 var jap_penta_scale: Array[String] = ["A", "B", "C", "E", "F"]
@@ -33,9 +37,6 @@ var music_scales: Array[Array] = [
 	blues_scale,
 	doric_hicaz_scale
 ]
-@export var selected_scale: int = 0
-@export var samplers: Array[SamplerInstrument]
-@export var selected_sampler: int = 0
 
 
 func _ready() -> void:

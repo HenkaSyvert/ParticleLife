@@ -11,6 +11,10 @@ todo:
 	- do double buffer in cpu
 	- figure out why gpu and cpu dont behave the same
 	- remove unnessary delta param
+	- more satifying way of handling initialization and responsibilities
+	- derp derp är matten med squared saker ens rätt?
+	- lint shader code
+	- add particle drag
 	
 	gpu:
 		- figure out optimal work groups
