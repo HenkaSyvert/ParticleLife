@@ -31,7 +31,7 @@ func _ready() -> void:
 	(%WrapUniverseCheckBox as CheckBox).button_pressed = Params.wrap_universe
 	(%NumParticlesSpinBox as SpinBox).value = Params.num_particles
 	(%NumTypesSpinBox as SpinBox).value = Params.num_types
-	(%RunOnGpuCheckBox as CheckBox).button_pressed = particle_life.run_on_gpu
+	(%RunOnGpuCheckBox as CheckBox).button_pressed = false
 	Engine.physics_ticks_per_second = 30
 	(%PhysicsFPSSpinBox as SpinBox).value = Engine.physics_ticks_per_second
 	(%PauseCheckBox as CheckBox).button_pressed = particle_life.is_paused

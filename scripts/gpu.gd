@@ -1,5 +1,4 @@
 class_name GPU
-extends RefCounted
 
 enum Uniform {
 	NUM_PARTICLES,

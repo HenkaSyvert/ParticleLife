@@ -89,10 +89,12 @@ func map_sound(delta: float) -> void:
 		note_timers[i] -= delta
 
 		for j: int in range(Params.num_particles):
-			if particle_life.velocities[j].length() < 0.1:
+			if particle_life.simulation.get_vel_3d(j).length() < 0.1:
 				continue
 
-			var d: float = note_strings[i].normalized().dot(particle_life.positions[j].normalized())
+			var d: float = note_strings[i].normalized().dot(
+				particle_life.simulation.get_pos_3d(j).normalized()
+			)
 			if d > 0.9:
 				var notes: Array[String] = music_scales[selected_scale]
 				if note_timers[i] < 0:

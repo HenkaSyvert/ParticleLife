@@ -2,7 +2,6 @@
 ```
 todo:
 	
-	- make can change numer of particle types
 	- make 2d version
 	- 4d version
 	- add cube universe shape
@@ -10,12 +9,8 @@ todo:
 	- c++ optimization?
 	- do double buffer in cpu
 	- figure out why gpu and cpu dont behave the same
-	- remove unnessary delta param
-	- more satifying way of handling initialization and responsibilities
-	- derp derp är matten med squared saker ens rätt?
 	- lint shader code
 	- add particle drag
-	- rename stuff to make more sense and be more distinct
 	- random seed button
 	
 	gpu:

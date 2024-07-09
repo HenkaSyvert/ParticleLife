@@ -379,10 +379,6 @@ environment = SubResource("Environment_m44sp")
 particle_life = NodePath("..")
 sound = NodePath("../NoteStrings")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
-[node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
-
 [node name="GlassSampler" type="AudioStreamPlayer" parent="."]
 volume_db = -20.0
 script = ExtResource("1_1o4o4")

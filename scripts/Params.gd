@@ -2,6 +2,7 @@ class_name Params
 
 static var num_particles: int = 100
 static var num_types: int = 3
+
 static var universe_radius: float = 40
 static var attraction_radius: float = 10
 static var repel_radius: float = 1
