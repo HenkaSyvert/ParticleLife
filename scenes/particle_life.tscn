@@ -1,7 +1,7 @@
 [gd_scene load_steps=91 format=3 uid="uid://bb5yu55jng3ek"]
 
 [ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="1_1o4o4"]
-[ext_resource type="Script" path="res://scripts/particle_life.gd" id="1_tq84v"]
+[ext_resource type="Script" path="res://scripts/application.gd" id="1_tq84v"]
 [ext_resource type="Script" path="res://scripts/particles_3d.gd" id="2_ao65r"]
 [ext_resource type="Script" path="res://scripts/sound.gd" id="2_qaoom"]
 [ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="2_qj4jq"]

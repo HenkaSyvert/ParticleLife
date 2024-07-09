@@ -1,7 +1,7 @@
 class_name Sound
 extends MultiMeshInstance3D
 
-@export var particle_life: ParticleLife
+@export var particle_life: Application
 @export var enable_sound: bool = false
 @export var note_cooldown: float = 3
 @export var string_width: float = 0.05
@@ -42,7 +42,7 @@ var music_scales: Array[Array] = [
 func _ready() -> void:
 	multimesh.use_colors = true
 	multimesh.instance_count = num_notes
-	(multimesh.mesh as CapsuleMesh).height = particle_life.universe_radius
+	(multimesh.mesh as CapsuleMesh).height = Params.universe_radius
 	(multimesh.mesh as CapsuleMesh).radius = string_width / 2
 
 	visible = show_note_strings
@@ -51,9 +51,7 @@ func _ready() -> void:
 	for i: int in range(num_notes):
 		note_timers.append(note_cooldown / 2 + randf_range(-1, 1))
 
-		var t: Transform3D = Transform3D(
-			Basis(), note_strings[i] * particle_life.universe_radius / 2
-		)
+		var t: Transform3D = Transform3D(Basis(), note_strings[i] * Params.universe_radius / 2)
 
 		if not t.origin.normalized().cross(Vector3.UP).is_zero_approx():
 			t = t.looking_at(Vector3.ZERO)
@@ -68,8 +66,8 @@ func _process(delta: float) -> void:
 	for i: int in range(multimesh.instance_count):
 		var t: Transform3D = multimesh.get_instance_transform(i)
 		t.origin = Vector3.ZERO
-		t = t.translated(note_strings[i] * particle_life.universe_radius / 2)
-		(multimesh.mesh as CapsuleMesh).height = particle_life.universe_radius
+		t = t.translated(note_strings[i] * Params.universe_radius / 2)
+		(multimesh.mesh as CapsuleMesh).height = Params.universe_radius
 		multimesh.set_instance_transform(i, t)
 
 
@@ -90,7 +88,7 @@ func map_sound(delta: float) -> void:
 	for i: int in range(note_strings.size()):
 		note_timers[i] -= delta
 
-		for j: int in range(particle_life.num_particles):
+		for j: int in range(Params.num_particles):
 			if particle_life.velocities[j].length() < 0.1:
 				continue
 

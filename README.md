@@ -15,6 +15,8 @@ todo:
 	- derp derp är matten med squared saker ens rätt?
 	- lint shader code
 	- add particle drag
+	- rename stuff to make more sense and be more distinct
+	- random seed button
 	
 	gpu:
 		- figure out optimal work groups

@@ -20,7 +20,7 @@ signal music_scale_changed(value: int)
 signal note_string_width_changed(value: float)
 signal instrument_changed(value: int)
 
-@export var particle_life: ParticleLife
+@export var particle_life: Application
 @export var sound: Sound
 
 @onready var fps_label: Label = %FpsLabel
@@ -28,19 +28,19 @@ signal instrument_changed(value: int)
 
 func _ready() -> void:
 	(%SeedLineEdit as LineEdit).set_text(particle_life.seed_str)
-	(%WrapUniverseCheckBox as CheckBox).button_pressed = particle_life.wrap_universe
-	(%NumParticlesSpinBox as SpinBox).value = particle_life.num_particles
-	(%NumTypesSpinBox as SpinBox).value = particle_life.num_types
+	(%WrapUniverseCheckBox as CheckBox).button_pressed = Params.wrap_universe
+	(%NumParticlesSpinBox as SpinBox).value = Params.num_particles
+	(%NumTypesSpinBox as SpinBox).value = Params.num_types
 	(%RunOnGpuCheckBox as CheckBox).button_pressed = particle_life.run_on_gpu
 	Engine.physics_ticks_per_second = 30
 	(%PhysicsFPSSpinBox as SpinBox).value = Engine.physics_ticks_per_second
 	(%PauseCheckBox as CheckBox).button_pressed = particle_life.is_paused
 
-	(%UniverseRadiusSpinBox as SpinBox).value = particle_life.universe_radius
-	(%AttractionRadiusSpinBox as SpinBox).value = particle_life.attraction_radius
-	(%RepelRadiusSpinBox as SpinBox).value = particle_life.repel_radius
-	(%ForceStrengthSpinBox as SpinBox).value = particle_life.force_strength
-	(%MaxSpeedSpinBox as SpinBox).value = particle_life.max_speed
+	(%UniverseRadiusSpinBox as SpinBox).value = Params.universe_radius
+	(%AttractionRadiusSpinBox as SpinBox).value = Params.attraction_radius
+	(%RepelRadiusSpinBox as SpinBox).value = Params.repel_radius
+	(%ForceStrengthSpinBox as SpinBox).value = Params.force_strength
+	(%MaxSpeedSpinBox as SpinBox).value = Params.max_speed
 
 	(%EnableSoundCheckBox as CheckBox).button_pressed = sound.enable_sound
 	(%NoteCooldownSpinBox as SpinBox).value = sound.note_cooldown
