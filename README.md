@@ -12,6 +12,7 @@ todo:
 	- lint shader code
 	- add particle drag
 	- random seed button
+	- use const more
 	
 	gpu:
 		- figure out optimal work groups
@@ -32,6 +33,7 @@ todo:
 		- make notes from 4ths and 5th and set intervals instead of just all tones in scale
 		- visualize with keyboard
 		- polyrythm
+		- make use of string thickness for determine if particle hit string or not
 
 	graphics:
 		- change particle mesh to cooler

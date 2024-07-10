@@ -2,54 +2,58 @@ class_name Sound
 extends MultiMeshInstance3D
 
 @export var particle_life: Application
-@export var enable_sound: bool = false
+
 @export var note_cooldown: float = 3
 @export var string_width: float = 0.05
 @export var show_note_strings: bool = false
+
+@export var enable_sound: bool = false
 @export var selected_scale: int = 0
 @export var samplers: Array[SamplerInstrument]
 @export var selected_sampler: int = 0
 
-var note_strings: Array[Vector3]
-var note_timers: Array[float] = []
-var num_octaves: int = 3
-var num_notes: int = 15
-var starting_octaves: Array[int] = [3, 5, 3]
+var note_strings: PackedVector3Array = PackedVector3Array()
+var note_timers: PackedFloat32Array = PackedFloat32Array()
 
-var penta_scale: Array[String] = ["C", "D", "E", "G", "A"]
-var jap_penta_scale: Array[String] = ["A", "B", "C", "E", "F"]
-var hicaz_scale: Array[String] = ["A", "A#", "C#", "D", "E", "F", "G"]
-var major_scale: Array[String] = ["A", "B", "C", "D", "E", "F", "G"]
-var melodic_minor_scale: Array[String] = ["A", "B", "C", "D", "E", "F#", "G#"]
-var whole_tone_scale: Array[String] = ["C", "D", "E", "F#", "G#", "A#"]
-var diminished_scale: Array[String] = ["C", "C#", "D#", "E", "F#", "G", "A", "A#"]
-var blues_scale: Array[String] = ["A", "C", "D", "D#", "E", "G"]
-var doric_hicaz_scale: Array[String] = ["D", "E", "F", "G#", "A", "B", "C"]
+const NUM_OCTAVES: int = 3
+const NUM_NOTES: int = 15
+const STARTING_OCTAVES: Array[int] = [3, 5, 3]
 
-var music_scales: Array[Array] = [
-	penta_scale,
-	jap_penta_scale,
-	hicaz_scale,
-	major_scale,
-	melodic_minor_scale,
-	whole_tone_scale,
-	diminished_scale,
-	blues_scale,
-	doric_hicaz_scale
+const PENTA_SCALE: PackedStringArray = ["C", "D", "E", "G", "A"]
+const JAP_PENTA_SCALE: PackedStringArray = ["A", "B", "C", "E", "F"]
+const HICAZ_SCALE: PackedStringArray = ["A", "A#", "C#", "D", "E", "F", "G"]
+const MAJOR_SCALE: PackedStringArray = ["A", "B", "C", "D", "E", "F", "G"]
+const MELODIC_MINOR_SCALE: PackedStringArray = ["A", "B", "C", "D", "E", "F#", "G#"]
+const WHOLE_TONE_SCALE: PackedStringArray = ["C", "D", "E", "F#", "G#", "A#"]
+const DIMINISHED_SCALE: PackedStringArray = ["C", "C#", "D#", "E", "F#", "G", "A", "A#"]
+const BLUES_SCALE: PackedStringArray = ["A", "C", "D", "D#", "E", "G"]
+const DORIC_HICAZ_SCALE: PackedStringArray = ["D", "E", "F", "G#", "A", "B", "C"]
+
+const MUSIC_SCALES: Array[PackedStringArray] = [
+	PENTA_SCALE,
+	JAP_PENTA_SCALE,
+	HICAZ_SCALE,
+	MAJOR_SCALE,
+	MELODIC_MINOR_SCALE,
+	WHOLE_TONE_SCALE,
+	DIMINISHED_SCALE,
+	BLUES_SCALE,
+	DORIC_HICAZ_SCALE
 ]
 
 
 func _ready() -> void:
 	multimesh.use_colors = true
-	multimesh.instance_count = num_notes
+	multimesh.instance_count = NUM_NOTES
 	(multimesh.mesh as CapsuleMesh).height = Params.universe_radius
 	(multimesh.mesh as CapsuleMesh).radius = string_width / 2
 
 	visible = show_note_strings
 
-	note_strings = fibonacci_sphere(num_notes)
-	for i: int in range(num_notes):
-		note_timers.append(note_cooldown / 2 + randf_range(-1, 1))
+	note_strings = fibonacci_sphere(NUM_NOTES)
+	assert(note_timers.resize(NUM_NOTES) == OK)
+	for i: int in range(NUM_NOTES):
+		note_timers[i] = note_cooldown / 2 + randf_range(-1, 1)
 
 		var t: Transform3D = Transform3D(Basis(), note_strings[i] * Params.universe_radius / 2)
 
@@ -71,8 +75,9 @@ func _process(delta: float) -> void:
 		multimesh.set_instance_transform(i, t)
 
 
-func fibonacci_sphere(n: int) -> Array[Vector3]:
-	var points: Array[Vector3] = []
+func fibonacci_sphere(n: int) -> PackedVector3Array:
+	var points: PackedVector3Array = PackedVector3Array()
+	assert(points.resize(n) == OK)
 	var phi: float = PI * (sqrt(5) - 1)
 	for i: int in range(n):
 		var y: float = 1 - (i / float(n - 1)) * 2
@@ -80,7 +85,7 @@ func fibonacci_sphere(n: int) -> Array[Vector3]:
 		var theta: float = phi * i
 		var x: float = r * cos(theta)
 		var z: float = r * sin(theta)
-		points.append(Vector3(x, y, z))
+		points[i] = Vector3(x, y, z)
 	return points
 
 
@@ -96,14 +101,14 @@ func map_sound(delta: float) -> void:
 				particle_life.simulation.get_pos_3d(j).normalized()
 			)
 			if d > 0.9:
-				var notes: Array[String] = music_scales[selected_scale]
+				var notes: PackedStringArray = MUSIC_SCALES[selected_scale]
 				if note_timers[i] < 0:
 					note_timers[i] = note_cooldown
 					if enable_sound:
 						@warning_ignore("integer_division")
 						samplers[selected_sampler].play_note(
 							notes[i % notes.size()],
-							starting_octaves[selected_sampler] + i / notes.size()
+							STARTING_OCTAVES[selected_sampler] + i / notes.size()
 						)
 
 		if note_timers[i] > 0:
