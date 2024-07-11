@@ -132,7 +132,7 @@ static func setup_shader_uniforms(num_particles: int, num_types: int) -> void:
 	GPU.set_uniform(Uniform.DELTA, 1.0 / Engine.physics_ticks_per_second)
 
 
-static func set_particles_state(
+static func set_particle_states(
 	positions: PackedVector3Array, velocities: PackedVector3Array
 ) -> void:
 	_buffer_toggle = 1

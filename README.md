@@ -13,6 +13,7 @@ todo:
 	- add particle drag
 	- random seed button
 	- use const more
+	- more robust menu variable system..
 	
 	gpu:
 		- figure out optimal work groups

@@ -1,8 +1,12 @@
 class_name Simulation3D
 extends Simulation
 
-var positions: PackedVector3Array = PackedVector3Array()
-var velocities: PackedVector3Array = PackedVector3Array()
+var positions: PackedVector3Array = PackedVector3Array():
+	set(value):
+		pass
+var velocities: PackedVector3Array = PackedVector3Array():
+	set(value):
+		pass
 
 
 func _init() -> void:
@@ -15,24 +19,12 @@ func _init() -> void:
 		positions[i] = p
 		velocities[i] = Vector3()
 
-	GPU.setup_shader_uniforms(Params.num_particles, Params.num_types)
-
-	GPU.set_uniform(GPU.Uniform.ATTRACTION_RADIUS, Params.attraction_radius)
-	GPU.set_uniform(GPU.Uniform.REPEL_RADIUS, Params.repel_radius)
-	GPU.set_uniform(GPU.Uniform.FORCE_STRENGTH, Params.force_strength)
-	GPU.set_uniform(GPU.Uniform.MAX_SPEED, Params.max_speed)
-	GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, Params.universe_radius)
-	GPU.set_uniform(GPU.Uniform.WRAP_UNIVERSE, Params.wrap_universe)
-
-	GPU.set_uniform(GPU.Uniform.TYPES, Params.types)
-	GPU.set_uniform(GPU.Uniform.ATTRACTION_MATRIX, Params.attraction_matrix)
-	GPU.set_particles_state(positions, velocities)
+	GPU.set_particle_states(positions, velocities)
 
 
 func sync_gpu_cpu() -> void:
 	if not run_on_gpu:
-		GPU.set_particles_state(positions, velocities)
-
+		GPU.set_particle_states(positions, velocities)
 
 
 func get_pos_3d(index: int) -> Vector3:
@@ -51,7 +43,8 @@ func do_step(delta: float) -> void:
 
 
 func _do_cpu_step(delta: float) -> void:
-	var new_positions: Array[Vector3] = []
+	var new_positions: PackedVector3Array = PackedVector3Array()
+	assert(new_positions.resize(Params.num_particles) == OK)
 	for i: int in range(Params.num_particles):
 		var force: Vector3 = Vector3.ZERO
 		for j: int in range(Params.num_particles):
@@ -101,6 +94,7 @@ func _do_cpu_step(delta: float) -> void:
 					velocities[i] - pos.normalized() * velocities[i].dot(pos.normalized())
 				)
 
-		new_positions.append(pos)
+		new_positions[i] = pos
 
-	positions = new_positions
+	for i: int in range(Params.num_particles):
+		positions[i] = new_positions[i]

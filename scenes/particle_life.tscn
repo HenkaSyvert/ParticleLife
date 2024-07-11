@@ -352,12 +352,11 @@ unique_name_in_owner = true
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
 mesh = SubResource("SphereMesh_drbe8")
 
-[node name="NoteStrings" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life", "samplers")]
+[node name="NoteStrings" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life")]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_6ql17")
 script = ExtResource("2_qaoom")
 particle_life = NodePath("..")
-samplers = [NodePath("../HarpSampler"), NodePath("../GlassSampler"), NodePath("../XylophoneSampler")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
@@ -392,21 +391,3 @@ max_notes = 20
 samples = Array[ExtResource("2_qj4jq")]([SubResource("Resource_83mwu"), SubResource("Resource_052dl"), SubResource("Resource_8ciwq"), SubResource("Resource_ypvs5"), SubResource("Resource_dwq2o"), SubResource("Resource_ehxy7"), SubResource("Resource_cdysb"), SubResource("Resource_os3nw"), SubResource("Resource_0ktdp")])
 
 [connection signal="simulation_started" from="." to="Particles3D" method="_on_particle_life_simulation_started"]
-[connection signal="attraction_radius_changed" from="Menu" to="." method="_on_menu_attraction_radius_changed"]
-[connection signal="enable_sound_changed" from="Menu" to="NoteStrings" method="_on_menu_enable_sound_changed"]
-[connection signal="force_strength_changed" from="Menu" to="." method="_on_menu_force_strength_changed"]
-[connection signal="instrument_changed" from="Menu" to="NoteStrings" method="_on_menu_instrument_changed"]
-[connection signal="max_speed_changed" from="Menu" to="." method="_on_menu_max_speed_changed"]
-[connection signal="music_scale_changed" from="Menu" to="NoteStrings" method="_on_menu_music_scale_changed"]
-[connection signal="note_cooldown_changed" from="Menu" to="NoteStrings" method="_on_menu_note_cooldown_changed"]
-[connection signal="note_string_width_changed" from="Menu" to="NoteStrings" method="_on_menu_note_string_width_changed"]
-[connection signal="pause_changed" from="Menu" to="." method="_on_menu_pause_changed"]
-[connection signal="physics_fps_changed" from="Menu" to="." method="_on_menu_physics_fps_changed"]
-[connection signal="pressed_restart" from="Menu" to="." method="_on_menu_pressed_restart"]
-[connection signal="pressed_step" from="Menu" to="." method="_on_menu_pressed_step"]
-[connection signal="repel_radius_changed" from="Menu" to="." method="_on_menu_repel_radius_changed"]
-[connection signal="run_on_gpu_changed" from="Menu" to="." method="_on_menu_run_on_gpu_changed"]
-[connection signal="show_note_strings_changed" from="Menu" to="NoteStrings" method="_on_menu_show_note_strings_changed"]
-[connection signal="universe_radius_changed" from="Menu" to="." method="_on_menu_universe_radius_changed"]
-[connection signal="universe_radius_changed" from="Menu" to="Particles3D" method="_on_menu_universe_radius_changed"]
-[connection signal="wrap_universe_changed" from="Menu" to="." method="_on_menu_wrap_universe_changed"]

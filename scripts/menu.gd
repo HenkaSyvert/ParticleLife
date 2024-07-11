@@ -1,17 +1,10 @@
 extends Window
 
 signal pressed_restart(seed_string: String, particles_count: int, types_count: int)
-signal wrap_universe_changed(value: bool)
 signal run_on_gpu_changed(value: bool)
 signal pause_changed(value: bool)
 signal pressed_step
 signal physics_fps_changed
-
-signal universe_radius_changed(value: float)
-signal attraction_radius_changed(value: float)
-signal repel_radius_changed(value: float)
-signal force_strength_changed(value: float)
-signal max_speed_changed(value: float)
 
 signal enable_sound_changed(value: bool)
 signal note_cooldown_changed(value: float)
@@ -66,7 +59,7 @@ func _on_restart_button_pressed() -> void:
 
 
 func _on_wrap_universe_check_box_toggled(toggled_on: bool) -> void:
-	wrap_universe_changed.emit(toggled_on)
+	Params.wrap_universe = toggled_on
 
 
 func _on_run_on_gpu_check_box_toggled(toggled_on: bool) -> void:
@@ -74,23 +67,23 @@ func _on_run_on_gpu_check_box_toggled(toggled_on: bool) -> void:
 
 
 func _on_universe_radius_spin_box_value_changed(value: float) -> void:
-	universe_radius_changed.emit(value)
+	Params.universe_radius = value
 
 
 func _on_attraction_radius_spin_box_value_changed(value: float) -> void:
-	attraction_radius_changed.emit(value)
+	Params.attraction_radius = value
 
 
 func _on_repel_radius_spin_box_value_changed(value: float) -> void:
-	repel_radius_changed.emit(value)
+	Params.repel_radius = value
 
 
 func _on_force_strength_spin_box_value_changed(value: float) -> void:
-	force_strength_changed.emit(value)
+	Params.force_strength = value
 
 
 func _on_max_speed_spin_box_value_changed(value: float) -> void:
-	max_speed_changed.emit(value)
+	Params.max_speed = value
 
 
 func _on_enable_sound_check_box_toggled(toggled_on: bool) -> void:
