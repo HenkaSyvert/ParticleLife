@@ -30,11 +30,10 @@ func _init() -> void:
 #	GPU.set_particles_state(positions, velocities)
 
 
-func sync_gpu_cpu() -> void:
+static func sync_gpu_cpu() -> void:
 	if not run_on_gpu:
 		pass
 		#GPU.set_particles_state(positions, velocities)
-
 
 
 func get_pos_2d(index: int) -> Vector2:

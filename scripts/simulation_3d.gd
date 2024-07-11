@@ -1,10 +1,10 @@
 class_name Simulation3D
 extends Simulation
 
-var positions: PackedVector3Array = PackedVector3Array():
+static var positions: PackedVector3Array = PackedVector3Array():
 	set(value):
 		pass
-var velocities: PackedVector3Array = PackedVector3Array():
+static var velocities: PackedVector3Array = PackedVector3Array():
 	set(value):
 		pass
 
@@ -22,7 +22,13 @@ func _init() -> void:
 	GPU.set_particle_states(positions, velocities)
 
 
-func sync_gpu_cpu() -> void:
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		assert(positions.resize(0) == OK)
+		assert(velocities.resize(0) == OK)
+
+
+static func sync_gpu_cpu() -> void:
 	if not run_on_gpu:
 		GPU.set_particle_states(positions, velocities)
 

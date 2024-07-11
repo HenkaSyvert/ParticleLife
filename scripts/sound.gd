@@ -1,8 +1,6 @@
 class_name Sound
 extends MultiMeshInstance3D
 
-@export var particle_life: Application
-
 @export var note_cooldown: float = 3
 @export var string_width: float = 0.05
 @export var show_note_strings: bool = false
@@ -94,12 +92,10 @@ func map_sound(delta: float) -> void:
 		note_timers[i] -= delta
 
 		for j: int in range(Params.num_particles):
-			if particle_life.simulation.get_vel_3d(j).length() < 0.1:
+			if Simulation3D.velocities[j].length() < 0.1:
 				continue
 
-			var d: float = note_strings[i].normalized().dot(
-				particle_life.simulation.get_pos_3d(j).normalized()
-			)
+			var d: float = note_strings[i].normalized().dot(Simulation3D.positions[j].normalized())
 			if d > 0.9:
 				var notes: PackedStringArray = MUSIC_SCALES[selected_scale]
 				if note_timers[i] < 0:

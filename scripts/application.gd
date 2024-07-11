@@ -7,7 +7,7 @@ signal simulation_started
 @export var seed_str: String = "mehiko"
 var dimensions: int = 3
 
-var simulation: Simulation = Simulation3D.new()
+var simulation: Simulation
 
 
 func _ready() -> void:

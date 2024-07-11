@@ -1,7 +1,5 @@
 extends MultiMeshInstance3D
 
-@export var particle_life: Application
-
 
 func _ready() -> void:
 	(%UniverseSphere as MeshInstance3D).scale = Vector3.ONE * Params.universe_radius * 2
@@ -9,7 +7,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	for i: int in range(Params.num_particles):
-		var t: Transform3D = Transform3D(Basis(), particle_life.simulation.get_pos_3d(i))
+		var t: Transform3D = Transform3D(Basis(), Simulation3D.positions[i])
 		multimesh.set_instance_transform(i, t)
 
 

@@ -341,22 +341,20 @@ velocity = 5
 [node name="ParticleLife" type="Node"]
 script = ExtResource("1_tq84v")
 
-[node name="Particles3D" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life")]
+[node name="Particles3D" type="MultiMeshInstance3D" parent="."]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_rnxrb")
 script = ExtResource("2_ao65r")
-particle_life = NodePath("..")
 
 [node name="UniverseSphere" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
 mesh = SubResource("SphereMesh_drbe8")
 
-[node name="NoteStrings" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("particle_life")]
+[node name="NoteStrings" type="MultiMeshInstance3D" parent="."]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_6ql17")
 script = ExtResource("2_qaoom")
-particle_life = NodePath("..")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
