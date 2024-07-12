@@ -1,9 +1,6 @@
 class_name Application
 extends Node
 
-signal simulation_started
-
-@export var is_paused: bool = false
 var dimensions: int = 3
 
 var simulation: Simulation
@@ -14,11 +11,6 @@ func _ready() -> void:
 	start_simulation()
 
 
-func _physics_process(delta: float) -> void:
-	if not is_paused:
-		simulation.do_step(delta)
-
-
 func start_simulation() -> void:
 	if dimensions == 2:
 		simulation = Simulation2D.new()
@@ -26,26 +18,7 @@ func start_simulation() -> void:
 	elif dimensions == 3:
 		simulation = Simulation3D.new()
 
-	simulation_started.emit()
-
 
 func _on_menu_pressed_restart(seed_string: String, particles_count: int, types_count: int) -> void:
 	Params.randomize_particle_params(seed_string, particles_count, types_count)
 	start_simulation()
-
-
-func _on_menu_run_on_gpu_changed(value: bool) -> void:
-	simulation.run_on_gpu = value
-
-
-func _on_menu_pause_changed(value: bool) -> void:
-	is_paused = value
-
-
-func _on_menu_pressed_step() -> void:
-	if is_paused:
-		simulation.do_step(1.0 / Engine.physics_ticks_per_second)
-
-
-func _on_menu_physics_fps_changed() -> void:
-	GPU.set_uniform(GPU.Uniform.DELTA, 1.0 / Engine.physics_ticks_per_second)

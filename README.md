@@ -15,6 +15,7 @@ todo:
 	- use const more
 	- more robust menu variable system..
 	- fix all broken signals
+	- fix signal for universe sphere so doesnt change scale every frame
 	
 	gpu:
 		- figure out optimal work groups

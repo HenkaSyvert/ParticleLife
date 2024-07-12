@@ -9,7 +9,7 @@ static var velocities: PackedVector3Array = PackedVector3Array():
 		pass
 
 
-func _init() -> void:
+func _ready() -> void:
 	assert(positions.resize(Params.num_particles) == OK)
 	assert(velocities.resize(Params.num_particles) == OK)
 
@@ -22,30 +22,13 @@ func _init() -> void:
 	GPU.set_particle_states(positions, velocities)
 
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_PREDELETE:
-		assert(positions.resize(0) == OK)
-		assert(velocities.resize(0) == OK)
-
-
-static func sync_gpu_cpu() -> void:
+static func _sync_gpu_cpu() -> void:
 	if not run_on_gpu:
 		GPU.set_particle_states(positions, velocities)
 
 
-func get_pos_3d(index: int) -> Vector3:
-	return positions[index]
-
-
-func get_vel_3d(index: int) -> Vector3:
-	return velocities[index]
-
-
-func do_step(delta: float) -> void:
-	if run_on_gpu:
-		GPU.particle_life_gpu(positions, velocities)
-	else:
-		_do_cpu_step(delta)
+func _do_gpu_step() -> void:
+	GPU.particle_life_gpu(positions, velocities)
 
 
 func _do_cpu_step(delta: float) -> void:

@@ -1,0 +1,86 @@
+[gd_scene load_steps=20 format=3 uid="uid://ch24jre1rtgj7"]
+
+[ext_resource type="Script" path="res://scripts/simulation_3d.gd" id="1_3ptry"]
+[ext_resource type="Script" path="res://scripts/particles_3d.gd" id="1_hginm"]
+[ext_resource type="Script" path="res://scripts/note_strings.gd" id="2_24f0d"]
+[ext_resource type="Script" path="res://scripts/camera_movement.gd" id="3_ief3o"]
+[ext_resource type="Script" path="res://scripts/universe_sphere.gd" id="3_j6djp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_es8bu"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_hga30"]
+material = SubResource("StandardMaterial3D_es8bu")
+
+[sub_resource type="MultiMesh" id="MultiMesh_rnxrb"]
+transform_format = 1
+mesh = SubResource("SphereMesh_hga30")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_w4oc6"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g0nml"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_45w8o"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0akae"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jylc8"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_db0lp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eqshp"]
+transparency = 4
+cull_mode = 1
+albedo_color = Color(0.345098, 0.443137, 0.501961, 0.0941176)
+metallic = 0.78
+metallic_specular = 0.56
+metallic_texture = SubResource("NoiseTexture2D_g0nml")
+roughness = 0.1
+roughness_texture = SubResource("NoiseTexture2D_jylc8")
+normal_enabled = true
+normal_scale = 0.35
+normal_texture = SubResource("NoiseTexture2D_45w8o")
+rim = 0.0
+anisotropy = 1.0
+anisotropy_flowmap = SubResource("NoiseTexture2D_w4oc6")
+subsurf_scatter_texture = SubResource("NoiseTexture2D_db0lp")
+refraction_scale = 1.0
+refraction_texture = SubResource("NoiseTexture2D_0akae")
+
+[sub_resource type="SphereMesh" id="SphereMesh_drbe8"]
+material = SubResource("StandardMaterial3D_eqshp")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lyq8f"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_u0b18"]
+material = SubResource("StandardMaterial3D_lyq8f")
+radius = 0.785
+height = 7.452
+
+[sub_resource type="MultiMesh" id="MultiMesh_6ql17"]
+transform_format = 1
+mesh = SubResource("CapsuleMesh_u0b18")
+
+[node name="Simulation3D" type="Node3D"]
+script = ExtResource("1_3ptry")
+
+[node name="Particles3D" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_rnxrb")
+script = ExtResource("1_hginm")
+
+[node name="UniverseSphere" type="MeshInstance3D" parent="."]
+transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
+mesh = SubResource("SphereMesh_drbe8")
+skeleton = NodePath("../..")
+script = ExtResource("3_j6djp")
+
+[node name="NoteStrings" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_6ql17")
+script = ExtResource("2_24f0d")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
+script = ExtResource("3_ief3o")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

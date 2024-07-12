@@ -1,10 +1,6 @@
 extends Window
 
 signal pressed_restart(seed_string: String, particles_count: int, types_count: int)
-signal run_on_gpu_changed(value: bool)
-signal pause_changed(value: bool)
-signal pressed_step
-signal physics_fps_changed
 
 signal note_cooldown_changed(value: float)
 signal show_note_strings_changed(value: bool)
@@ -23,7 +19,7 @@ func _ready() -> void:
 	(%RunOnGpuCheckBox as CheckBox).button_pressed = false
 	Engine.physics_ticks_per_second = 30
 	(%PhysicsFPSSpinBox as SpinBox).value = Engine.physics_ticks_per_second
-	(%PauseCheckBox as CheckBox).button_pressed = particle_life.is_paused
+	(%PauseCheckBox as CheckBox).button_pressed = Simulation.is_paused
 
 	(%UniverseRadiusSpinBox as SpinBox).value = Params.universe_radius
 	(%AttractionRadiusSpinBox as SpinBox).value = Params.attraction_radius
@@ -59,7 +55,7 @@ func _on_wrap_universe_check_box_toggled(toggled_on: bool) -> void:
 
 
 func _on_run_on_gpu_check_box_toggled(toggled_on: bool) -> void:
-	run_on_gpu_changed.emit(toggled_on)
+	Simulation.run_on_gpu = toggled_on
 
 
 func _on_universe_radius_spin_box_value_changed(value: float) -> void:
@@ -108,12 +104,12 @@ func _on_instrument_option_button_item_selected(index: int) -> void:
 
 func _on_physics_fps_spin_box_value_changed(value: float) -> void:
 	Engine.physics_ticks_per_second = int(value)
-	physics_fps_changed.emit()
+	GPU.set_uniform(GPU.Uniform.DELTA, 1.0 / Engine.physics_ticks_per_second)
 
 
 func _on_pause_check_box_toggled(toggled_on: bool) -> void:
-	pause_changed.emit(toggled_on)
+	Simulation.is_paused = toggled_on
 
 
 func _on_step_button_pressed() -> void:
-	pressed_step.emit()
+	particle_life.simulation.do_step(1.0 / Engine.physics_ticks_per_second)
