@@ -9,6 +9,7 @@ static var num_particles: int = 100:
 static var num_types: int = 3:
 	set(value):
 		pass
+static var dimensions: int = 3
 
 static var universe_radius: float = 40:
 	set(value):
@@ -78,6 +79,7 @@ static func randomize_particle_params(
 		var c: Color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
 		colors.append(c)
 
-	GPU.setup_shader_uniforms(num_particles, num_types)
+	GPU.compile_shader(dimensions)
+	GPU.setup_shader_uniforms()
 	GPU.set_uniform(GPU.Uniform.TYPES, types)
 	GPU.set_uniform(GPU.Uniform.ATTRACTION_MATRIX, attraction_matrix)

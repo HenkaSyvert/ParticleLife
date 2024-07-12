@@ -16,6 +16,7 @@ todo:
 	- more robust menu variable system..
 	- fix all broken signals
 	- fix signal for universe sphere so doesnt change scale every frame
+	- move 2d,3d specific params out from gpu
 	
 	gpu:
 		- figure out optimal work groups

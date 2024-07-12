@@ -1,11 +1,15 @@
 class_name Simulation2D
 extends Simulation
 
-var positions: PackedVector2Array = PackedVector2Array()
-var velocities: PackedVector2Array = PackedVector2Array()
+static var positions: PackedVector2Array = PackedVector2Array():
+	set(value):
+		pass
+static var velocities: PackedVector2Array = PackedVector2Array():
+	set(value):
+		pass
 
 
-func _init() -> void:
+func _ready() -> void:
 	assert(positions.resize(Params.num_particles) == OK)
 	assert(velocities.resize(Params.num_particles) == OK)
 
@@ -15,45 +19,21 @@ func _init() -> void:
 		positions[i] = p
 		velocities[i] = Vector2()
 
-	#GPU.setup_shader_uniforms(Params.num_particles, Params.num_types)
-
-	#GPU.set_uniform(GPU.Uniform.ATTRACTION_RADIUS, Params.attraction_radius)
-	#GPU.set_uniform(GPU.Uniform.REPEL_RADIUS, Params.repel_radius)
-	#GPU.set_uniform(GPU.Uniform.FORCE_STRENGTH, Params.force_strength)
-	#GPU.set_uniform(GPU.Uniform.MAX_SPEED, Params.max_speed)
-	#GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, Params.universe_radius)
-	#GPU.set_uniform(GPU.Uniform.WRAP_UNIVERSE, Params.wrap_universe)
+	#GPU.set_particle_states(positions, velocities)
 
 
-#	GPU.set_uniform(GPU.Uniform.TYPES, Params.types)
-#	GPU.set_uniform(GPU.Uniform.ATTRACTION_MATRIX, Params.attraction_matrix)
-#	GPU.set_particles_state(positions, velocities)
-
-
-static func sync_gpu_cpu() -> void:
+static func _sync_gpu_cpu() -> void:
 	if not run_on_gpu:
+	#	GPU.set_particle_states(positions, velocities)
 		pass
-		#GPU.set_particles_state(positions, velocities)
 
-
-func get_pos_2d(index: int) -> Vector2:
-	return positions[index]
-
-
-func get_vel_2d(index: int) -> Vector2:
-	return velocities[index]
-
-
-func do_step(delta: float) -> void:
-	if run_on_gpu:
-		#GPU.particle_life_gpu(positions, velocities)
-		pass
-	else:
-		_do_cpu_step(delta)
-
+func _do_gpu_step() -> void:
+	#GPU.particle_life_gpu(positions, velocities)
+	pass
 
 func _do_cpu_step(delta: float) -> void:
-	var new_positions: Array[Vector2] = []
+	var new_positions: PackedVector2Array = PackedVector2Array()
+	assert(new_positions.resize(Params.num_particles) == OK)
 	for i: int in range(Params.num_particles):
 		var force: Vector2 = Vector2.ZERO
 		for j: int in range(Params.num_particles):
@@ -103,6 +83,7 @@ func _do_cpu_step(delta: float) -> void:
 					velocities[i] - pos.normalized() * velocities[i].dot(pos.normalized())
 				)
 
-		new_positions.append(pos)
+		new_positions[i] = pos
 
-	positions = new_positions
+	for i: int in range(Params.num_particles):
+		positions[i] = new_positions[i]

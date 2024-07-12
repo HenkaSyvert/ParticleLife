@@ -23,9 +23,6 @@ const NUM_VEC_ELEMENTS: int = 4
 const MEM_ALIGNMENT: int = 16
 const WORKGROUP_SIZE: Vector3i = Vector3i(512, 1, 1)
 
-static var _num_particles: int
-static var _num_types: int
-
 static var _rd: RenderingDevice = RenderingServer.create_local_rendering_device()
 static var _shader: RID
 static var _pipeline: RID
@@ -45,9 +42,14 @@ static var _types_buf_size: int
 
 static var _buffer_toggle: int
 
+static var _shader_files: PackedStringArray = [
+	"res://scenes/simulation/simulation2d/particle_life_2d.glsl",
+	"res://scenes/simulation/simulation3d/particle_life_3d.glsl",
+]
 
-static func _static_init() -> void:
-	var shader_file: RDShaderFile = load("res://scenes/simulation/particle_life.glsl")
+
+static func compile_shader(dimensions: int) -> void:
+	var shader_file: RDShaderFile = load(_shader_files[dimensions - 2])
 	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
 	_shader = _rd.shader_create_from_spirv(shader_spirv)
 	_pipeline = _rd.compute_pipeline_create(_shader)
@@ -73,19 +75,16 @@ static func free_uniforms() -> void:
 		_rd.free_rid(_types_buf)
 
 
-static func setup_shader_uniforms(num_particles: int, num_types: int) -> void:
-	_num_particles = num_particles
-	_num_types = num_types
-
+static func setup_shader_uniforms() -> void:
 	free_uniforms()
 
-	_positions_buf_size = _num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
-	_velocities_buf_size = _num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
+	_positions_buf_size = Params.num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
+	_velocities_buf_size = Params.num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
 	_params_buf_size = (
 		ceili((Uniform.NUM_PARAMS as float) * SIZEOF_DATATYPE / MEM_ALIGNMENT) * MEM_ALIGNMENT
 	)
-	_attraction_matrix_buf_size = _num_types ** 2 * SIZEOF_DATATYPE
-	_types_buf_size = _num_particles * SIZEOF_DATATYPE
+	_attraction_matrix_buf_size = Params.num_types ** 2 * SIZEOF_DATATYPE
+	_types_buf_size = Params.num_particles * SIZEOF_DATATYPE
 
 	_positions_bufs[0] = _rd.storage_buffer_create(_positions_buf_size)
 	_positions_bufs[1] = _rd.storage_buffer_create(_positions_buf_size)
@@ -127,8 +126,8 @@ static func setup_shader_uniforms(num_particles: int, num_types: int) -> void:
 	]
 	_uniform_set = _rd.uniform_set_create(uniforms, _shader, 0)
 
-	GPU.set_uniform(Uniform.NUM_PARTICLES, num_particles)
-	GPU.set_uniform(Uniform.NUM_TYPES, num_types)
+	GPU.set_uniform(Uniform.NUM_PARTICLES, Params.num_particles)
+	GPU.set_uniform(Uniform.NUM_TYPES, Params.num_types)
 	GPU.set_uniform(Uniform.DELTA, 1.0 / Engine.physics_ticks_per_second)
 
 
@@ -141,9 +140,7 @@ static func set_particle_states(
 	GPU.set_uniform(Uniform.VELOCITIES, velocities)
 
 
-static func particle_life_gpu(
-	positions: PackedVector3Array, velocities: PackedVector3Array
-) -> void:
+static func particle_life_gpu() -> void:
 	_buffer_toggle = (_buffer_toggle + 1) % 2
 	GPU.set_uniform(Uniform.BUFFER_TOGGLE, _buffer_toggle)
 
@@ -155,22 +152,13 @@ static func particle_life_gpu(
 	_rd.submit()
 	_rd.sync()
 
-	var pos_data: PackedByteArray = _rd.buffer_get_data(
-		_positions_bufs[_buffer_toggle], 0, _positions_buf_size
-	)
-	var vel_data: PackedByteArray = _rd.buffer_get_data(_velocities_buf, 0, _velocities_buf_size)
 
-	for i: int in range(_num_particles):
-		positions[i] = Vector3(
-			pos_data.decode_float((i * NUM_VEC_ELEMENTS) * SIZEOF_DATATYPE),
-			pos_data.decode_float((i * NUM_VEC_ELEMENTS + 1) * SIZEOF_DATATYPE),
-			pos_data.decode_float((i * NUM_VEC_ELEMENTS + 2) * SIZEOF_DATATYPE)
-		)
-		velocities[i] = Vector3(
-			vel_data.decode_float((i * NUM_VEC_ELEMENTS) * SIZEOF_DATATYPE),
-			vel_data.decode_float((i * NUM_VEC_ELEMENTS + 1) * SIZEOF_DATATYPE),
-			vel_data.decode_float((i * NUM_VEC_ELEMENTS + 2) * SIZEOF_DATATYPE),
-		)
+static func get_pos_data() -> PackedByteArray:
+	return _rd.buffer_get_data(_positions_bufs[_buffer_toggle], 0, _positions_buf_size)
+
+
+static func get_vel_data() -> PackedByteArray:
+	return _rd.buffer_get_data(_velocities_buf, 0, _velocities_buf_size)
 
 
 static func set_uniform(uniform: Uniform, data: Variant) -> void:
@@ -191,14 +179,14 @@ static func set_uniform(uniform: Uniform, data: Variant) -> void:
 			buffer = _attraction_matrix_buf
 			size = _attraction_matrix_buf_size
 			assert(pba.resize(size) == OK)
-			for i: int in range(_num_types ** 2):
+			for i: int in range(Params.num_types ** 2):
 				pba.encode_float(i * SIZEOF_DATATYPE, data[i])
 
 		elif uniform == Uniform.POSITIONS:
 			buffer = _positions_bufs[0]
 			size = _positions_buf_size
 			assert(pba.resize(size) == OK)
-			for i: int in range(_num_particles):
+			for i: int in range(Params.num_particles):
 				for j: int in range(3):
 					var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
 					pba.encode_float(offset, data[i][j])
@@ -207,14 +195,14 @@ static func set_uniform(uniform: Uniform, data: Variant) -> void:
 			buffer = _types_buf
 			size = _types_buf_size
 			assert(pba.resize(size) == OK)
-			for i: int in range(_num_particles):
+			for i: int in range(Params.num_particles):
 				pba.encode_s32(i * SIZEOF_DATATYPE, data[i])
 
 		else:
 			buffer = _velocities_buf
 			size = _velocities_buf_size
 			assert(pba.resize(size) == OK)
-			for i: int in range(_num_particles):
+			for i: int in range(Params.num_particles):
 				for j: int in range(3):
 					var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
 					pba.encode_float(offset, data[i][j])

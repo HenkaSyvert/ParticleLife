@@ -28,7 +28,20 @@ static func _sync_gpu_cpu() -> void:
 
 
 func _do_gpu_step() -> void:
-	GPU.particle_life_gpu(positions, velocities)
+	GPU.particle_life_gpu()
+	var pos_data: PackedByteArray = GPU.get_pos_data()
+	var vel_data: PackedByteArray = GPU.get_vel_data()
+	for i: int in range(Params.num_particles):
+		positions[i] = Vector3(
+			pos_data.decode_float((i * GPU.NUM_VEC_ELEMENTS) * GPU.SIZEOF_DATATYPE),
+			pos_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 1) * GPU.SIZEOF_DATATYPE),
+			pos_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 2) * GPU.SIZEOF_DATATYPE)
+		)
+		velocities[i] = Vector3(
+			vel_data.decode_float((i * GPU.NUM_VEC_ELEMENTS) * GPU.SIZEOF_DATATYPE),
+			vel_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 1) * GPU.SIZEOF_DATATYPE),
+			vel_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 2) * GPU.SIZEOF_DATATYPE),
+		)
 
 
 func _do_cpu_step(delta: float) -> void:
