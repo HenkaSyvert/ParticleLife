@@ -6,15 +6,11 @@ signal pause_changed(value: bool)
 signal pressed_step
 signal physics_fps_changed
 
-signal enable_sound_changed(value: bool)
 signal note_cooldown_changed(value: float)
 signal show_note_strings_changed(value: bool)
-signal music_scale_changed(value: int)
 signal note_string_width_changed(value: float)
-signal instrument_changed(value: int)
 
 @export var particle_life: Application
-@export var sound: Sound
 
 @onready var fps_label: Label = %FpsLabel
 
@@ -35,12 +31,12 @@ func _ready() -> void:
 	(%ForceStrengthSpinBox as SpinBox).value = Params.force_strength
 	(%MaxSpeedSpinBox as SpinBox).value = Params.max_speed
 
-	(%EnableSoundCheckBox as CheckBox).button_pressed = sound.enable_sound
-	(%NoteCooldownSpinBox as SpinBox).value = sound.note_cooldown
-	(%ShowNoteStringsCheckBox as CheckBox).button_pressed = sound.show_note_strings
-	(%MusicScaleOptionButton as OptionButton).selected = sound.selected_scale
-	(%NoteStringWidthSpinBox as SpinBox).value = sound.string_width
-	(%InstrumentOptionButton as OptionButton).selected = sound.selected_sampler
+	(%EnableSoundCheckBox as CheckBox).button_pressed = Sound.enabled
+	#(%NoteCooldownSpinBox as SpinBox).value = sound.note_cooldown
+	#(%ShowNoteStringsCheckBox as CheckBox).button_pressed = sound.show_note_strings
+	(%MusicScaleOptionButton as OptionButton).selected = Sound.selected_scale
+	#(%NoteStringWidthSpinBox as SpinBox).value = sound.string_width
+	(%InstrumentOptionButton as OptionButton).selected = Sound.instrument
 
 
 func _process(_delta: float) -> void:
@@ -87,7 +83,7 @@ func _on_max_speed_spin_box_value_changed(value: float) -> void:
 
 
 func _on_enable_sound_check_box_toggled(toggled_on: bool) -> void:
-	enable_sound_changed.emit(toggled_on)
+	Sound.enabled = toggled_on
 
 
 func _on_note_cooldown_spin_box_value_changed(value: float) -> void:
@@ -99,7 +95,7 @@ func _on_show_note_strings_check_box_toggled(toggled_on: bool) -> void:
 
 
 func _on_music_scale_option_button_item_selected(index: int) -> void:
-	music_scale_changed.emit(index)
+	Sound.selected_scale = (index as Sound.Scale)
 
 
 func _on_note_string_width_spin_box_value_changed(value: float) -> void:
@@ -107,7 +103,7 @@ func _on_note_string_width_spin_box_value_changed(value: float) -> void:
 
 
 func _on_instrument_option_button_item_selected(index: int) -> void:
-	instrument_changed.emit(index)
+	Sound.instrument = (index as Sound.Instrument)
 
 
 func _on_physics_fps_spin_box_value_changed(value: float) -> void:

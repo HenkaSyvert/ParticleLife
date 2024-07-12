@@ -1,0 +1,298 @@
+[gd_scene load_steps=72 format=3 uid="uid://drsy7w5upredf"]
+
+[ext_resource type="Script" path="res://scripts/sound.gd" id="1_x115g"]
+[ext_resource type="Script" path="res://addons/SimpleSampler/sampler_instrument.gd" id="2_rdhu0"]
+[ext_resource type="Script" path="res://addons/SimpleSampler/sample_resource.gd" id="3_m1d2j"]
+[ext_resource type="AudioStream" uid="uid://xlvyebdqvar2" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/A2_mf1.wav" id="4_lqty7"]
+[ext_resource type="AudioStream" uid="uid://c2fpi0783x13a" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B1_mf1.wav" id="5_od2ma"]
+[ext_resource type="AudioStream" uid="uid://bpw57mi88o12v" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B3_mf1.wav" id="6_ilvd7"]
+[ext_resource type="AudioStream" uid="uid://8x31uiv8ulvq" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/B6_mf1.wav" id="7_v66aa"]
+[ext_resource type="AudioStream" uid="uid://ct3h42gb43e5f" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/C5_f1.wav" id="8_n55o1"]
+[ext_resource type="AudioStream" uid="uid://buku0u55xmn3k" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D2_f1.wav" id="9_5esq7"]
+[ext_resource type="AudioStream" uid="uid://dwp4w5wgtbt26" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D4_mf1.wav" id="10_c85vs"]
+[ext_resource type="AudioStream" uid="uid://v3p1tp0tkpd5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D6_mf1.wav" id="11_svrg4"]
+[ext_resource type="AudioStream" uid="uid://n4pd7wnl0edf" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/D7_f1.wav" id="12_v3jof"]
+[ext_resource type="AudioStream" uid="uid://dwuqe4qjt0nc5" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/E1_f1.wav" id="13_oo6lg"]
+[ext_resource type="AudioStream" uid="uid://dwsbc4no6ivp8" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/E3_mf1.wav" id="14_53c78"]
+[ext_resource type="AudioStream" uid="uid://by00himaqn7kc" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/E5_mf1.wav" id="15_dauio"]
+[ext_resource type="AudioStream" uid="uid://cpeo5g8qh40wq" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F2_f1.wav" id="16_afois"]
+[ext_resource type="AudioStream" uid="uid://b58b51u7jqc6x" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F4_mf1.wav" id="17_4h1cl"]
+[ext_resource type="AudioStream" uid="uid://r6l1pslenjh1" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F6_mf1.wav" id="18_04312"]
+[ext_resource type="AudioStream" uid="uid://ddlxso46dsgrg" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/F7_f1.wav" id="19_hrhki"]
+[ext_resource type="AudioStream" uid="uid://cxdnkphh4dvno" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/G1_f1.wav" id="20_yjejh"]
+[ext_resource type="AudioStream" uid="uid://dfpwtwspt2rm3" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/G3_mf1.wav" id="21_5o8jn"]
+[ext_resource type="AudioStream" uid="uid://ceuw4jlpfsp8a" path="res://sounds/ConcertHarp-small-SFZ-20200702/samples/G5_mf1.wav" id="22_ebcc7"]
+[ext_resource type="AudioStream" uid="uid://cynukpdtl30y0" path="res://sounds/Glass-SFZ-20191227/samples/A#4-B4_01.wav" id="23_37f2x"]
+[ext_resource type="AudioStream" uid="uid://vefranwgms4r" path="res://sounds/Glass-SFZ-20191227/samples/C5_01.wav" id="24_rer5w"]
+[ext_resource type="AudioStream" uid="uid://dpumaiggsjkts" path="res://sounds/Glass-SFZ-20191227/samples/C#6_01.wav" id="25_mkclw"]
+[ext_resource type="AudioStream" uid="uid://en6ohg377l1l" path="res://sounds/Glass-SFZ-20191227/samples/E5_01.wav" id="26_idhcm"]
+[ext_resource type="AudioStream" uid="uid://dlwpjdjwcxwgk" path="res://sounds/Glass-SFZ-20191227/samples/F6_01.wav" id="27_ti5gr"]
+[ext_resource type="AudioStream" uid="uid://bxadx6xaqx5ih" path="res://sounds/Glass-SFZ-20191227/samples/G#5_01.wav" id="28_8rt37"]
+[ext_resource type="AudioStream" uid="uid://d384oq8ey5qu3" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C3_ff.wav" id="29_lbx7y"]
+[ext_resource type="AudioStream" uid="uid://d0h47skwjlpdf" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C4_ff.wav" id="30_0lt4t"]
+[ext_resource type="AudioStream" uid="uid://cbktp06ca2o78" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C5_ff.wav" id="31_5lu33"]
+[ext_resource type="AudioStream" uid="uid://b6dlfy5nirhfn" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C6_ff.wav" id="32_jmmid"]
+[ext_resource type="AudioStream" uid="uid://b3shkhra6yfgm" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/C7_ff.wav" id="33_58ybg"]
+[ext_resource type="AudioStream" uid="uid://dk2wa05uli7ol" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G3_ff.wav" id="34_slmiv"]
+[ext_resource type="AudioStream" uid="uid://dyx1a33tbv6an" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G4_ff.wav" id="35_17ccd"]
+[ext_resource type="AudioStream" uid="uid://bw5t6xnetwuje" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G5_ff.wav" id="36_myspn"]
+[ext_resource type="AudioStream" uid="uid://dantrjwrlv7jx" path="res://sounds/Xylophone-MediumMallets-SFZ-20200706/samples/G6_ff.wav" id="37_xxx86"]
+
+[sub_resource type="Resource" id="Resource_u31wq"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("4_lqty7")
+tone = "A"
+octave = 2
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_fbw0g"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("5_od2ma")
+tone = "B"
+octave = 1
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_bjwkn"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("6_ilvd7")
+tone = "B"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_5t8ka"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("7_v66aa")
+tone = "B"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_u54xo"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("8_n55o1")
+tone = "C"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_upxau"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("9_5esq7")
+tone = "D"
+octave = 2
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_urcf2"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("10_c85vs")
+tone = "D"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_i1p03"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("11_svrg4")
+tone = "D"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_htvdp"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("12_v3jof")
+tone = "D"
+octave = 7
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_mlo1f"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("13_oo6lg")
+tone = "E"
+octave = 1
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_u2ajk"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("14_53c78")
+tone = "E"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_6j6gw"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("15_dauio")
+tone = "E"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_73jew"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("16_afois")
+tone = "F"
+octave = 2
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_fmpf5"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("17_4h1cl")
+tone = "F"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_ltr1o"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("18_04312")
+tone = "F"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_tew52"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("19_hrhki")
+tone = "F"
+octave = 7
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_4vufs"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("20_yjejh")
+tone = "G"
+octave = 1
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_gd2x7"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("21_5o8jn")
+tone = "G"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_sb1xo"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("22_ebcc7")
+tone = "G"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_je76h"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("23_37f2x")
+tone = "A#"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_2y3ji"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("24_rer5w")
+tone = "C"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_84yif"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("25_mkclw")
+tone = "C#"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_l1d1h"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("26_idhcm")
+tone = "E"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_2bieg"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("27_ti5gr")
+tone = "F"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_tl1qy"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("28_8rt37")
+tone = "G#"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_83mwu"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("29_lbx7y")
+tone = "C"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_052dl"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("30_0lt4t")
+tone = "C"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_8ciwq"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("31_5lu33")
+tone = "C"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_ypvs5"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("32_jmmid")
+tone = "C"
+octave = 6
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_dwq2o"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("33_58ybg")
+tone = "C"
+octave = 7
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_ehxy7"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("34_slmiv")
+tone = "G"
+octave = 3
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_cdysb"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("35_17ccd")
+tone = "G"
+octave = 4
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_os3nw"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("36_myspn")
+tone = "G"
+octave = 5
+velocity = 5
+
+[sub_resource type="Resource" id="Resource_0ktdp"]
+script = ExtResource("3_m1d2j")
+stream = ExtResource("37_xxx86")
+tone = "G"
+octave = 6
+velocity = 5
+
+[node name="Sound" type="Node"]
+script = ExtResource("1_x115g")
+
+[node name="HarpSampler" type="AudioStreamPlayer" parent="."]
+volume_db = -20.0
+script = ExtResource("2_rdhu0")
+max_notes = 20
+samples = Array[ExtResource("3_m1d2j")]([SubResource("Resource_u31wq"), SubResource("Resource_fbw0g"), SubResource("Resource_bjwkn"), SubResource("Resource_5t8ka"), SubResource("Resource_u54xo"), SubResource("Resource_upxau"), SubResource("Resource_urcf2"), SubResource("Resource_i1p03"), SubResource("Resource_htvdp"), SubResource("Resource_mlo1f"), SubResource("Resource_u2ajk"), SubResource("Resource_6j6gw"), SubResource("Resource_73jew"), SubResource("Resource_fmpf5"), SubResource("Resource_ltr1o"), SubResource("Resource_tew52"), SubResource("Resource_4vufs"), SubResource("Resource_gd2x7"), SubResource("Resource_sb1xo")])
+
+[node name="GlassSampler" type="AudioStreamPlayer" parent="."]
+volume_db = -20.0
+script = ExtResource("2_rdhu0")
+max_notes = 20
+samples = Array[ExtResource("3_m1d2j")]([SubResource("Resource_je76h"), SubResource("Resource_2y3ji"), SubResource("Resource_84yif"), SubResource("Resource_l1d1h"), SubResource("Resource_2bieg"), SubResource("Resource_tl1qy")])
+
+[node name="XylophoneSampler" type="AudioStreamPlayer" parent="."]
+volume_db = -20.0
+script = ExtResource("2_rdhu0")
+max_notes = 20
+samples = Array[ExtResource("3_m1d2j")]([SubResource("Resource_83mwu"), SubResource("Resource_052dl"), SubResource("Resource_8ciwq"), SubResource("Resource_ypvs5"), SubResource("Resource_dwq2o"), SubResource("Resource_ehxy7"), SubResource("Resource_cdysb"), SubResource("Resource_os3nw"), SubResource("Resource_0ktdp")])

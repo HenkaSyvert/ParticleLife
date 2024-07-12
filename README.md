@@ -14,6 +14,7 @@ todo:
 	- random seed button
 	- use const more
 	- more robust menu variable system..
+	- fix all broken signals
 	
 	gpu:
 		- figure out optimal work groups
