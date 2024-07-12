@@ -16,7 +16,7 @@ signal note_string_width_changed(value: float)
 
 
 func _ready() -> void:
-	(%SeedLineEdit as LineEdit).set_text(particle_life.seed_str)
+	(%SeedLineEdit as LineEdit).set_text(Params.seed_str)
 	(%WrapUniverseCheckBox as CheckBox).button_pressed = Params.wrap_universe
 	(%NumParticlesSpinBox as SpinBox).value = Params.num_particles
 	(%NumTypesSpinBox as SpinBox).value = Params.num_types

@@ -4,7 +4,6 @@ extends Node
 signal simulation_started
 
 @export var is_paused: bool = false
-@export var seed_str: String = "mehiko"
 var dimensions: int = 3
 
 var simulation: Simulation
@@ -21,8 +20,6 @@ func _physics_process(delta: float) -> void:
 
 
 func start_simulation() -> void:
-	seed(seed_str.hash())
-
 	if dimensions == 2:
 		simulation = Simulation2D.new()
 		($Camera2D as Camera2D).make_current()
@@ -33,8 +30,7 @@ func start_simulation() -> void:
 
 
 func _on_menu_pressed_restart(seed_string: String, particles_count: int, types_count: int) -> void:
-	seed_str = seed_string
-	Params.randomize_particle_params(particles_count, types_count)
+	Params.randomize_particle_params(seed_string, particles_count, types_count)
 	start_simulation()
 
 

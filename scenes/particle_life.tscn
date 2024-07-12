@@ -67,6 +67,8 @@ mesh = SubResource("CapsuleMesh_u0b18")
 
 [node name="ParticleLife" type="Node"]
 script = ExtResource("1_tq84v")
+is_paused = null
+seed_str = null
 
 [node name="Particles3D" type="MultiMeshInstance3D" parent="."]
 unique_name_in_owner = true

@@ -1,5 +1,8 @@
 class_name Params
 
+static var seed_str: String = "mehiko":
+	set(value):
+		pass
 static var num_particles: int = 100:
 	set(value):
 		pass
@@ -44,7 +47,7 @@ static var colors: Array[Color]:
 
 
 static func _static_init() -> void:
-	randomize_particle_params(num_particles, num_types)
+	randomize_particle_params(seed_str, num_particles, num_types)
 	GPU.set_uniform(GPU.Uniform.UNIVERSE_RADIUS, universe_radius)
 	GPU.set_uniform(GPU.Uniform.ATTRACTION_RADIUS, attraction_radius)
 	GPU.set_uniform(GPU.Uniform.REPEL_RADIUS, repel_radius)
@@ -53,9 +56,14 @@ static func _static_init() -> void:
 	GPU.set_uniform(GPU.Uniform.WRAP_UNIVERSE, wrap_universe)
 
 
-static func randomize_particle_params(particles_count: int, types_count: int) -> void:
+static func randomize_particle_params(
+	seed_string: String, particles_count: int, types_count: int
+) -> void:
+	seed_str = seed_string
 	num_particles = particles_count
 	num_types = types_count
+
+	seed(seed_str.hash())
 
 	assert(attraction_matrix.resize(num_types ** 2) == OK)
 	for i: int in range(num_types ** 2):
