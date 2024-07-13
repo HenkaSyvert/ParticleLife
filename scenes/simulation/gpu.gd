@@ -19,7 +19,7 @@ enum Uniform {
 }
 
 const SIZEOF_DATATYPE: int = 4
-const NUM_VEC_ELEMENTS: int = 4
+const NUM_VEC_ELEMENTS: Dictionary = {2: 2, 3: 4, 4: 4}
 const MEM_ALIGNMENT: int = 16
 const WORKGROUP_SIZE: Vector3i = Vector3i(512, 1, 1)
 
@@ -78,8 +78,12 @@ static func free_uniforms() -> void:
 static func setup_shader_uniforms() -> void:
 	free_uniforms()
 
-	_positions_buf_size = Params.num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
-	_velocities_buf_size = Params.num_particles * NUM_VEC_ELEMENTS * SIZEOF_DATATYPE
+	_positions_buf_size = (
+		Params.num_particles * NUM_VEC_ELEMENTS[Params.dimensions] * SIZEOF_DATATYPE
+	)
+	_velocities_buf_size = (
+		Params.num_particles * NUM_VEC_ELEMENTS[Params.dimensions] * SIZEOF_DATATYPE
+	)
 	_params_buf_size = (
 		ceili((Uniform.NUM_PARAMS as float) * SIZEOF_DATATYPE / MEM_ALIGNMENT) * MEM_ALIGNMENT
 	)
@@ -131,9 +135,7 @@ static func setup_shader_uniforms() -> void:
 	GPU.set_uniform(Uniform.DELTA, 1.0 / Engine.physics_ticks_per_second)
 
 
-static func set_particle_states(
-	positions: PackedVector3Array, velocities: PackedVector3Array
-) -> void:
+static func set_particle_states(positions: Variant, velocities: Variant) -> void:
 	_buffer_toggle = 1
 	GPU.set_uniform(Uniform.BUFFER_TOGGLE, _buffer_toggle)
 	GPU.set_uniform(Uniform.POSITIONS, positions)
@@ -187,8 +189,10 @@ static func set_uniform(uniform: Uniform, data: Variant) -> void:
 			size = _positions_buf_size
 			assert(pba.resize(size) == OK)
 			for i: int in range(Params.num_particles):
-				for j: int in range(3):
-					var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
+				for j: int in range(Params.dimensions):
+					var offset: int = (
+						(i * NUM_VEC_ELEMENTS[Params.dimensions] + j) * SIZEOF_DATATYPE
+					)
 					pba.encode_float(offset, data[i][j])
 
 		elif uniform == Uniform.TYPES:
@@ -203,8 +207,10 @@ static func set_uniform(uniform: Uniform, data: Variant) -> void:
 			size = _velocities_buf_size
 			assert(pba.resize(size) == OK)
 			for i: int in range(Params.num_particles):
-				for j: int in range(3):
-					var offset: int = (i * NUM_VEC_ELEMENTS + j) * SIZEOF_DATATYPE
+				for j: int in range(Params.dimensions):
+					var offset: int = (
+						(i * NUM_VEC_ELEMENTS[Params.dimensions] + j) * SIZEOF_DATATYPE
+					)
 					pba.encode_float(offset, data[i][j])
 
 		assert(_rd.buffer_update(buffer, 0, size, pba) == OK)

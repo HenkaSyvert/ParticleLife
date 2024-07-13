@@ -1,12 +1,8 @@
 class_name Simulation2D
 extends Simulation
 
-static var positions: PackedVector2Array = PackedVector2Array():
-	set(value):
-		pass
-static var velocities: PackedVector2Array = PackedVector2Array():
-	set(value):
-		pass
+static var positions: PackedVector2Array = PackedVector2Array()
+static var velocities: PackedVector2Array = PackedVector2Array()
 
 
 func _ready() -> void:
@@ -85,5 +81,4 @@ func _do_cpu_step(delta: float) -> void:
 
 		new_positions[i] = pos
 
-	for i: int in range(Params.num_particles):
-		positions[i] = new_positions[i]
+	positions=new_positions

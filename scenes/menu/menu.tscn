@@ -95,6 +95,14 @@ text = "Pause Simulation"
 layout_mode = 2
 text = "Do Simulation Step"
 
+[node name="DimensionsSpinBox" type="SpinBox" parent="MarginContainer/Tabs/Simulation"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 2.0
+max_value = 4.0
+value = 2.0
+prefix = "Dimensions: "
+
 [node name="Particles" type="VBoxContainer" parent="MarginContainer/Tabs"]
 visible = false
 layout_mode = 2

@@ -10,6 +10,7 @@ var note_timers: PackedFloat32Array = PackedFloat32Array()
 
 
 func _ready() -> void:
+	multimesh.instance_count = 0
 	multimesh.use_colors = true
 	multimesh.instance_count = Sound.NUM_NOTES
 	(multimesh.mesh as CapsuleMesh).height = Params.universe_radius

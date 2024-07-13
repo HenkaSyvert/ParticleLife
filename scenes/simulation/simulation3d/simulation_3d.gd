@@ -1,12 +1,8 @@
 class_name Simulation3D
 extends Simulation
 
-static var positions: PackedVector3Array = PackedVector3Array():
-	set(value):
-		pass
-static var velocities: PackedVector3Array = PackedVector3Array():
-	set(value):
-		pass
+static var positions: PackedVector3Array = PackedVector3Array()
+static var velocities: PackedVector3Array = PackedVector3Array()
 
 
 func _ready() -> void:
@@ -33,14 +29,26 @@ func _do_gpu_step() -> void:
 	var vel_data: PackedByteArray = GPU.get_vel_data()
 	for i: int in range(Params.num_particles):
 		positions[i] = Vector3(
-			pos_data.decode_float((i * GPU.NUM_VEC_ELEMENTS) * GPU.SIZEOF_DATATYPE),
-			pos_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 1) * GPU.SIZEOF_DATATYPE),
-			pos_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 2) * GPU.SIZEOF_DATATYPE)
+			pos_data.decode_float(
+				(i * GPU.NUM_VEC_ELEMENTS[Params.dimensions]) * GPU.SIZEOF_DATATYPE
+			),
+			pos_data.decode_float(
+				(i * GPU.NUM_VEC_ELEMENTS[Params.dimensions] + 1) * GPU.SIZEOF_DATATYPE
+			),
+			pos_data.decode_float(
+				(i * GPU.NUM_VEC_ELEMENTS[Params.dimensions] + 2) * GPU.SIZEOF_DATATYPE
+			)
 		)
 		velocities[i] = Vector3(
-			vel_data.decode_float((i * GPU.NUM_VEC_ELEMENTS) * GPU.SIZEOF_DATATYPE),
-			vel_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 1) * GPU.SIZEOF_DATATYPE),
-			vel_data.decode_float((i * GPU.NUM_VEC_ELEMENTS + 2) * GPU.SIZEOF_DATATYPE),
+			vel_data.decode_float(
+				(i * GPU.NUM_VEC_ELEMENTS[Params.dimensions]) * GPU.SIZEOF_DATATYPE
+			),
+			vel_data.decode_float(
+				(i * GPU.NUM_VEC_ELEMENTS[Params.dimensions] + 1) * GPU.SIZEOF_DATATYPE
+			),
+			vel_data.decode_float(
+				(i * GPU.NUM_VEC_ELEMENTS[Params.dimensions] + 2) * GPU.SIZEOF_DATATYPE
+			),
 		)
 
 
@@ -98,5 +106,4 @@ func _do_cpu_step(delta: float) -> void:
 
 		new_positions[i] = pos
 
-	for i: int in range(Params.num_particles):
-		positions[i] = new_positions[i]
+	positions = new_positions

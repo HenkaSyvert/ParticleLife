@@ -1,6 +1,6 @@
 extends Window
 
-signal pressed_restart(seed_string: String, particles_count: int, types_count: int)
+signal pressed_restart(seed_string: String, particles_count: int, types_count: int, dims: int)
 
 signal note_cooldown_changed(value: float)
 signal show_note_strings_changed(value: bool)
@@ -16,7 +16,7 @@ func _ready() -> void:
 	(%WrapUniverseCheckBox as CheckBox).button_pressed = Params.wrap_universe
 	(%NumParticlesSpinBox as SpinBox).value = Params.num_particles
 	(%NumTypesSpinBox as SpinBox).value = Params.num_types
-	(%RunOnGpuCheckBox as CheckBox).button_pressed = false
+	(%RunOnGpuCheckBox as CheckBox).button_pressed = Simulation.run_on_gpu
 	Engine.physics_ticks_per_second = 30
 	(%PhysicsFPSSpinBox as SpinBox).value = Engine.physics_ticks_per_second
 	(%PauseCheckBox as CheckBox).button_pressed = Simulation.is_paused
@@ -46,7 +46,8 @@ func _on_restart_button_pressed() -> void:
 	pressed_restart.emit(
 		(%SeedLineEdit as LineEdit).text,
 		(%NumParticlesSpinBox as SpinBox).value,
-		(%NumTypesSpinBox as SpinBox).value
+		(%NumTypesSpinBox as SpinBox).value,
+		(%DimensionsSpinBox as SpinBox).value
 	)
 
 
