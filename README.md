@@ -7,7 +7,7 @@ todo:
 		-add menu on autoload
 		
 		
-		
+	- check best practices and naming conventions
 	- 4d version
 	- add cube universe shape
 	- fix errors from all enforced typing options

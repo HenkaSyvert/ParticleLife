@@ -12,9 +12,8 @@ script = ExtResource("1_tq84v")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_m44sp")
 
-[node name="Menu" parent="." node_paths=PackedStringArray("particle_life") instance=ExtResource("12_yjsci")]
-particle_life = NodePath("..")
+[node name="Menu" parent="." instance=ExtResource("12_yjsci")]
+particle_life = Object(Node,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","script":ExtResource("1_tq84v"))
+
 
 [node name="Sound" parent="." instance=ExtResource("6_5hlyv")]
-
-[connection signal="pressed_restart" from="Menu" to="." method="_on_menu_pressed_restart"]

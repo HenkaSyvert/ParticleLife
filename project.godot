@@ -105,6 +105,10 @@ pan_camera={
 ]
 }
 
+[physics]
+
+common/physics_ticks_per_second=30
+
 [rendering]
 
 renderer/rendering_method.mobile="forward_plus"

@@ -2,13 +2,11 @@ extends Window
 
 signal pressed_restart(seed_string: String, particles_count: int, types_count: int, dims: int)
 
-signal note_cooldown_changed(value: float)
-signal show_note_strings_changed(value: bool)
-signal note_string_width_changed(value: float)
-
-@export var particle_life: Application
-
-@onready var fps_label: Label = %FpsLabel
+@onready var _fps_label: Label = %FpsLabel
+@onready var _seed_line_edit: LineEdit = %SeedLineEdit
+@onready var _num_particles_spin_box: SpinBox = %NumParticlesSpinBox
+@onready var _num_types_spin_box: SpinBox = %NumTypesSpinBox
+@onready var _dimensions_spin_box: SpinBox = %DimensionsSpinBox
 
 
 func _ready() -> void:
@@ -17,7 +15,6 @@ func _ready() -> void:
 	(%NumParticlesSpinBox as SpinBox).value = Params.num_particles
 	(%NumTypesSpinBox as SpinBox).value = Params.num_types
 	(%RunOnGpuCheckBox as CheckBox).button_pressed = Simulation.run_on_gpu
-	Engine.physics_ticks_per_second = 30
 	(%PhysicsFPSSpinBox as SpinBox).value = Engine.physics_ticks_per_second
 	(%PauseCheckBox as CheckBox).button_pressed = Simulation.is_paused
 
@@ -36,18 +33,20 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if Input.is_action_pressed("ui_cancel"):
-		get_tree().quit()
+	_fps_label.set_text("FPS: %d" % Engine.get_frames_per_second())
 
-	fps_label.set_text("FPS: %d" % Engine.get_frames_per_second())
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().quit()
 
 
 func _on_restart_button_pressed() -> void:
 	pressed_restart.emit(
-		(%SeedLineEdit as LineEdit).text,
-		(%NumParticlesSpinBox as SpinBox).value,
-		(%NumTypesSpinBox as SpinBox).value,
-		(%DimensionsSpinBox as SpinBox).value
+		_seed_line_edit.text,
+		_num_particles_spin_box.value,
+		_num_types_spin_box.value,
+		_dimensions_spin_box.value
 	)
 
 
