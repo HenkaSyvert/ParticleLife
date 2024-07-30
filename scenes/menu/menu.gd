@@ -83,11 +83,11 @@ func _on_enable_sound_check_box_toggled(toggled_on: bool) -> void:
 
 
 func _on_note_cooldown_spin_box_value_changed(value: float) -> void:
-	note_cooldown_changed.emit(value)
+	NoteStrings.note_cooldown=value
 
 
 func _on_show_note_strings_check_box_toggled(toggled_on: bool) -> void:
-	show_note_strings_changed.emit(toggled_on)
+	NoteStrings.show_note_strings=toggled_on
 
 
 func _on_music_scale_option_button_item_selected(index: int) -> void:
@@ -95,7 +95,7 @@ func _on_music_scale_option_button_item_selected(index: int) -> void:
 
 
 func _on_note_string_width_spin_box_value_changed(value: float) -> void:
-	note_string_width_changed.emit(value)
+	NoteStrings.string_width=value
 
 
 func _on_instrument_option_button_item_selected(index: int) -> void:
@@ -112,4 +112,4 @@ func _on_pause_check_box_toggled(toggled_on: bool) -> void:
 
 
 func _on_step_button_pressed() -> void:
-	particle_life.simulation.do_step(1.0 / Engine.physics_ticks_per_second)
+	Simulation.do_step(1.0 / Engine.physics_ticks_per_second)

@@ -2,8 +2,7 @@ class_name NoteStrings
 extends MultiMeshInstance3D
 
 static var note_cooldown: float = 3
-static var string_width: float = 0.05:
-
+static var string_width: float = 0.05
 static var show_note_strings: bool = false
 
 var note_strings: PackedVector3Array = PackedVector3Array()

@@ -1,6 +1,8 @@
 class_name Simulation
 extends Node
 
+static var _instance: Simulation = null
+
 static var run_on_gpu: bool:
 	set(value):
 		_sync_gpu_cpu()
@@ -13,16 +15,24 @@ static func _sync_gpu_cpu() -> void:
 	pass
 
 
+func _ready() -> void:
+	_instance = self
+
+
 func _physics_process(delta: float) -> void:
 	if not is_paused:
-		do_step(delta)
+		Simulation.do_step(delta)
 
 
-func do_step(delta: float) -> void:
+static func do_step(delta: float) -> void:
+
+	if _instance == null:
+		return
+	
 	if run_on_gpu:
-		_do_gpu_step()
+		_instance._do_gpu_step()
 	else:
-		_do_cpu_step(delta)
+		_instance._do_cpu_step(delta)
 
 
 func _do_gpu_step() -> void:
