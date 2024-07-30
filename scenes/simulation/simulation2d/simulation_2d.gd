@@ -6,6 +6,7 @@ static var velocities: PackedVector2Array = PackedVector2Array()
 
 
 func _ready() -> void:
+	super._ready()
 	assert(positions.resize(Params.num_particles) == OK)
 	assert(velocities.resize(Params.num_particles) == OK)
 

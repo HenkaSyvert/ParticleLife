@@ -2,10 +2,13 @@
 ```
 todo:
 
+	- install python, pip, gdtools on stationary
+
 	structure:
 		- some kind of static soundmap class
 		-add menu on autoload
-		
+		- refactor application.gd, simulation static funcs
+		- fix menu control vars use variable
 		
 	- check best practices and naming conventions
 	- 4d version
@@ -46,6 +49,7 @@ todo:
 		- add hide menu
 		
 	sound:
+		- add volume bus
 		- make particle velocity affect envelope
 		- other note mapping to fib dirs
 		- different particles have own sounds
